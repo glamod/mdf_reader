@@ -2,3 +2,6 @@
 /**/*.py[cod]
 /**/__pycache__
 Tool_validation.py
+schemas/deck*
+schemas/td14
+schemas/wmo*
