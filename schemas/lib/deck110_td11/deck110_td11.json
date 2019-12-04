@@ -1,0 +1,216 @@
+{
+  "header":{
+    "format":"fixed_width",
+    "encoding":"ascii"
+  },
+  "elements":{
+        "RH":{
+          "description":"Relative humidity",
+          "field_length":3,
+          "column_type":"int8",
+          "valid_max":100,
+          "valid_min":0
+        },
+        "CL":{
+          "description":"Ceiling height (hundreds of feet)",
+          "field_length":2,
+          "column_type":"key",
+          "codetable":"ceiling_height"
+        },
+        "SKY COND I":{
+          "description":"Sky condition indicator",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"sky_condition_ind"
+        },
+        "CLD HGT":{
+          "description":"Reported cloud height in sky condition (hundreds of feet)",
+          "field_length":2,
+          "column_type":"key",
+          "codetable":"sky_condition_reported_cloud_height"
+        },
+        "SKY COND":{
+          "description":"Sky condition",
+          "field_length":1,
+          "column_type":"key",
+          "disable_white_strip":true,
+          "codetable":"sky_condition"
+        },
+        "VIS":{
+          "description":"Visibility",
+          "field_length":3,
+          "column_type":"key",
+          "codetable":"visibility"
+        },
+        "WEATHER A":{
+          "description":"Present weather. Field a",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"weather_present_a"
+        },
+        "WEATHER B":{
+          "description":"Present weather. Field b",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"weather_present_b"
+        },
+        "WEATHER C":{
+          "description":"Present weather. Field c",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"weather_present_c"
+        },
+        "WEATHER D":{
+          "description":"Present weather. Field d",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"weather_present_d"
+        },
+        "WEATHER E":{
+          "description":"Present weather. Field e",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"weather_present_e"
+        },
+        "WEATHER F":{
+          "description":"Present weather. Field f",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"weather_present_f"
+        },
+        "WEATHER G":{
+          "description":"Present weather. Field g",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"weather_present_g"
+        },
+        "WEATHER H":{
+          "description":"Present weather. Field h",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"weather_present_h"
+        },
+        "WEATHER I":{
+          "description":"Present weather. Field i",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"weather_present_i"
+        },
+        "WEATHER J":{
+          "description":"Present weather. Field j",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"weather_present_j"
+        },
+        "AIR TMP":{
+          "description":"Air temperature",
+          "field_length":2,
+          "column_type":"int16",
+          "encoding":"signed_overpunch",
+          "units": "Fahrenheit"
+        },
+        "WND DIR":{
+          "description":"Wind direction",
+          "field_length":2,
+          "column_type":"key",
+          "codetable":"wind_direction"
+        },
+        "CL AMT":{
+          "description":"Amount of low cloud",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"cloud_amount_tenths"
+        },
+        "CL TYP":{
+          "description":"Type of low cloud",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"cloud_type_low"
+        },
+        "CL HGT":{
+          "description":"Height of low cloud (hundreds of feet)",
+          "field_length":2,
+          "column_type":"key",
+          "codetable":"cloud_height"
+        },
+        "CM AMT":{
+          "description":"Amount of middle cloud",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"cloud_amount_tenths"
+        },
+        "CM TYP":{
+          "description":"Type of middle cloud",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"cloud_type_middle"
+        },
+        "CH TYP":{
+          "description":"Type of high cloud",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"cloud_type_high"
+        },
+        "CH HGT":{
+          "description":"Height of high cloud",
+          "field_length":2,
+          "column_type":"key",
+          "codetable":"cloud_height"
+        },
+        "N":{
+          "description":"Total cloud amount",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"cloud_amount_tenths"
+        },
+        "WET BLB":{
+          "description":"Wet bulb temperature",
+          "field_length":2,
+          "column_type":"int16",
+          "encoding":"signed_overpunch",
+          "units": "Fahrenheit"
+        },
+        "SEA TMP":{
+          "description":"Sea temperature",
+          "field_length":2,
+          "column_type":"int16",
+          "valid_min":0,
+          "valid_max":99,
+          "units": "Fahrenheit"
+        },
+        "S E A":{
+          "description":"State of the sea",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"sea_state"
+        },
+        "SEA DIR":{
+          "description":"Direction of sea",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"sea_swell_direction"
+        },
+        "SWL HGT":{
+          "description":"Height of swell",
+          "field_length":2,
+          "column_type":"int16",
+          "valid_min":0,
+          "valid_max":99,
+          "units":"feet"
+        },
+        "SWL DIR":{
+          "description":"Direction of swell",
+          "field_length":1,
+          "column_type":"key",
+          "codetable":"sea_swell_direction"
+        },
+        "SWL PER":{
+          "description":"Period of swell",
+          "field_length":2,
+          "column_type":"int16",
+          "valid_min":0,
+          "valid_max":39,
+          "units":"seconds"
+        }
+    }
+}
