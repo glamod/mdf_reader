@@ -1,7 +1,6 @@
 {
 "header":
 {
-  "format":"delimited",
   "multiple_reports_per_line": true,
   "reports_per_line": 6,
   "encoding":"ascii"
