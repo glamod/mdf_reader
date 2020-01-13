@@ -1,11 +1,9 @@
 {
     "header": {
-        "format": "fixed_width",
         "parsing_order": [
             {"s": ["core1"]},
             {"e": [ "additional blank","additional 1",  "additional 6","additional 8"]},
             {"s": [ "core2","supplemental"]}],
-        "date_parser": {"section": "core1","elements": ["YEAR","MO","DA","HR"],"format": ["%Y","%m","%d","%H"]}
     },
     "sections": {
         "core1": {
