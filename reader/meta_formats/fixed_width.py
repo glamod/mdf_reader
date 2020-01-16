@@ -10,8 +10,8 @@ Uses the data model layout to first find sections in the data and internally
 store the data in sections, then reads in, decodes and converts the elements on
 a section by section basis and finally merges that together in the output
 dataframe.
- 
-Internally works assuming highest complexity in the input data model: 
+
+Internally works assuming highest complexity in the input data model:
 multiple non sequential sections
 
 @author: iregon
@@ -41,7 +41,7 @@ if sys.version_info[0] >= 3:
 else:
     py3 = False
     from io import BytesIO as BytesIO
-    
+
 
 FULL_WIDTH = 100000
 
@@ -147,13 +147,13 @@ def get_sections(df_in):
     #    'modulo'                   Reminder of parent_data after extracting section (data)
     #    'children_no'              Number of children threads to build, based on next parsing order list element. Resets to number of active children
     #    'children'                 Thread id for every child
-    #    'children_group_number'    Group number (in the global parsing order, of the children) 
+    #    'children_group_number'    Group number (in the global parsing order, of the children)
     global sentinals, section_lens, sentinal_lens, parsing_order
     global children_group_type
     global threads
     global thread_id
     global group_type
-    
+
     # Initial "node': input data
     threads = dict()
     thread_id = '00'
@@ -203,38 +203,12 @@ def get_sections(df_in):
     return section_dict
 
 #   ---------------------------------------------------------------------------
-#   FUNCTION TO PREPARE SOURCE DATA TO WHAT GET_SECTIONS() EXPECTS, AN ITERABLE:
-#   EITHER A PD.IO.PARSERS.TEXTFILEREADER OR A LIST, DEPENDING ON 
-#   SOURCE TYPE AND CHUNKSIZE ARGUMENT
-#   BASICALLY 1 RECORD (ONE OR MULTIPLE REPORTS) IN ONE LINE
-#   ---------------------------------------------------------------------------
-def source_11(source,schema, chunksize = None, skiprows = None, delimiter = None ):
-    # 11: 1 REPORT PER RECORD IN ONE LINE
-    # delimiter = '\t' so that it reads blanks as blanks, otherwise reads as empty: NaN
-    # this applies mainly when reading elements from sections, but we leave it also here
-    if isinstance(source,pd.DataFrame):
-        TextParser = source
-        TextParser.columns = [0]
-        TextParser = [TextParser]
-    elif isinstance(source,pd.io.parsers.TextFileReader):
-        TextParser = source
-    else:
-        TextParser = pd.read_fwf(source,widths=[FULL_WIDTH],header = None, skiprows = skiprows, delimiter="\t", chunksize = chunksize)
-        if not chunksize:
-            TextParser = [TextParser]
-    return TextParser
-
-def source_1x(source,schema, chunksize = None, skiprows = None, delimiter = None  ):
-    # 1X: MULTIPLE REPORTS PER RECORD IN ONE LINE
-    return source_11(source,schema, chunksize = chunksize, skiprows = skiprows, delimiter = delimiter )
-
-#   ---------------------------------------------------------------------------
 #   MAIN FUNCTIONS
 #   ---------------------------------------------------------------------------
 def source_to_df(TextParser, schema, read_sections, idx_offset = 0):
     global sentinals, section_lens, sentinals_lens
     global parsing_order
-    
+
     section_lens = { section: schema['sections'][section]['header'].get('length') for section in schema['sections'].keys()}
     sentinals = { section: schema['sections'][section]['header'].get('sentinal') for section in schema['sections'].keys()}
     sentinals_lens = { section: schema['sections'][section]['header'].get('sentinal_length') for section in schema['sections'].keys()}
@@ -247,7 +221,7 @@ def source_to_df(TextParser, schema, read_sections, idx_offset = 0):
             out_dtypes.update({ (section,i):properties.pandas_dtypes.get(schema['sections'][section]['elements'][i].get('column_type')) for i in schema['sections'][section]['elements'].keys() } )
     else:
         for section in read_sections:
-            out_dtypes.update({ i:properties.pandas_dtypes.get(schema['sections'][section]['elements'][i].get('column_type')) for i in schema['sections'][section]['elements'].keys() } ) 
+            out_dtypes.update({ i:properties.pandas_dtypes.get(schema['sections'][section]['elements'][i].get('column_type')) for i in schema['sections'][section]['elements'].keys() } )
     I_CHUNK = 0
     output_buffer = StringIO() if py3 else BytesIO()
     valid_buffer = StringIO() if py3 else BytesIO()
@@ -297,12 +271,12 @@ def source_to_df(TextParser, schema, read_sections, idx_offset = 0):
                 missing = section_elements[element].isna()
                 if element in encoded:
                     section_elements[element] = decoders.get(section_encoding.get(element)).get(section_dtypes.get(element))(section_elements[element])
-                  
+
                 kwargs = { converter_arg:schema['sections'][section]['elements'][element].get(converter_arg) for converter_arg in properties.data_type_conversion_args.get(section_dtypes.get(element))  }
                 section_elements[element] = converters.get(section_dtypes.get(element))(section_elements[element], **kwargs)
-                
+
                 section_valid[element] = missing | section_elements[element].notna()
-                
+
             # 3.1.3. Format section:
             #   - Put data in its rightfull place of the original data (indexing!) and remove section elements not desired
             #   - Name columns: tuples (section, element_name) for multisection, element_name if one section

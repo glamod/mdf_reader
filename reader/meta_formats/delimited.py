@@ -8,8 +8,8 @@ DataFrame.
 
 Assumes source data as data model layout and all sections and elements in data.
 Reads in full data content, then decodes and converts the elements.
- 
-Internally works assuming highest complexity in the input data model: 
+
+Internally works assuming highest complexity in the input data model:
 multiple sequential sections
 
 @author: iregon
@@ -44,36 +44,10 @@ else:
     from io import BytesIO as BytesIO
 
 #   ---------------------------------------------------------------------------
-#   FUNCTION TO PREPARE SOURCE DATA TO WHAT GET_SECTIONS() EXPECTS, AN ITERABLE:
-#   EITHER A PD.IO.PARSERS.TEXTFILEREADER OR A LIST, DEPENDING ON 
-#   SOURCE TYPE AND CHUNKSIZE ARGUMENT
-#   BASICALLY 1 RECORD (ONE OR MULTIPLE REPORTS) IN ONE LINE
-#   ---------------------------------------------------------------------------
-def source_11(source, schema, chunksize = None, skiprows = None, delimiter = ',' ):
-    # 11: 1 REPORT PER RECORD IN ONE LINE
-    if isinstance(source,pd.DataFrame):
-        TextParser = source
-        TextParser = [TextParser]
-    elif isinstance(source,pd.io.parsers.TextFileReader):
-        TextParser = source
-    else:
-        names = [ (x,y) for x in schema['sections'].keys() for y in schema['sections'][x]['elements'].keys()]
-        missing = { x:schema['sections'][x[0]]['elements'][x[1]].get('missing_value') for x in names }
-        TextParser = pd.read_csv(source,header = None, delimiter = delimiter, encoding = 'utf-8',
-                                 dtype = 'object', skip_blank_lines = False, chunksize = chunksize,
-                                 skiprows = skiprows, names = names, na_values = missing)
-        if not chunksize:
-            TextParser = [TextParser]
-    return TextParser
-
-def source_1x(source,schema, chunksize = None, skiprows = None, delimiter = ',' ):
-    # 1X: MULTIPLE REPORTS PER RECORD IN ONE LINE
-    return source_11(source,schema, chunksize = chunksize, skiprows = skiprows, delimiter = ',' )
-#   ---------------------------------------------------------------------------
 #   MAIN FUNCTIONS
 #   ---------------------------------------------------------------------------
 def source_to_df(source, schema, read_sections, idx_offset = 0):
-    
+
     column_names = []
     for section in schema['sections']:
         column_names.extend([ (section,i) for i in schema['sections'][section]['elements'] ])
@@ -102,11 +76,11 @@ def source_to_df(source, schema, read_sections, idx_offset = 0):
         for element in dtypes.keys():
                 missing = df[element].isna()
                 if element in encoded:
-                    df[element] = decoders.get(encodings.get(element)).get(dtypes.get(element))(df[element]) 
-                          
+                    df[element] = decoders.get(encodings.get(element)).get(dtypes.get(element))(df[element])
+
                 kwargs = { converter_arg:schema['sections'][element[0]]['elements'][element[1]].get(converter_arg) for converter_arg in properties.data_type_conversion_args.get(dtypes.get(element))  }
-                df[element] = converters.get(dtypes.get(element))(df[element], **kwargs) 
-                
+                df[element] = converters.get(dtypes.get(element))(df[element], **kwargs)
+
                 valid[element] = missing | df[element].notna()
         # Add _datetime section: watch this if we mean to do multiple reports in record!!!
         # for this to be valid, would have to assume that same day reports and that date in common report section....
@@ -118,11 +92,11 @@ def source_to_df(source, schema, read_sections, idx_offset = 0):
             out_dtypes.update({ date_name: 'object' })
             df = functions.df_prepend_datetime(df, date_elements, date_parser['format'], date_name = date_name )
             valid = pd.concat([pd.DataFrame(index = valid.index, data = True,columns = [date_name]),valid],sort = False,axis=1)
-            
-        out_dtypes.update({ i:df[i].dtype.name for i in df if df[i].dtype.name in properties.numpy_floats})   
-        if idx_offset > 0:  
+
+        out_dtypes.update({ i:df[i].dtype.name for i in df if df[i].dtype.name in properties.numpy_floats})
+        if idx_offset > 0:
             df.index = df.index + idx_offset
-        # If I get into the section: is it really only removing that named element from that section???? have to check 
+        # If I get into the section: is it really only removing that named element from that section???? have to check
         #element[section].drop([element],axis=1,level=1,inplace = True)
         # Drop level 0 in multilevel if len(read_sections)==1 or section is dummy
         # 3. Add chunk data to output
@@ -130,5 +104,5 @@ def source_to_df(source, schema, read_sections, idx_offset = 0):
         df.to_csv(output_buffer,header = header, mode = 'a', encoding = 'utf-8',index = False)
         valid.to_csv(valid_buffer,header=header, mode = 'a', encoding = 'utf-8',index = False)
         I_CHUNK += 1
- 
+
     return output_buffer, valid_buffer, out_dtypes

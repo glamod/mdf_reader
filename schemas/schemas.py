@@ -5,6 +5,11 @@ Created on Thu Sep 13 15:14:51 2018
 
 
 Read data file format json schema to dictionary
+
+Add schema validation:
+    - check mandatory are not null
+    - check fixed options
+
 """
 
 
@@ -54,6 +59,22 @@ def copy_template(schema, out_dir = None,out_path = None):
         print('\tValid names are: {}'.format(", ".join(schemas)))
         return
 
+def get_field_layout(field_layout_def,field_layout):
+    if not field_layout_def and not field_layout:
+        return None
+    elif not field_layout:
+        return field_layout_def
+    else:
+        return field_layout
+
+def get_delimiter(delimiter_def,delimiter):
+    if not delimiter_def and not delimiter:
+        return None
+    elif not delimiter_def:
+        return delimiter
+    else:
+        return field_layout
+
 def read_schema(schema_name = None, ext_schema_path = None):
 
     if schema_name:
@@ -65,6 +86,7 @@ def read_schema(schema_name = None, ext_schema_path = None):
     else:
         schema_path = os.path.abspath(ext_schema_path)
         schema_name = os.path.basename(schema_path)
+        
     schema_file = os.path.join(schema_path, schema_name + '.json')
     if not os.path.isfile(schema_file):
         logging.error('Can\'t find input schema file {}'.format(schema_file))
@@ -75,14 +97,31 @@ def read_schema(schema_name = None, ext_schema_path = None):
     #   FILL IN THE INITIAL SCHEMA TO "FULL COMPLEXITY"
     #   EXPLICITY ADD INFO THAT IS IMPLICIT TO GIVEN SITUATIONS/SUBFORMATS
     #   ---------------------------------------------------------------------------
-    # One report per record
+    # One report per record: make sure later changes are reflected in MULTIPLE
+    # REPORTS PER RECORD case below if we ever use it!
     if not schema['header'].get('multiple_reports_per_line'):
+        # Make no section formats be 1 section format
         if not schema.get('sections'):
             schema['sections'] = {properties.dummy_level:{'header':{},'elements':schema.get('elements')}}
             schema['header']['parsing_order'] = [{'s':[properties.dummy_level]}]
             schema.pop('elements',None)
+            schema['sections'][properties.dummy_level]['header']['delimiter'] = schema['header'].get('delimiter')
+            schema['header'].pop('delimiter',None)
+            schema['sections'][properties.dummy_level]['header']['field_layout'] = schema['header'].get('field_layout')
+            schema['header'].pop('field_layout',None)
+        # Make parsing order explicit
         if not schema['header'].get('parsing_order'):# assume sequential
             schema['header']['parsing_order'] = [{'s':list(schema['sections'].keys())}]
+        # Make disable_read and field_layout explicit: this is ruled by delimiter or length being set,
+        # unless explicitly set
+        for section in schema['sections'].keys():
+            if schema['sections'][section]['header'].get('disable_read'):
+                continue
+            else:
+                schema['sections'][section]['header']['disable_read'] = False
+            if not schema['sections'][section]['header'].get('field_layout'):
+                delimiter = schema['sections'][section]['header'].get('delimiter')
+                schema['sections'][section]['header']['field_layout'] = 'delimited' if delimiter else 'fixed_width'   
         return schema
     else:
         # 1X: MULTIPLE REPORTS PER RECORD

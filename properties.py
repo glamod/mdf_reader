@@ -11,7 +11,6 @@ import pandas as pd
 
 
 # Supported formats, sources and internal data models -------------------------
-supported_meta_file_formats = ['fixed_width','delimited']
 schema_path = os.path.join(os.path.dirname(__file__),'schemas','lib')
 supported_file_formats = [ os.path.basename(x).split(".")[0] for x in glob.glob(schema_path + '/*/*.json') if os.path.basename(x).split(".")[0] == os.path.dirname(x).split("/")[-1]]
 supported_sources = [pd.DataFrame, pd.io.parsers.TextFileReader, io.StringIO]
@@ -44,4 +43,6 @@ data_type_conversion_args['datetime'] = ['datetime_format']
 
 # Misc ------------------------------------------------------------------------
 tol = 1E-10
-dummy_level = '_section'
+dummy_level = 'SECTION__'
+# Length of reports in initial read
+MAX_FULL_REPORT_WIDTH = 100000

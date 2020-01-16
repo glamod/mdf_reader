@@ -4,7 +4,7 @@
     },
     "sections": {
         "core": {
-            "header": {"sentinal": null,"sentinal_length": null,"length": 108},
+            "header": {"sentinal": null,"length": 108},
             "elements": {
                 "YR": {
                     "description": "year UTC",
@@ -365,7 +365,7 @@
             }
         },
         "c1": {
-            "header": {"sentinal": " 165","sentinal_length": 4, "length": 65},
+            "header": {"sentinal": " 165","length": 65},
             "elements": {
                 "ATTI": {
                     "description": "attm ID",
@@ -705,7 +705,6 @@
         "c5": {
             "header": {
                 "sentinal": " 594",
-                "sentinal_length": 4,
                 "length": 94
             },
             "elements": {
@@ -1129,7 +1128,6 @@
         "c6": {
             "header": {
                 "sentinal": " 668",
-                "sentinal_length": 4,
                 "length": 68
             },
             "elements": {
@@ -1297,7 +1295,6 @@
         "c7": {
             "header": {
                 "sentinal": " 758",
-                "sentinal_length": 4,
                 "length": 58
             },
             "elements": {
@@ -1462,7 +1459,6 @@
         "c8": {
             "header": {
                 "sentinal": " 82U",
-                "sentinal_length": 4,
                 "length": 102
             },
             "elements": {
@@ -1687,7 +1683,6 @@
         "c9": {
             "header": {
                 "sentinal": " 932",
-                "sentinal_length": 4,
                 "length": 32
             },
             "elements": {
@@ -1813,7 +1808,6 @@
         "c95": {
             "header": {
                 "sentinal": "9561",
-                "sentinal_length": 4,
                 "length": 61
             },
             "elements": {
@@ -1930,7 +1924,6 @@
         "c96": {
             "header": {
                 "sentinal": "9653",
-                "sentinal_length": 4,
                 "length": 53
             },
             "elements": {
@@ -2088,7 +2081,6 @@
         "c97": {
             "header": {
                 "sentinal": "9732",
-                "sentinal_length": 4,
                 "length": 32
             },
             "elements": {
@@ -2162,7 +2154,7 @@
             }
         },
         "c98": {
-            "header": {"sentinal": "9815","sentinal_length": 4,  "length": 15},
+            "header": {"sentinal": "9815", "length": 15},
             "elements": {
                 "ATTI": {
                     "description": "attm ID",
@@ -2220,19 +2212,7 @@
             }
         },
         "c99": {
-            "header": {"sentinal": "99 0","sentinal_length": 4},
-            "elements": {
-                "sentinal": {
-                    "description": "sentinal",
-                    "column_type": "object",
-                    "field_length": 5,
-                    "ignore": true
-                },
-                "supp": {
-                    "description": "supplemental",
-                    "column_type": "object"
-                }
-            }
+            "header": {"sentinal": "99 0", "disable_read": true}
         }
     }
 }
