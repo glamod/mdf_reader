@@ -3,13 +3,26 @@
 """
 Created on Fri Jan 10 13:17:43 2020
 
+Extracts and reads (decodes, scales, etc...) the elements of data sections.
+Each column of the input dataframe is a section with all its elements stored
+as a single string.
+
+Working on a section by section basis, this module uses the data model 
+information provided in the schema to split the elements, decode and scale them
+where appropriate and ensure its data type consistency.
+
+Output is a dataframe with columns as follows depending on the data model
+structure:
+    1) Data model with sections (1 or more): [(section0,element0),.......(sectionN,elementN)]
+    2) Data model with no sections[element0...element1]
+
+
 @author: iregon
 """
 
 import pandas as pd
 from io import StringIO as StringIO
 import mdf_reader.properties as properties
-import csv # To disable quoting
 from mdf_reader.common.converters import converters
 from mdf_reader.common.decoders import decoders
 
@@ -38,24 +51,25 @@ def read_data(section_df,section_schema):
     section_dtypes = { i:section_schema['elements'][i]['column_type'] for i in section_names }
     encoded = [ (x) for x in section_names if 'encoding' in section_schema['elements'][x]]
     section_encoding = { i:section_schema['elements'][i]['encoding'] for i in encoded }
+    section_valid = pd.DataFrame(index = section_df.index, columns = section_df.columns)
     
     for element in section_dtypes.keys():
-        #missing = section_elements[element].isna()
+        missing = section_df[element].isna()
         if element in encoded:
             section_df[element] = decoders.get(section_encoding.get(element)).get(section_dtypes.get(element))(section_df[element])
 
         kwargs = { converter_arg:section_schema['elements'][element].get(converter_arg) for converter_arg in properties.data_type_conversion_args.get(section_dtypes.get(element))  }
         section_df[element] = converters.get(section_dtypes.get(element))(section_df[element], **kwargs)
 
-#        section_valid[element] = missing | section_elements[element].notna()
+        section_valid[element] = missing | section_df[element].notna()
                 
-    return section_df
+    return section_df,section_valid
 
 def read_sections(sections_df, schema):
     
     multiindex = True if len(sections_df.columns) > 1 or sections_df.columns[0] != properties.dummy_level else False
     data_df = pd.DataFrame()
-    
+    valid_df = pd.DataFrame()
     out_dtypes = dict()
     
     for section in sections_df.columns: 
@@ -81,18 +95,21 @@ def read_sections(sections_df, schema):
             # we'll see if we do that in the caller module or here....
             sections_df[section].to_csv(section_buffer,header=False, encoding = 'utf-8',index = False)#,quoting=csv.QUOTE_NONE,escapechar="\\",sep="\t") 
             ssshh = section_buffer.seek(0)
-        # Get the individual elements as objects
+            # Get the individual elements as objects
             if field_layout == 'fixed_width':
                 section_elements_obj = extract_fixed_width(section_buffer,section_schema)
             elif field_layout == 'delimited':
                 section_elements_obj = extract_delimited(section_buffer,section_schema)
                 
             section_elements_obj.drop(ignore, axis = 1, inplace = True)
+            
             # Read the objects to their data types and apply decoding, scaling and so on...
-            section_elements = read_data(section_elements_obj,section_schema)
+            section_elements, section_valid = read_data(section_elements_obj,section_schema)
             section_elements.index = sections_df[section].index
+            section_valid.index = sections_df[section].index
         else:
             section_elements = pd.DataFrame(sections_df[section],columns = [section])
+            section_valid = pd.DataFrame(index = section_elements.index,data = True, columns = [section])
                
         if not disable_read:
             if multiindex:
@@ -108,6 +125,8 @@ def read_sections(sections_df, schema):
                 out_dtypes.update({ section:'object' } )        
         
         section_elements.columns = [ (section, x) for x in section_elements.columns] if multiindex else section_elements.columns
+        section_valid.columns = section_elements.columns
         data_df = pd.concat([data_df,section_elements],sort = False,axis=1)
-           
-    return data_df,out_dtypes
+        valid_df = pd.concat([valid_df,section_valid],sort = False,axis=1)
+        
+    return data_df, valid_df, out_dtypes

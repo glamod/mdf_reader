@@ -13,7 +13,7 @@ import pandas as pd
 # Supported formats, sources and internal data models -------------------------
 schema_path = os.path.join(os.path.dirname(__file__),'schemas','lib')
 supported_file_formats = [ os.path.basename(x).split(".")[0] for x in glob.glob(schema_path + '/*/*.json') if os.path.basename(x).split(".")[0] == os.path.dirname(x).split("/")[-1]]
-supported_sources = [pd.DataFrame, pd.io.parsers.TextFileReader, io.StringIO]
+supported_sources = [pd.io.parsers.TextFileReader, io.StringIO]
 
 # Data types ------------------------------------------------------------------
 numpy_integers = ['int8','int16','int32','int64','uint8','uint16','uint32','uint64']

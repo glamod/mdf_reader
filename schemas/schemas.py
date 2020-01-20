@@ -9,6 +9,7 @@ Read data file format json schema to dictionary
 Add schema validation:
     - check mandatory are not null
     - check fixed options
+..and return None if it does not validate
 
 """
 
@@ -58,22 +59,6 @@ def copy_template(schema, out_dir = None,out_path = None):
         print('\tRequested template {} must be a valid name.'.format(schema))
         print('\tValid names are: {}'.format(", ".join(schemas)))
         return
-
-def get_field_layout(field_layout_def,field_layout):
-    if not field_layout_def and not field_layout:
-        return None
-    elif not field_layout:
-        return field_layout_def
-    else:
-        return field_layout
-
-def get_delimiter(delimiter_def,delimiter):
-    if not delimiter_def and not delimiter:
-        return None
-    elif not delimiter_def:
-        return delimiter
-    else:
-        return field_layout
 
 def read_schema(schema_name = None, ext_schema_path = None):
 

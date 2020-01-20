@@ -5,7 +5,7 @@ Created on Tue Apr 30 09:38:17 2019
 
 Reads source data (file, pandas DataFrame or pd.io.parsers.TextFileReader) to
 a pandas DataFrame. The source data model needs to be input to the module as
-a named model (included in the module) or as the path to a data model.
+a named model (included in the module) or as the path to a valid data model.
 
 Data is validated against its data model after reading, producing a boolean mask.
 
@@ -17,13 +17,24 @@ read the data and validate it.
 import os
 import sys
 import pandas as pd
+import logging
+import json
+
 from mdf_reader.reader import reader as reader
 from mdf_reader.validate import validate as validate
 import mdf_reader.schemas as schemas
+
 import mdf_reader.properties as properties
 import mdf_reader.common.pandas_TextParser_hdlr as pandas_TextParser_hdlr
-import logging
-import json
+
+
+def validate_arg(arg_name,arg_value,arg_type):
+    
+    if arg_value and not isinstance(arg_value,arg_type):
+        logging.error('Argument {0} must be {1}, input type is {2}'.format(arg_name,arg_type,type(arg_value))) 
+        return False
+    else:
+        return True
 
 def read(source, data_model = None, data_model_path = None, sections = None,chunksize = None,
          skiprows = None, out_path = None ):
@@ -31,7 +42,7 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     logging.basicConfig(format='%(levelname)s\t[%(asctime)s](%(filename)s)\t%(message)s',
                     level=logging.INFO,datefmt='%Y%m%d %H:%M:%S',filename=None)
 
-    # 0. Make sure min info is available
+    # 0. Validate input
     if not data_model and not data_model_path:
         logging.error('A valid data model name or path to data model must be provided')
         return
@@ -43,8 +54,14 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
             logging.error('Can\'t reach data source {} as a file'.format(source))
             logging.info('Supported in-memory data sources are {}'.format(",".join(properties.supported_sources)))
             return
+    if not validate_arg('sections',sections,list):
+        return
+    if not validate_arg('chunksize',chunksize,int):
+        return    
+    if not validate_arg('skiprows',skiprows,int):
+        return    
 
-    # 1. Read schema(s) and get file format
+    # 1. Read data model: schema reader will return None if schema does not validate
     logging.info("READING DATA MODEL SCHEMA FILE...")
     schema = schemas.read_schema( schema_name = data_model, ext_schema_path = data_model_path)
     if not schema:
@@ -60,13 +77,14 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     data_columns = [ x for x in data ] if isinstance(data,pd.DataFrame) else data.orig_options['names']
     out_atts = schemas.df_schema(data_columns, schema, data_model)
 
-    # 5. Complete data validation
+    # 5. Complete data model validation
     logging.info("VALIDATING DATA")
     valid = validate.validate(data, out_atts, valid, data_model = data_model, data_model_path = data_model_path)
     if isinstance(data,pd.io.parsers.TextFileReader):
             logging.info('...RESTORING DATA PARSER')
             data = pandas_TextParser_hdlr.restore(data.f,data.orig_options)
 
+    # 6. Output to files if requested
     if out_path:
         logging.info('WRITING DATA TO FILES IN: {}'.format(out_path))
         cols = [ x for x in data ]
@@ -81,11 +99,11 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
         with open(os.path.join(out_path,'atts.json'),'w') as fileObj:
             json.dump(out_atts_json,fileObj,indent=4)
 
+    # 7. Return data
     return {'data':data,'atts':out_atts,'valid_mask':valid}
 
 if __name__=='__main__':
     kwargs = dict(arg.split('=') for arg in sys.argv[2:])
     if 'sections' in kwargs.keys():
         kwargs.update({ 'sections': [ x.strip() for x in kwargs.get('sections').split(",")] })
-    read(sys.argv[1],
-         **kwargs) # kwargs
+    read(sys.argv[1], **kwargs) # kwargs

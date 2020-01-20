@@ -3,10 +3,10 @@
 """
 Created on Tue Apr 30 09:38:17 2019
 
-Splits string reports in sections using a data model layout
+Splits string reports in sections using a data model layout.
 
-Input and output are simple pandas dataframes, with the output DF column names
-as the section names
+Input and output are simple pandas dataframes, with the output dataframe
+column names being section names
 
 To work with a pandas TextParser, loop through this module.
 
@@ -34,8 +34,6 @@ use, also support to chunking would make converting to series a bit dirty...
 import pandas as pd
 from copy import deepcopy
 import logging
-import mdf_reader.properties as properties
-
 
 #   ---------------------------------------------------------------------------
 #   FUNCTIONS TO PERFORM INITIAL SEPARATION OF SECTIONS: MAIN IS GET_SECTIONS()
@@ -128,7 +126,7 @@ def add_dynamic_children():
     if (len(threads[thread_id]['modulo'])) > 0:
         add_higher_group_children()
 
-def extract_sections(df_in):
+def extract_sections(string_df):
     # threads elements:
     #    'parsing_order'            What needs to be applied to current parent data
     #    'group_number'             Order in the global parsing order
@@ -154,7 +152,7 @@ def extract_sections(df_in):
     threads[thread_id]['group_number'] = 0
     threads[thread_id]['group_type'] = None
     threads[thread_id]['section'] = None
-    threads[thread_id]['parent_data'] = df_in
+    threads[thread_id]['parent_data'] = string_df
     threads[thread_id]['data'] = None
     threads[thread_id]['modulo'] = threads[thread_id]['parent_data']
     del threads[thread_id]['parent_data']
@@ -198,25 +196,25 @@ def extract_sections(df_in):
 #   ---------------------------------------------------------------------------
 #   MAIN
 #   ---------------------------------------------------------------------------
-def get_sections(StringDf, schema, read_sections):
+def get_sections(string_df, schema, read_sections):
     global sentinals, section_lens, sentinals_lens
     global parsing_order
-
+    # Proceed to split sections if more than one
     if len(schema['sections'].keys())> 1:
         section_lens = { section: schema['sections'][section]['header'].get('length') for section in schema['sections'].keys()}
         sentinals = { section: schema['sections'][section]['header'].get('sentinal') for section in schema['sections'].keys()}
         sentinals_lens = { section: len(sentinals.get(section)) if sentinals.get(section) else 0 for section in sentinals.keys()}
         parsing_order = schema['header']['parsing_order']
         # Get sections separated
-        section_strings = extract_sections(StringDf)
+        section_strings = extract_sections(string_df)
         # Paste in order in a single dataframe with columns named as sections
         # Do not include sections not asked for
         df_out = pd.DataFrame()
         for section in read_sections:
             df_out = pd.concat([df_out,section_strings[section].rename(section)],sort = False,axis=1)
     else:
-        df_out = StringDf
+        # return section in named column
+        df_out = string_df
         df_out.columns = read_sections
-
 
     return df_out
