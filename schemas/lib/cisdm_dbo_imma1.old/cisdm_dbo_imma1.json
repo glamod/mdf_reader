@@ -1,0 +1,163 @@
+{
+    "header": {
+        "format": "fixed_width",
+        "delimiter": ","
+    },
+    "elements": {
+        "Identifier": {
+            "description": "WMO Buoy number",
+            "field_length": 5,
+            "column_type": "object"
+        },
+        "Odate": {
+            "description": "Observation date",
+            "field_length": 8,
+            "column_type": "str"
+        },
+        "Otime": {
+            "description": "Observation time",
+            "field_length": 4,
+            "column_type": "str"
+        },
+        "Lat": {
+            "description": "Latitude (positive North)",
+            "field_length": 9,
+            "column_type": "float16",
+            "valid_max": 90.0,
+            "valid_min": -90.0,
+            "decimal_places": 4,
+            "units": "degrees"
+        },
+        "Lon": {
+            "description": "Longitude (positive West)",
+            "field_length": 9,
+            "column_type": "float16",
+            "valid_max": 180.0,
+            "valid_min": -180.0,
+            "decimal_places": 4,
+            "units": "degrees"
+        },
+        "QC_POS": {
+            "description": "Quality control flag for position",
+            "field_length": 1,
+            "column_type": "key",
+            "missing_value":"P",
+            "codetable": "qc_flags"
+        },
+        "PDT": {
+            "description": "Position date",
+            "field_length": 8,
+            "column_type": "str"
+        },
+        "PTM": {
+            "description": "Position time",
+            "field_length": 4,
+            "column_type": "str"
+        },
+        "Drogue": {
+            "description": "Drogue depth",
+            "field_length": 7,
+            "column_type": "float16",
+            "valid_max": 99999.0,
+            "valid_min": 0.0,
+            "decimal_places": 1,
+            "units": "metre"
+        },
+        "SST": {
+            "description": "Sea surface temperature",
+            "field_length": 7,
+            "column_type": "float16",
+            "valid_max": 99.99,
+            "valid_min": -99.99,
+            "decimal_places": 2,
+            "units": "degree Celsius"
+        },
+        "QC_SST": {
+            "description": "Quality control flag for SST",
+            "field_length": 1,
+            "column_type": "key",
+            "missing_value":"P",
+            "codetable": "qc_flags"
+        },
+        "Airtemp": {
+            "description": "Air temperature",
+            "field_length": 7,
+            "column_type": "float16",
+            "valid_max": 99.99,
+            "valid_min": -99.99,
+            "decimal_places": 2,
+            "units": "degree Celsius"
+        },
+        "QC_AirT": {
+            "description": "Quality control flag for Air temp",
+            "field_length": 1,
+            "column_type": "key",
+            "missing_value":"P",
+            "codetable": "qc_flags"
+        },
+        "Pressure": {
+            "description": "Air Pressure at sea level",
+            "field_length": 7,
+            "column_type": "float32",
+            "valid_max": 1074.6,
+            "valid_min": 870.0,
+            "decimal_places": 2,
+            "units": "hectopascal"
+        },
+        "QC_Pr": {
+            "description": "Quality control flag for pressure",
+            "field_length": 1,
+            "column_type": "key",
+            "missing_value":"P",
+            "codetable": "qc_flags"
+        },
+        "WSp": {
+            "description": "Wind speed",
+            "field_length": 7,
+            "column_type": "float16",
+            "valid_max": 99.99,
+            "valid_min": 0.0,
+            "decimal_places": 2,
+            "units": "metres per second"
+
+        },
+        "QC_Wsp": {
+            "description": "Quality control flag for Wind Speed",
+            "field_length": 1,
+            "column_type": "key",
+            "missing_value":"P",
+            "codetable": "qc_flags"
+        },
+        "WDir": {
+            "description": "Wind direction relative to true North",
+            "field_length": 7,
+            "column_type": "float16",
+            "valid_max": 360.0,
+            "valid_min": 0.0,
+            "decimal_places": 2,
+            "units": "degrees true"
+        },
+        "QC_WD": {
+            "description": "Quality control flag for Wind direction",
+            "field_length": 1,
+            "column_type": "key",
+            "missing_value":"P",
+            "codetable": "qc_flags"
+        },
+        "RelHum": {
+            "description": "Relative humidity (%)",
+            "field_length": 7,
+            "column_type": "float16",
+            "valid_max": 100.0,
+            "valid_min": 0.0,
+            "decimal_places": 2
+        },
+        "QC_RH": {
+            "description": "Quality control flag for relative humidity",
+            "field_length": 1,
+            "column_type": "key",
+            "missing_value":"P",
+            "codetable": "qc_flags"
+        }
+    }
+}
