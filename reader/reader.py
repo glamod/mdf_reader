@@ -59,11 +59,16 @@ def read_model(source,schema, sections = None, chunksize = None, skiprows = None
     valid_buffer = StringIO()
     
     for i,string_df in enumerate(TextParser):
-        # a. Get sections separated in a dataframe columns:
-        # one per column, only requested sections, ignore rest.
+        # a. Get a DF with sections separated in columns:
+        # - one section per column
+        # - only sections requested, ignore rest
+        # - requested NA sections as NaN columns
+        # - columns order as in read_sections_list
         sections_df = get_sections.get_sections(string_df, schema, read_sections_list)
+        
         # b. Read elements from sections: along data chunks, resulting data types
         # may vary if gaps, keep track of data types!
+        # Sections as parsed in the same order as sections_df.columns
         [data_df, valid_df, out_dtypesi ] = read_sections.read_sections(sections_df, schema)
         if i == 0:
             out_dtypes = copy.deepcopy(out_dtypesi)
@@ -73,16 +78,16 @@ def read_model(source,schema, sections = None, chunksize = None, skiprows = None
                 out_dtypes.update({ k:out_dtypesi.get(k) })
         # Save to buffer
         data_df.to_csv(data_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
-        valid_df.to_csv(data_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
+        valid_df.to_csv(valid_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
        
     # 4. OUTPUT DATA ----------------------------------------------------------
     # WE'LL NEED TO POSPROCESS THIS WHEN READING MULTIPLE REPORTS PER LINE
     data_buffer.seek(0)
     valid_buffer.seek(0)
     logging.info("Wrapping output....")
-#   Chunksize from the imported TextParser if it is a pd.io.parsers.TextFileReader
-#   (source is either pd.io.parsers.TextFileReader or a file with chunksize specified on input):
-#   This way it supports direct chunksize property inheritance if the input source was a pd.io.parsers.TextFileReader
+    # Chunksize from the imported TextParser if it is a pd.io.parsers.TextFileReader
+    # (source is either pd.io.parsers.TextFileReader or a file with chunksize specified on input):
+    # This way it supports direct chunksize property inheritance if the input source was a pd.io.parsers.TextFileReader
     chunksize = TextParser.orig_options['chunksize'] if isinstance(TextParser,pd.io.parsers.TextFileReader) else None
     # 'datetime' is not a valid pandas dtype: Only on output (on reading) will be then converted (via parse_dates) to datetime64[ns] type, cannot specify 'datetime' (of any kind) here: will fail
     date_columns = [] # Needs to be the numeric index of the column, as seems not to be able to work with tupples....

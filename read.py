@@ -51,8 +51,8 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
             logging.error('Data source is empty (first argument to read()) ')
             return
         elif not os.path.isfile(source):
-            logging.error('Can\'t reach data source {} as a file'.format(source))
-            logging.info('Supported in-memory data sources are {}'.format(",".join(properties.supported_sources)))
+            logging.error('Could not open data source file {}'.format(source))
+            logging.info('Otherwise, supported in-memory data sources are {}'.format(",".join([ str(x) for x in properties.supported_sources])))
             return
     if not validate_arg('sections',sections,list):
         return
@@ -71,7 +71,6 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     imodel = data_model if data_model else data_model_path
     logging.info("EXTRACTING DATA FROM MODEL: {}".format(imodel))
     data, valid = reader.read_model(source,schema, sections = sections, chunksize = chunksize, skiprows = skiprows)
-
     # 4. Create out data attributes
     logging.info("CREATING OUTPUT DATA ATTRIBUTES FROM DATA MODEL(S)")
     data_columns = [ x for x in data ] if isinstance(data,pd.DataFrame) else data.orig_options['names']

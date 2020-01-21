@@ -184,8 +184,8 @@ def extract_sections(string_df):
     section_dict = dict()
     section_groups = [ d[x] for d in parsing_order for x in d.keys() ]
     sections = [item for sublist in section_groups for item in sublist]
+    
     for section in sections:
-        #section_dict[section] = pd.DataFrame() # Index as initial size to help final merging
         section_dict[section] = pd.Series()
         thread_ids = [ x for x in threads.keys() if threads[x]['section'] == section ]
         for thread_id in thread_ids:
@@ -200,20 +200,24 @@ def get_sections(string_df, schema, read_sections):
     global sentinals, section_lens, sentinals_lens
     global parsing_order
     # Proceed to split sections if more than one
+    # else return section in a named column
     if len(schema['sections'].keys())> 1:
         section_lens = { section: schema['sections'][section]['header'].get('length') for section in schema['sections'].keys()}
         sentinals = { section: schema['sections'][section]['header'].get('sentinal') for section in schema['sections'].keys()}
         sentinals_lens = { section: len(sentinals.get(section)) if sentinals.get(section) else 0 for section in sentinals.keys()}
         parsing_order = schema['header']['parsing_order']
-        # Get sections separated
-        section_strings = extract_sections(string_df)
-        # Paste in order in a single dataframe with columns named as sections
-        # Do not include sections not asked for
+        # Get sections separated: section dict has a key:value pair for each
+        # section in the data model. If the section does not exist in the data,
+        # the value is an empty pd.Series
+        section_dict = extract_sections(string_df)
+        # Paste in order (as read_sections) in a single dataframe with columns
+        # named as sections:
+        # - Drop unwanted sections
+        # - Keep requested but non-existent sections
         df_out = pd.DataFrame()
         for section in read_sections:
-            df_out = pd.concat([df_out,section_strings[section].rename(section)],sort = False,axis=1)
+            df_out = pd.concat([df_out,section_dict[section].rename(section)],sort = False,axis=1)
     else:
-        # return section in named column
         df_out = string_df
         df_out.columns = read_sections
 

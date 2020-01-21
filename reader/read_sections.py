@@ -62,7 +62,7 @@ def read_data(section_df,section_schema):
         section_df[element] = converters.get(section_dtypes.get(element))(section_df[element], **kwargs)
 
         section_valid[element] = missing | section_df[element].notna()
-                
+             
     return section_df,section_valid
 
 def read_sections(sections_df, schema):

@@ -149,6 +149,8 @@ def df_schema(df_columns, schema, data_model, supp_section = None, supp_schema =
     for section in schema.get('sections'):
         if section == properties.dummy_level:
             flat_schema.update(schema['sections'].get(section).get('elements'))
+        elif schema['sections'].get(section).get('header').get('disable_read'):
+            flat_schema.update( { (section, section): {'column_type':'object'} })    
         else:
             flat_schema.update( { (section, x): schema['sections'].get(section).get('elements').get(x) for x in schema['sections'].get(section).get('elements') })
 
