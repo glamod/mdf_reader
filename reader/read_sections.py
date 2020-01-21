@@ -17,6 +17,19 @@ structure:
     2) Data model with no sections[element0...element1]
 
 
+DEV NOTES:
+1) the 'quoted' issue: in version 1.0:
+ # Writing options from quoting on to prevent supp buoy data to be quoted:
+ # maybe this happenned because buoy data has commas, and pandas makes its own decission about
+ # how to write that.....
+ #https://stackoverflow.com/questions/21147058/pandas-to-csv-output-quoting-issue
+ # quoting=csv.QUOTE_NONE was failing when a section is empty (or just one record in a section,...)
+ sections_df[section].to_csv(section_buffer,header=False, encoding = 'utf-8',index = False,quoting=csv.QUOTE_NONE,escapechar="\\",sep="\t")   
+
+ But we were still experiencing problems when reading fully empty sections, now
+ we only write to the section buffer reports that are not empty. We afterwards
+ recover the indexes....
+    
 @author: iregon
 """
 
@@ -68,8 +81,8 @@ def read_data(section_df,section_schema):
 def read_sections(sections_df, schema):
     
     multiindex = True if len(sections_df.columns) > 1 or sections_df.columns[0] != properties.dummy_level else False
-    data_df = pd.DataFrame()
-    valid_df = pd.DataFrame()
+    data_df = pd.DataFrame(index = sections_df.index)
+    valid_df = pd.DataFrame(index = sections_df.index)
     out_dtypes = dict()
     
     for section in sections_df.columns: 
@@ -86,14 +99,12 @@ def read_sections(sections_df, schema):
                 sections_df[section] = sections_df[section].str.replace(delimiter,'')
         
             section_buffer = StringIO()
-            # Writing options from quoting on to prevent supp buoy data to be quoted:
-            # maybe this happenned because buoy data has commas, and pandas makes its own decission about
-            # how to write that.....
-            #https://stackoverflow.com/questions/21147058/pandas-to-csv-output-quoting-issue
-            # quoting=csv.QUOTE_NONE was failing when a section is empty (or just one record in a section,...)
             # Here indices are lost, have to give the real ones, those in section_strings:
             # we'll see if we do that in the caller module or here....
-            sections_df[section].to_csv(section_buffer,header=False, encoding = 'utf-8',index = False)#,quoting=csv.QUOTE_NONE,escapechar="\\",sep="\t") 
+            # Only pass records with data to avoid the hassle of dealing with
+            # how the NaN rows are written and then read!
+            notna_idx = sections_df[sections_df[section].notna()].index
+            sections_df[section].loc[notna_idx].to_csv(section_buffer,header=False, encoding = 'utf-8',index = False)
             ssshh = section_buffer.seek(0)
             # Get the individual elements as objects
             if field_layout == 'fixed_width':
@@ -104,29 +115,38 @@ def read_sections(sections_df, schema):
             section_elements_obj.drop(ignore, axis = 1, inplace = True)
             
             # Read the objects to their data types and apply decoding, scaling and so on...
+            # Give them their actual indexes back
             section_elements, section_valid = read_data(section_elements_obj,section_schema)
-            section_elements.index = sections_df[section].index
-            section_valid.index = sections_df[section].index
+            section_elements.index = notna_idx
+            section_valid.index = notna_idx
+
         else:
             section_elements = pd.DataFrame(sections_df[section],columns = [section])
             section_valid = pd.DataFrame(index = section_elements.index,data = True, columns = [section])
-               
-        if not disable_read:
-            if multiindex:
-                out_dtypes.update({ (section,i):properties.pandas_dtypes.get(section_schema['elements'][i].get('column_type')) for i in section_elements.columns } )
-                out_dtypes.update({ (section,i):section_elements[i].dtype.name for i in section_elements if section_elements[i].dtype.name in properties.numpy_floats})
-            else:
-                out_dtypes.update({ i:properties.pandas_dtypes.get(section_schema['elements'][i].get('column_type')) for i in section_elements.columns } ) 
-                out_dtypes.update({ i:section_elements[i].dtype.name for i in section_elements if section_elements[i].dtype.name in properties.numpy_floats})
-        else:
-            if multiindex:
-                    out_dtypes.update({ (section,section):'object' } )
-            else:
-                out_dtypes.update({ section:'object' } )        
+      
         
         section_elements.columns = [ (section, x) for x in section_elements.columns] if multiindex else section_elements.columns
         section_valid.columns = section_elements.columns
         data_df = pd.concat([data_df,section_elements],sort = False,axis=1)
         valid_df = pd.concat([valid_df,section_valid],sort = False,axis=1)
         
+    # We do the actual out_dtypes here: because the full indexing occurs only
+    # after concat, NaN values may arise only in data_df if a section is
+    # not existing in a given report!
+    for section in sections_df.columns:
+        section_schema = schema['sections'].get(section)
+        if not section_schema.get('header').get('disable_read'): 
+            elements = [ x[1] for x in data_df.columns if x[0] == section ]
+            if multiindex:
+                out_dtypes.update({ (section,i):properties.pandas_dtypes.get(section_schema['elements'][i].get('column_type')) for i in elements } )
+                out_dtypes.update({ (section,i):data_df[(section,i)].dtype.name for i in elements if data_df[(section,i)].dtype.name in properties.numpy_floats})
+            else:
+                out_dtypes.update({ i:properties.pandas_dtypes.get(section_schema['elements'][i].get('column_type')) for i in elements } ) 
+                out_dtypes.update({ i:data_df[i].dtype.name for i in section_elements if data_df[i].dtype.name in properties.numpy_floats})
+        else:
+            if multiindex:
+                    out_dtypes.update({ (section,section):'object' } )
+            else:
+                out_dtypes.update({ section:'object' } ) 
+                
     return data_df, valid_df, out_dtypes
