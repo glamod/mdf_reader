@@ -50,6 +50,7 @@ import io
 from mdf_reader import properties
 
 def to_iterable_df(source,skiprows = None, chunksize = None):
+    print('chunksize is {}'.format(str(chunksize)))
     TextParser = pd.read_fwf(source,widths=[properties.MAX_FULL_REPORT_WIDTH],header = None, delimiter="\t", skiprows = skiprows, chunksize = chunksize)
     if not chunksize:
         TextParser = [TextParser]

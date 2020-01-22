@@ -133,15 +133,13 @@ def read_schema(schema_name = None, ext_schema_path = None):
             schema['header']['parsing_order'][0]['s'].append(str(i))
         return schema
 
-def df_schema(df_columns, schema, data_model, supp_section = None, supp_schema = None, supp_model = None ):
-    def clean_schema(columns,schema,data_model):
+def df_schema(df_columns, schema):
+    def clean_schema(columns,schema):
         # Could optionally add cleaning of element descriptors that only apply
         # to the initial reading of the data model: field_length, etc....
         for element in list(schema):
             if element not in columns:
                 schema.pop(element)
-            else:
-                schema[element].update({'data_model': data_model})
         return
 
     flat_schema = dict()
@@ -154,12 +152,7 @@ def df_schema(df_columns, schema, data_model, supp_section = None, supp_schema =
         else:
             flat_schema.update( { (section, x): schema['sections'].get(section).get('elements').get(x) for x in schema['sections'].get(section).get('elements') })
 
-    clean_schema(df_columns, flat_schema, data_model)
-    # Here we are assuming supp data has no sections!
-    if supp_section:
-        flat_supp = dict()
-        flat_supp.update( { (supp_section, x): supp_schema['sections'].get(properties.dummy_level).get('elements').get(x) for x in supp_schema['sections'].get(properties.dummy_level).get('elements') })
-        clean_schema(df_columns, flat_supp, supp_model)
-        flat_schema.update(flat_supp)
+    clean_schema(df_columns, flat_schema)
+
 
     return flat_schema

@@ -31,6 +31,56 @@ from mdf_reader.reader import get_sections
 from mdf_reader.reader import read_sections
 from mdf_reader.validate import validate
 
+toolPath = os.path.dirname(os.path.abspath(__file__))
+schema_lib = os.path.join(toolPath,'schemas','lib')
+
+def ERV(TextParser,read_sections_list, schema, code_tables_path):
+    data_buffer = StringIO()
+    valid_buffer = StringIO()
+
+    for i_chunk, string_df in enumerate(TextParser):
+        # a. Get a DF with sections separated in columns:
+        # - one section per column
+        # - only sections requested, ignore rest
+        # - requested NA sections as NaN columns
+        # - columns order as in read_sections_list
+        sections_df = get_sections.get_sections(string_df, schema, read_sections_list)
+        
+        # b. Read elements from sections: along data chunks, resulting data types
+        # may vary if gaps, keep track of data types!
+        # Sections as parsed in the same order as sections_df.columns
+        [data_df, valid_df, out_dtypesi ] = read_sections.read_sections(sections_df, schema)
+        if i_chunk == 0:
+            out_dtypes = copy.deepcopy(out_dtypesi)
+            
+        for k in out_dtypesi: 
+            if out_dtypesi in properties.numpy_floats:
+                out_dtypes.update({ k:out_dtypesi.get(k) })
+                
+        valid_df = validate.validate(data_df, valid_df, schema, code_tables_path)        
+        # Save to buffer
+        data_df.to_csv(data_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
+        valid_df.to_csv(valid_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
+    # Create the output 
+    # WE'LL NEED TO POSPROCESS THIS WHEN READING MULTIPLE REPORTS PER LINE
+    data_buffer.seek(0)
+    valid_buffer.seek(0)
+    logging.info("Wrapping output....")
+    # Chunksize from the imported TextParser if it is a pd.io.parsers.TextFileReader
+    # (source is either pd.io.parsers.TextFileReader or a file with chunksize specified on input):
+    # This way it supports direct chunksize property inheritance if the input source was a pd.io.parsers.TextFileReader
+    chunksize = TextParser.orig_options['chunksize'] if isinstance(TextParser,pd.io.parsers.TextFileReader) else None
+    # 'datetime' is not a valid pandas dtype: Only on output (on reading) will be then converted (via parse_dates) to datetime64[ns] type, cannot specify 'datetime' (of any kind) here: will fail
+    date_columns = [] # Needs to be the numeric index of the column, as seems not to be able to work with tupples....
+    for i,element in enumerate(list(out_dtypes)):
+        if out_dtypes.get(element) == 'datetime':
+            date_columns.append(i)
+    
+    data = pd.read_csv(data_buffer,names = data_df.columns, chunksize = chunksize, dtype = out_dtypes, parse_dates = date_columns)
+    valid = pd.read_csv(valid_buffer,names = data_df.columns, chunksize = chunksize)
+    
+    return data, valid
+
 def validate_arg(arg_name,arg_value,arg_type):
     
     if arg_value and not isinstance(arg_value,arg_type):
@@ -70,12 +120,17 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     schema = schemas.read_schema( schema_name = data_model, ext_schema_path = data_model_path)
     if not schema:
         return
+    if data_model:
+        model_path = os.path.join(schema_lib,data_model)
+    else:
+        model_path = data_model_path 
+    code_tables_path = os.path.join(model_path,'code_tables')
     # For future use: some work already done in schema reading
     if schema['header'].get('multiple_reports_per_line'):
         logging.error('File format not yet supported')
         sys.exit(1)
         
-    # 2. Read data
+    # 2. Read and validate data
     imodel = data_model if data_model else data_model_path
     logging.info("EXTRACTING DATA FROM MODEL: {}".format(imodel)) 
     
@@ -92,65 +147,18 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     # a list with a single dataframe or a pd.io.parsers.TextFileReader
     logging.info("Getting data string from source...")
     TextParser = import_data.import_data(source, chunksize = chunksize, skiprows = skiprows)
+    print(type(TextParser))
     
-    # 2.3. Extract and read data in same loop
-    logging.info("Extracting sections...")
-    data_buffer = StringIO()
-    valid_buffer = StringIO()
-    
-    for i,string_df in enumerate(TextParser):
-        # a. Get a DF with sections separated in columns:
-        # - one section per column
-        # - only sections requested, ignore rest
-        # - requested NA sections as NaN columns
-        # - columns order as in read_sections_list
-        sections_df = get_sections.get_sections(string_df, schema, read_sections_list)
-        
-        # b. Read elements from sections: along data chunks, resulting data types
-        # may vary if gaps, keep track of data types!
-        # Sections as parsed in the same order as sections_df.columns
-        [data_df, valid_df, out_dtypesi ] = read_sections.read_sections(sections_df, schema)
-        if i == 0:
-            out_dtypes = copy.deepcopy(out_dtypesi)
-            
-        for k in out_dtypesi: 
-            if out_dtypesi in properties.numpy_floats:
-                out_dtypes.update({ k:out_dtypesi.get(k) })
-        # Save to buffer
-        data_df.to_csv(data_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
-        valid_df.to_csv(valid_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
-       
-    # 2.4 Create output data
-    # WE'LL NEED TO POSPROCESS THIS WHEN READING MULTIPLE REPORTS PER LINE
-    data_buffer.seek(0)
-    valid_buffer.seek(0)
-    logging.info("Wrapping output....")
-    # Chunksize from the imported TextParser if it is a pd.io.parsers.TextFileReader
-    # (source is either pd.io.parsers.TextFileReader or a file with chunksize specified on input):
-    # This way it supports direct chunksize property inheritance if the input source was a pd.io.parsers.TextFileReader
-    chunksize = TextParser.orig_options['chunksize'] if isinstance(TextParser,pd.io.parsers.TextFileReader) else None
-    # 'datetime' is not a valid pandas dtype: Only on output (on reading) will be then converted (via parse_dates) to datetime64[ns] type, cannot specify 'datetime' (of any kind) here: will fail
-    date_columns = [] # Needs to be the numeric index of the column, as seems not to be able to work with tupples....
-    for i,element in enumerate(list(out_dtypes)):
-        if out_dtypes.get(element) == 'datetime':
-            date_columns.append(i)
-    
-    data = pd.read_csv(data_buffer,names = data_df.columns, chunksize = chunksize, dtype = out_dtypes, parse_dates = date_columns)
-    valid = pd.read_csv(valid_buffer,names = data_df.columns, chunksize = chunksize)
+    # 2.3. Extract, read and validate data in same loop
+    logging.info("Extracting and reading sections")
+    data,valid = ERV(TextParser,read_sections_list, schema, code_tables_path)
     
     # 3. Create out data attributes
     logging.info("CREATING OUTPUT DATA ATTRIBUTES FROM DATA MODEL(S)")
     data_columns = [ x for x in data ] if isinstance(data,pd.DataFrame) else data.orig_options['names']
-    out_atts = schemas.df_schema(data_columns, schema, data_model)
+    out_atts = schemas.df_schema(data_columns, schema)
 
-    # 4. Complete data model validation
-    logging.info("VALIDATING DATA")
-    valid = validate.validate(data, out_atts, valid, data_model = data_model, data_model_path = data_model_path)
-    if isinstance(data,pd.io.parsers.TextFileReader):
-            logging.info('...RESTORING DATA PARSER')
-            data = pandas_TextParser_hdlr.restore(data.f,data.orig_options)
-
-    # 5. Output to files if requested
+    # 4. Output to files if requested
     if out_path:
         enlisted = False
         if not isinstance(data,pd.io.parsers.TextFileReader):
@@ -182,7 +190,7 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
         with open(os.path.join(out_path,'atts.json'),'w') as fileObj:
             json.dump(out_atts_json,fileObj,indent=4)
 
-    # 6. Return data
+    # 5. Return data
     return {'data':data,'atts':out_atts,'valid_mask':valid}
 
 if __name__=='__main__':
