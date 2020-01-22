@@ -85,16 +85,33 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
 
     # 6. Output to files if requested
     if out_path:
+        enlisted = False
+        if not isinstance(data,pd.io.parsers.TextFileReader):
+            data = [data]
+            valid = [valid]
+            enlisted = True
         logging.info('WRITING DATA TO FILES IN: {}'.format(out_path))
-        cols = [ x for x in data ]
-        if isinstance(cols[0],tuple):
-            header = [":".join(x) for x in cols]
-            out_atts_json = { ":".join(x):out_atts.get(x) for x in out_atts.keys() }
+
+        for i, (data_df,valid_df) in enumerate(zip(data,valid)):
+            header = False
+            mode = 'a'
+            if i == 0:
+                mode = 'w'
+                cols = [ x for x in data_df ]
+                if isinstance(cols[0],tuple):
+                    header = [":".join(x) for x in cols]
+                    out_atts_json = { ":".join(x):out_atts.get(x) for x in out_atts.keys() }
+                else:
+                    header = cols
+                    out_atts_json = out_atts
+            data_df.to_csv(os.path.join(out_path,'data.csv'), header = header, mode = mode, encoding = 'utf-8',index = True, index_label='index')
+            valid_df.to_csv(os.path.join(out_path,'valid_mask.csv'), header = header, mode = mode, encoding = 'utf-8',index = True, index_label='index')  
+        if enlisted:
+            data = data[0]
+            valid = valid[0]
         else:
-            header = cols
-            out_atts_json = out_atts
-        data.to_csv(os.path.join(out_path,'data.csv'), header = header, encoding = 'utf-8',index = True, index_label='index')
-        valid.to_csv(os.path.join(out_path,'valid_mask.csv'), header = header, encoding = 'utf-8',index = True, index_label='index')
+            data = pandas_TextParser_hdlr.restore(data.f,data.orig_options)
+            valid = pandas_TextParser_hdlr.restore(valid.f,valid.orig_options)
         with open(os.path.join(out_path,'atts.json'),'w') as fileObj:
             json.dump(out_atts_json,fileObj,indent=4)
 
