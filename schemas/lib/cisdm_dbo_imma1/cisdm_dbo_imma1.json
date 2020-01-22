@@ -2217,14 +2217,16 @@
               "ATTI": {
                   "description": "attm ID",
                   "field_length": 2,
-                  "column_type": "str"
+                  "column_type": "str",
+                  "ignore":true
               },
               "ATTL": {
                   "description": "attm length",
                   "field_length": 2,
                   "column_type": "int8",
                   "valid_max": 0,
-                  "valid_min": 0
+                  "valid_min": 0,
+                  "ignore":true
               },
               "BLK": {
                   "description": "blank space",
