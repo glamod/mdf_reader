@@ -35,9 +35,10 @@ DEV NOTES:
 
 import pandas as pd
 from io import StringIO as StringIO
-import mdf_reader.properties as properties
-from mdf_reader.common.converters import converters
-from mdf_reader.common.decoders import decoders
+
+from .. import properties
+from ..common.converters import converters
+from ..common.decoders import decoders
 
 def extract_fixed_width(section_serie_bf,section_schema):
     # Read section elements descriptors

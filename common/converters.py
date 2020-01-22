@@ -1,10 +1,7 @@
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
-
-from mdf_reader import properties
-import numpy as np
 import pandas as pd
+
+from .. import properties
+
 
 # 1. dtype must be defined in dtype_properties.data_types
 #>>> if not np.dtype('int8'):

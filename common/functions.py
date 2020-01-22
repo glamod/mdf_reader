@@ -1,7 +1,3 @@
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
-
 import pandas as pd
 
 def df_prepend_datetime(df,date_columns,date_format,date_name = "_datetime"):

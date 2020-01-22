@@ -1,12 +1,8 @@
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
 
 import numpy as np
-import pandas as pd
 import string
-import logging
-from mdf_reader import properties
+
+from .. import properties
 
 
 #for importer, modname, ispkg in pkgutil.walk_packages(path=package.__path__,prefix=package.__name__+'.',onerror=lambda x: None):

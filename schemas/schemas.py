@@ -14,10 +14,6 @@ Add schema validation:
 """
 
 
-from __future__ import print_function
-from __future__ import absolute_import
-# Import required libraries
-
 import os
 import sys
 import json
@@ -25,6 +21,7 @@ import logging
 import shutil
 from copy import deepcopy
 import glob
+
 from .. import properties
 
 if sys.version_info[0] >= 3:

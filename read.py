@@ -22,14 +22,13 @@ import json
 import copy
 from io import StringIO as StringIO
 
-import mdf_reader.schemas as schemas
-import mdf_reader.properties as properties
-import mdf_reader.common.pandas_TextParser_hdlr as pandas_TextParser_hdlr
-
-from mdf_reader.reader import import_data
-from mdf_reader.reader import get_sections
-from mdf_reader.reader import read_sections
-from mdf_reader.validate import validate
+from . import schemas 
+from . import properties 
+from .common import pandas_TextParser_hdlr 
+from .reader import import_data
+from .reader import get_sections
+from .reader import read_sections
+from .validate import validate
 
 toolPath = os.path.dirname(os.path.abspath(__file__))
 schema_lib = os.path.join(toolPath,'schemas','lib')
@@ -147,7 +146,6 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     # a list with a single dataframe or a pd.io.parsers.TextFileReader
     logging.info("Getting data string from source...")
     TextParser = import_data.import_data(source, chunksize = chunksize, skiprows = skiprows)
-    print(type(TextParser))
     
     # 2.3. Extract, read and validate data in same loop
     logging.info("Extracting and reading sections")

@@ -9,7 +9,7 @@ Assumes we are never writing a header!
 """
 
 import pandas as pd
-import mdf_reader.common.logging_hdlr as logging_hdlr
+from . import logging_hdlr
 
 logger = logging_hdlr.init_logger(__name__,level = 'DEBUG')
 
@@ -18,7 +18,7 @@ def restore(TextParser_ref,TextParser_options):
         TextParser_ref.seek(0)
         TextParser = pd.read_csv( TextParser_ref, names = TextParser_options['names'],chunksize = TextParser_options['chunksize'], dtype = TextParser_options['dtype']) #, skiprows = options['skiprows'])
         return TextParser
-    except Exception as e:
+    except:
         logger.error('Failed to restore TextParser', exc_info=True)
         return TextParser
 
@@ -26,7 +26,7 @@ def is_not_empty(TextParser):
     try:
         TextParser_ref = TextParser.f
         TextParser_options = TextParser.orig_options
-    except Exception as e:
+    except:
         logger.error('Failed to process input. Input type is {}'.format(type(TextParser)), exc_info=True)
         return
     try:

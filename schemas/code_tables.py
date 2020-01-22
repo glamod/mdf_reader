@@ -3,14 +3,10 @@
 """
 Created on Thu Sep 13 15:14:51 2018
 """
-from __future__ import print_function
-from __future__ import absolute_import
-# Import required libraries
 
 import sys
 import json
 import datetime
-import copy
 import numpy as np
 import pandas as pd
 import os

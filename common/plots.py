@@ -14,11 +14,12 @@ if ipython and want to get the interactive plots!
 
 @author: iregon
 """
-import mdf_reader
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+from .. import properties
 
 #------------------------------------------------------------------------------
 def plot_numeric_validation(data,mask,element,valid_max,valid_min, units):
@@ -87,7 +88,7 @@ def plot_model_validation(imodel):
     for element in imodel['atts'].keys():
         title_element = element if not isinstance(element,tuple) else element[1] + " (" + element[0] + ")"
         dtype = imodel['atts'].get(element).get('column_type')
-        if dtype in mdf_reader.properties.numeric_types: 
+        if dtype in properties.numeric_types: 
             valid_max = imodel['atts'].get(element).get('valid_max')
             valid_min = imodel['atts'].get(element).get('valid_min')
             units = imodel['atts'].get(element).get('units')
