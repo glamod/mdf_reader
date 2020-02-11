@@ -22,9 +22,9 @@ import json
 import copy
 from io import StringIO as StringIO
 
-from . import schemas 
-from . import properties 
-from .common import pandas_TextParser_hdlr 
+from . import schemas
+from . import properties
+from .common import pandas_TextParser_hdlr
 from .reader import import_data
 from .reader import get_sections
 from .reader import read_sections
@@ -34,6 +34,7 @@ toolPath = os.path.dirname(os.path.abspath(__file__))
 schema_lib = os.path.join(toolPath,'schemas','lib')
 
 def ERV(TextParser,read_sections_list, schema, code_tables_path):
+
     data_buffer = StringIO()
     valid_buffer = StringIO()
 
@@ -44,23 +45,23 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
         # - requested NA sections as NaN columns
         # - columns order as in read_sections_list
         sections_df = get_sections.get_sections(string_df, schema, read_sections_list)
-        
+
         # b. Read elements from sections: along data chunks, resulting data types
         # may vary if gaps, keep track of data types!
         # Sections as parsed in the same order as sections_df.columns
         [data_df, valid_df, out_dtypesi ] = read_sections.read_sections(sections_df, schema)
         if i_chunk == 0:
             out_dtypes = copy.deepcopy(out_dtypesi)
-            
-        for k in out_dtypesi: 
+
+        for k in out_dtypesi:
             if out_dtypesi in properties.numpy_floats:
                 out_dtypes.update({ k:out_dtypesi.get(k) })
-                
-        valid_df = validate.validate(data_df, valid_df, schema, code_tables_path)        
+
+        valid_df = validate.validate(data_df, valid_df, schema, code_tables_path)
         # Save to buffer
         data_df.to_csv(data_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
         valid_df.to_csv(valid_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
-    # Create the output 
+    # Create the output
     # WE'LL NEED TO POSPROCESS THIS WHEN READING MULTIPLE REPORTS PER LINE
     data_buffer.seek(0)
     valid_buffer.seek(0)
@@ -69,21 +70,22 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
     # (source is either pd.io.parsers.TextFileReader or a file with chunksize specified on input):
     # This way it supports direct chunksize property inheritance if the input source was a pd.io.parsers.TextFileReader
     chunksize = TextParser.orig_options['chunksize'] if isinstance(TextParser,pd.io.parsers.TextFileReader) else None
-    # 'datetime' is not a valid pandas dtype: Only on output (on reading) will be then converted (via parse_dates) to datetime64[ns] type, cannot specify 'datetime' (of any kind) here: will fail
+    # 'datetime' is not a valid pandas dtype: Only on output (on reading) will be then converted (via parse_dates) to datetime64[ns] type,
+    # cannot specify 'datetime' (of any kind) here: would fail
     date_columns = [] # Needs to be the numeric index of the column, as seems not to be able to work with tupples....
     for i,element in enumerate(list(out_dtypes)):
         if out_dtypes.get(element) == 'datetime':
             date_columns.append(i)
-    
+
     data = pd.read_csv(data_buffer,names = data_df.columns, chunksize = chunksize, dtype = out_dtypes, parse_dates = date_columns)
     valid = pd.read_csv(valid_buffer,names = data_df.columns, chunksize = chunksize)
-    
+
     return data, valid
 
 def validate_arg(arg_name,arg_value,arg_type):
-    
+
     if arg_value and not isinstance(arg_value,arg_type):
-        logging.error('Argument {0} must be {1}, input type is {2}'.format(arg_name,arg_type,type(arg_value))) 
+        logging.error('Argument {0} must be {1}, input type is {2}'.format(arg_name,arg_type,type(arg_value)))
         return False
     else:
         return True
@@ -104,14 +106,14 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
             return
         elif not os.path.isfile(source):
             logging.error('Could not open data source file {}'.format(source))
-            logging.info('Otherwise, supported in-memory data sources are {}'.format(",".join([ str(x) for x in properties.supported_sources])))
+            logging.info('If input source was not a file: supported in-memory data sources are {}'.format(",".join([ str(x) for x in properties.supported_sources])))
             return
     if not validate_arg('sections',sections,list):
         return
     if not validate_arg('chunksize',chunksize,int):
-        return    
+        return
     if not validate_arg('skiprows',skiprows,int):
-        return    
+        return
 
     # 1. Read data model
     # Schema reader will return None if schema does not validate
@@ -122,37 +124,37 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     if data_model:
         model_path = os.path.join(schema_lib,data_model)
     else:
-        model_path = data_model_path 
+        model_path = data_model_path
     code_tables_path = os.path.join(model_path,'code_tables')
+
     # For future use: some work already done in schema reading
     if schema['header'].get('multiple_reports_per_line'):
         logging.error('File format not yet supported')
         sys.exit(1)
-        
+
     # 2. Read and validate data
     imodel = data_model if data_model else data_model_path
-    logging.info("EXTRACTING DATA FROM MODEL: {}".format(imodel)) 
-    
-    # 2.1. Define output 
-    # Subset data model sections to requested sections
+    logging.info("EXTRACTING DATA FROM MODEL: {}".format(imodel))
+
+    # 2.1. Subset data model sections to requested sections
     parsing_order = schema['header'].get('parsing_order')
     if not sections:
         sections = [ x.get(y) for x in parsing_order for y in x ]
         read_sections_list = [y for x in sections for y in x]
     else:
-        read_sections_list = sections 
-        
+        read_sections_list = sections
+
     # 2.2 Homogeneize input data to an iterable with dataframes:
     # a list with a single dataframe or a pd.io.parsers.TextFileReader
     logging.info("Getting data string from source...")
     TextParser = import_data.import_data(source, chunksize = chunksize, skiprows = skiprows)
-    
+
     # 2.3. Extract, read and validate data in same loop
     logging.info("Extracting and reading sections")
     data,valid = ERV(TextParser,read_sections_list, schema, code_tables_path)
-    
+
     # 3. Create out data attributes
-    logging.info("CREATING OUTPUT DATA ATTRIBUTES FROM DATA MODEL(S)")
+    logging.info("CREATING OUTPUT DATA ATTRIBUTES FROM DATA MODEL")
     data_columns = [ x for x in data ] if isinstance(data,pd.DataFrame) else data.orig_options['names']
     out_atts = schemas.df_schema(data_columns, schema)
 
@@ -178,7 +180,7 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
                     header = cols
                     out_atts_json = out_atts
             data_df.to_csv(os.path.join(out_path,'data.csv'), header = header, mode = mode, encoding = 'utf-8',index = True, index_label='index')
-            valid_df.to_csv(os.path.join(out_path,'valid_mask.csv'), header = header, mode = mode, encoding = 'utf-8',index = True, index_label='index')  
+            valid_df.to_csv(os.path.join(out_path,'valid_mask.csv'), header = header, mode = mode, encoding = 'utf-8',index = True, index_label='index')
         if enlisted:
             data = data[0]
             valid = valid[0]
