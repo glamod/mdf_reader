@@ -10,7 +10,7 @@ INPUT IS EITHER:
     - pd.io.parsers.textfilereader
     - io.StringIO
     - file path
-    
+
 OUTPUT IS AN ITERABLE, DEPENDING ON SOURCE TYPE AND CHUNKSIZE BEING SET:
     - a single dataframe in a list
     - a pd.io.parsers.textfilereader
@@ -18,7 +18,7 @@ OUTPUT IS AN ITERABLE, DEPENDING ON SOURCE TYPE AND CHUNKSIZE BEING SET:
 
 WITH BASICALLY 1 RECORD (ONE OR MULTIPLE REPORTS) IN ONE LINE
 
-delimiter="\t" option in pandas.read_fwf avoids white spaces at taild 
+delimiter="\t" option in pandas.read_fwf avoids white spaces at tails
 to be stripped
 
 @author: iregon
@@ -26,7 +26,7 @@ to be stripped
 DEV NOTES:
 1) What this module is able to ingest needs to align with properties.supported_sources
 2) Check io.StringIO input: why there, does it actually work as it is?
-3) Check pd.io.parsers.textfilereader input: why there, does it actually work as it is?   
+3) Check pd.io.parsers.textfilereader input: why there, does it actually work as it is?
 
 
 OPTIONS IN OLD DEVELOPMENT:
@@ -53,8 +53,8 @@ def to_iterable_df(source,skiprows = None, chunksize = None):
     TextParser = pd.read_fwf(source,widths=[properties.MAX_FULL_REPORT_WIDTH],header = None, delimiter="\t", skiprows = skiprows, chunksize = chunksize)
     if not chunksize:
         TextParser = [TextParser]
-    return TextParser    
-    
+    return TextParser
+
 
 def import_data(source,chunksize = None, skiprows = None):
 
