@@ -43,6 +43,6 @@ data_type_conversion_args['datetime'] = ['datetime_format']
 
 # Misc ------------------------------------------------------------------------
 tol = 1E-10
-dummy_level = 'SECTION__'
+dummy_level = '_SECTION_'
 # Length of reports in initial read
 MAX_FULL_REPORT_WIDTH = 100000
