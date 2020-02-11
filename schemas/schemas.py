@@ -3,16 +3,9 @@
 """
 Created on Thu Sep 13 15:14:51 2018
 
-
 Read data file format json schema to dictionary
 
-Add schema validation:
-    - check mandatory are not null
-    - check fixed options
-..and return None if it does not validate
-
 """
-
 
 import os
 import sys
@@ -34,41 +27,19 @@ toolPath = os.path.dirname(os.path.abspath(__file__))
 schema_lib = os.path.join(toolPath,'lib')
 templates_path = os.path.join(schema_lib,'templates','schemas')
 
-def templates():
-    schemas = glob.glob(os.path.join(templates_path,'*.json'))
-    return [ os.path.basename(x).split(".")[0] for x in schemas ]
-
-def copy_template(schema, out_dir = None,out_path = None):
-    schemas = templates()
-    if schema in schemas:
-        schema_path = os.path.join(templates_path,schema + '.json')
-        schema_out = out_path if out_path else os.path.join(out_dir,schema + '.json')
-        shutil.copyfile(schema_path,  schema_out)
-        if os.path.isfile( schema_out):
-            print('Schema template {0} copied to {1}'.format(schema, schema_out))
-            return
-        else:
-            print('copy_template ERROR:')
-            print('\tError copying schema template {0} copied to {1}'.format(schema, schema_out))
-            return
-    else:
-        print('copy_template ERROR:')
-        print('\tRequested template {} must be a valid name.'.format(schema))
-        print('\tValid names are: {}'.format(", ".join(schemas)))
-        return
 
 def read_schema(schema_name = None, ext_schema_path = None):
 
     if schema_name:
-        if schema_name not in properties.supported_file_formats:
-            print('ERROR: \n\tInput schema "{}" not supported. See mdf_reader.properties.supported_file_formats for supported file format schemas'.format(schema_name))
+        if schema_name not in properties.supported_data_models:
+            print('ERROR: \n\tInput data model "{}" not supported. See mdf_reader.properties.supported_data_models for supported data models'.format(schema_name))
             return
         else:
             schema_path = os.path.join(schema_lib,schema_name)
     else:
         schema_path = os.path.abspath(ext_schema_path)
         schema_name = os.path.basename(schema_path)
-        
+
     schema_file = os.path.join(schema_path, schema_name + '.json')
     if not os.path.isfile(schema_file):
         logging.error('Can\'t find input schema file {}'.format(schema_file))
@@ -103,7 +74,7 @@ def read_schema(schema_name = None, ext_schema_path = None):
                 schema['sections'][section]['header']['disable_read'] = False
             if not schema['sections'][section]['header'].get('field_layout'):
                 delimiter = schema['sections'][section]['header'].get('delimiter')
-                schema['sections'][section]['header']['field_layout'] = 'delimited' if delimiter else 'fixed_width'   
+                schema['sections'][section]['header']['field_layout'] = 'delimited' if delimiter else 'fixed_width'
         return schema
     else:
         # 1X: MULTIPLE REPORTS PER RECORD
@@ -145,7 +116,7 @@ def df_schema(df_columns, schema):
         if section == properties.dummy_level:
             flat_schema.update(schema['sections'].get(section).get('elements'))
         elif schema['sections'].get(section).get('header').get('disable_read'):
-            flat_schema.update( { (section, section): {'column_type':'object'} })    
+            flat_schema.update( { (section, section): {'column_type':'object'} })
         else:
             flat_schema.update( { (section, x): schema['sections'].get(section).get('elements').get(x) for x in schema['sections'].get(section).get('elements') })
 
@@ -153,3 +124,27 @@ def df_schema(df_columns, schema):
 
 
     return flat_schema
+
+
+def templates():
+    schemas = glob.glob(os.path.join(templates_path,'*.json'))
+    return [ os.path.basename(x).split(".")[0] for x in schemas ]
+
+def copy_template(schema, out_dir = None,out_path = None):
+    schemas = templates()
+    if schema in schemas:
+        schema_path = os.path.join(templates_path,schema + '.json')
+        schema_out = out_path if out_path else os.path.join(out_dir,schema + '.json')
+        shutil.copyfile(schema_path,  schema_out)
+        if os.path.isfile( schema_out):
+            print('Schema template {0} copied to {1}'.format(schema, schema_out))
+            return
+        else:
+            print('copy_template ERROR:')
+            print('\tError copying schema template {0} copied to {1}'.format(schema, schema_out))
+            return
+    else:
+        print('copy_template ERROR:')
+        print('\tRequested template {} must be a valid name.'.format(schema))
+        print('\tValid names are: {}'.format(", ".join(schemas)))
+        return
