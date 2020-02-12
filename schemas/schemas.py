@@ -46,15 +46,26 @@ def read_schema(schema_name = None, ext_schema_path = None):
         return
     with open(schema_file) as fileObj:
         schema = json.load(fileObj)
+
     #   ---------------------------------------------------------------------------
-    #   FILL IN THE INITIAL SCHEMA TO "FULL COMPLEXITY"
+    #   FILL IN THE INITIAL SCHEMA TO "FULL COMPLEXITY" TO HOMOGEINIZE
     #   EXPLICITY ADD INFO THAT IS IMPLICIT TO GIVEN SITUATIONS/SUBFORMATS
     #   ---------------------------------------------------------------------------
     # One report per record: make sure later changes are reflected in MULTIPLE
     # REPORTS PER RECORD case below if we ever use it!
+    # Currently only suppoerted case: one report per record (line)
+    # First check for no header case: sequential sections
+    if not schema['header']:
+        if not schema['sections']:
+            logging.error('\'sections\' block needs to be defined in a schema with no header. Error in data model schema file {}'.format(schema_file))
+            return
+        schema['header'] = dict()
     if not schema['header'].get('multiple_reports_per_line'):
         # Make no section formats be 1 section format
         if not schema.get('sections'):
+            if not schema.get('elements'):
+                logging.error('Data elements not defined in data model schema file {} under key \'elements\' '.format(schema_file))
+                return
             schema['sections'] = {properties.dummy_level:{'header':{},'elements':schema.get('elements')}}
             schema['header']['parsing_order'] = [{'s':[properties.dummy_level]}]
             schema.pop('elements',None)
@@ -77,29 +88,31 @@ def read_schema(schema_name = None, ext_schema_path = None):
                 schema['sections'][section]['header']['field_layout'] = 'delimited' if delimiter else 'fixed_width'
         return schema
     else:
+        logging.error('Multile reports per line data model: not yet supported')
+        return
         # 1X: MULTIPLE REPORTS PER RECORD
         # !!!! NEED TO ADD SECTION LENS TO THE REPORT'S SECTION'S HEADER!!!
         # CAN INFER FROM ELEMENTS LENGHT AND ADD, OR MAKE AS REQUIREMENT TO BE GIVEN
         # global name_report_section
         # Have to assess how the section splitting works when x sequential
         # sections are declared, and only x-y are met.
-        if not schema['header'].get('reports_per_line'):
-            schema['header']['reports_per_line'] = 24
-        if not schema.get('sections'):
-            schema['sections'] = dict()
-            schema['header']['parsing_order'] = [{'s':[]}]
-            for i in range(1,schema['header']['reports_per_line'] + 1):
-                schema['sections'].update({str(i):{'header':{},'elements':deepcopy(schema.get('elements'))}})
-        else:
-            name_report_section = list(schema['sections'].keys())[-1]
-            schema['header']['name_report_section'] == name_report_section
-            schema['header']['parsing_order'] = [{'s':list(schema['sections'].keys())[:-1]}]
-            for i in range(1,schema['header']['reports_per_line'] + 1):
-                schema['sections'].update({str(i):schema['sections'].get(name_report_section)})
-            schema['sections'].pop(name_report_section,None)
-        for i in range(1,schema['header']['reports_per_line'] + 1):
-            schema['header']['parsing_order'][0]['s'].append(str(i))
-        return schema
+        #if not schema['header'].get('reports_per_line'):
+        #    schema['header']['reports_per_line'] = 24
+        #if not schema.get('sections'):
+        #    schema['sections'] = dict()
+        #    schema['header']['parsing_order'] = [{'s':[]}]
+        #    for i in range(1,schema['header']['reports_per_line'] + 1):
+        #        schema['sections'].update({str(i):{'header':{},'elements':deepcopy(schema.get('elements'))}})
+        #else:
+        #    name_report_section = list(schema['sections'].keys())[-1]
+        #    schema['header']['name_report_section'] == name_report_section
+        #    schema['header']['parsing_order'] = [{'s':list(schema['sections'].keys())[:-1]}]
+        #    for i in range(1,schema['header']['reports_per_line'] + 1):
+        #        schema['sections'].update({str(i):schema['sections'].get(name_report_section)})
+        #    schema['sections'].pop(name_report_section,None)
+        #for i in range(1,schema['header']['reports_per_line'] + 1):
+        #    schema['header']['parsing_order'][0]['s'].append(str(i))
+        #return schema
 
 def df_schema(df_columns, schema):
     def clean_schema(columns,schema):
