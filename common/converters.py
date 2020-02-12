@@ -25,7 +25,7 @@ from .. import properties
 # return data.astype(self.dtype, casting = 'safe')
 # safe casting specifies, otherwise converts np.nan to some real number depending on dtype.
 
-    
+
 
 class df_converters():
     def __init__(self, dtype):
@@ -43,7 +43,7 @@ class df_converters():
         except:
             return data
 
-    def object_to_object(self,data,missing_value = None,disable_white_strip = False):
+    def object_to_object(self,data,disable_white_strip = False):
         # With strip() an empty element after stripping, is just an empty element, no NaN...
         if not disable_white_strip:
             return data.str.strip()
