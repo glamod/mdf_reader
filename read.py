@@ -73,11 +73,12 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
     # This way it supports direct chunksize property inheritance if the input source was a pd.io.parsers.TextFileReader
     chunksize = TextParser.orig_options['chunksize'] if isinstance(TextParser,pd.io.parsers.TextFileReader) else None
     # 'datetime' is not a valid pandas dtype: Only on output (on reading) will be then converted (via parse_dates) to datetime64[ns] type,
-    # cannot specify 'datetime' (of any kind) here: would fail
+    # cannot specify 'datetime' (of any kind) here: would fail, need to change to 'object' and tell the date parser where it is
     date_columns = [] # Needs to be the numeric index of the column, as seems not to be able to work with tupples....
     for i,element in enumerate(list(out_dtypes)):
         if out_dtypes.get(element) == 'datetime':
             date_columns.append(i)
+            out_dtypes.update({element:'object'})
 
     data = pd.read_csv(data_buffer,names = data_df.columns, chunksize = chunksize, dtype = out_dtypes, parse_dates = date_columns)
     valid = pd.read_csv(valid_buffer,names = data_df.columns, chunksize = chunksize)
