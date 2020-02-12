@@ -9,8 +9,10 @@ a named model (included in the module) or as the path to a valid data model.
 
 Data is validated against its data model after reading, producing a boolean mask.
 
-Calls the schemas, reader and valiate modules in the tool to access the data models,
-read the data and validate it.
+Uses submodules:
+- schemas
+- reader
+- valiate
 
 @author: iregon
 """
@@ -83,9 +85,15 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
     return data, valid
 
 def validate_arg(arg_name,arg_value,arg_type):
-
     if arg_value and not isinstance(arg_value,arg_type):
         logging.error('Argument {0} must be {1}, input type is {2}'.format(arg_name,arg_type,type(arg_value)))
+        return False
+    else:
+        return True
+
+def validate_path(arg_name,arg_value):
+    if arg_value and not os.path.isdir(arg_value):
+        logging.error('{0} could not find path {1}'.format(arg_name,arg_value))
         return False
     else:
         return True
@@ -114,9 +122,15 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
         return
     if not validate_arg('skiprows',skiprows,int):
         return
+    if not validate_path('data_model_path',data_model_path):
+        return
+    if not validate_path('out_path',out_path):
+        return
 
     # 1. Read data model
-    # Schema reader will return None if schema does not validate
+    # Schema reader will return empty if cannot read schema or is not valid
+    # and will log the corresponding error
+    # multiple_reports_per_line error also while reading schema
     logging.info("READING DATA MODEL SCHEMA FILE...")
     schema = schemas.read_schema( schema_name = data_model, ext_schema_path = data_model_path)
     if not schema:
@@ -127,10 +141,6 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
         model_path = data_model_path
     code_tables_path = os.path.join(model_path,'code_tables')
 
-    # For future use: some work already done in schema reading
-    if schema['header'].get('multiple_reports_per_line'):
-        logging.error('File format not yet supported')
-        sys.exit(1)
 
     # 2. Read and validate data
     imodel = data_model if data_model else data_model_path
