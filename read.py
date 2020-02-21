@@ -3,11 +3,11 @@
 """
 Created on Tue Apr 30 09:38:17 2019
 
-Reads source data (file) to
-a pandas DataFrame. The source data model needs to be input to the module as
-a named model (included in the module) or as the path to a valid data model.
+Reads a data file to a pandas DataFrame using a pre-defined data model.
 
-Data is validated against its data model after reading, producing a boolean mask.
+The data model needs to be input to the module as a named model (included in the module) or as the path to a valid data model.
+
+Data elements are validated against its data model after reading, producing a boolean mask.
 
 Uses submodules:
 - schemas
@@ -35,6 +35,7 @@ from .validate import validate
 toolPath = os.path.dirname(os.path.abspath(__file__))
 schema_lib = os.path.join(toolPath,'schemas','lib')
 
+# AUX FUNCTIONS ---------------------------------------------------------------
 def ERV(TextParser,read_sections_list, schema, code_tables_path):
 
     data_buffer = StringIO()
@@ -98,6 +99,9 @@ def validate_path(arg_name,arg_value):
         return False
     else:
         return True
+
+# END AUX FUNCTIONS -----------------------------------------------------------
+        
 
 def read(source, data_model = None, data_model_path = None, sections = None,chunksize = None,
          skiprows = None, out_path = None ):
@@ -197,7 +201,14 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
             json.dump(out_atts_json,fileObj,indent=4)
 
     # 5. Return data
-    return {'data':data,'atts':out_atts,'valid_mask':valid}
+    class output():
+        def __init__(self):
+            self.data = data
+            self.atts = out_atts
+            self.mask = valid
+        
+    
+    return output()
 
 if __name__=='__main__':
     kwargs = dict(arg.split('=') for arg in sys.argv[2:])
