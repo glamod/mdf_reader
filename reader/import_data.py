@@ -61,10 +61,10 @@ def import_data(source,chunksize = None, skiprows = None):
     if isinstance(source,pd.io.parsers.TextFileReader):
         return source
     elif isinstance(source, io.StringIO):
-        TextParser = to_iterable_df(source,skiprows = None, chunksize = chunksize)
+        TextParser = to_iterable_df(source,skiprows = skiprows, chunksize = chunksize)
         return TextParser
     elif os.path.isfile(source):
-        TextParser = to_iterable_df(source,skiprows = None, chunksize = chunksize)
+        TextParser = to_iterable_df(source,skiprows = skiprows, chunksize = chunksize)
         return TextParser
     else:
         print('Error')
