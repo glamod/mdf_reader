@@ -42,16 +42,18 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
     valid_buffer = StringIO()
 
     for i_chunk, string_df in enumerate(TextParser):
-        # a. Get a DF with sections separated in columns:
-        # - one section per column
+        
+        # 1. Get a DF with 1 column per sections:
         # - only sections requested, ignore rest
         # - requested NA sections as NaN columns
-        # - columns order as in read_sections_list
+        # - columns(sections) order as in read_sections_list
+        
         sections_df = get_sections.get_sections(string_df, schema, read_sections_list)
 
-        # b. Read elements from sections: along data chunks, resulting data types
-        # may vary if gaps, keep track of data types!
-        # Sections as parsed in the same order as sections_df.columns
+        # 2. Read elements from sections: along data chunks, resulting data types
+        # may vary if gaps, keep track of data types: add Intxx pandas classes rather than intxx to avoid this!
+        # Sections are parsed in the same order as sections_df.columns
+        
         [data_df, valid_df, out_dtypesi ] = read_sections.read_sections(sections_df, schema)
         if i_chunk == 0:
             out_dtypes = copy.deepcopy(out_dtypesi)
@@ -59,13 +61,17 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
         for k in out_dtypesi:
             if out_dtypesi in properties.numpy_floats:
                 out_dtypes.update({ k:out_dtypesi.get(k) })
-
+        
+        # 3. Validate data elements
+        
         valid_df = validate.validate(data_df, valid_df, schema, code_tables_path)
-        # Save to buffer
+        
+        # 4. Save to buffer
         data_df.to_csv(data_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
         valid_df.to_csv(valid_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
+        
     # Create the output
-    # WE'LL NEED TO POSPROCESS THIS WHEN READING MULTIPLE REPORTS PER LINE
+    # WE'LL NEED TO POSPROCESS THIS WHEN READING MULTIPLE REPORTS PER LINE, IF EVER...
     data_buffer.seek(0)
     valid_buffer.seek(0)
     logging.info("Wrapping output....")
@@ -73,6 +79,7 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
     # (source is either pd.io.parsers.TextFileReader or a file with chunksize specified on input):
     # This way it supports direct chunksize property inheritance if the input source was a pd.io.parsers.TextFileReader
     chunksize = TextParser.orig_options['chunksize'] if isinstance(TextParser,pd.io.parsers.TextFileReader) else None
+    
     # 'datetime' is not a valid pandas dtype: Only on output (on reading) will be then converted (via parse_dates) to datetime64[ns] type,
     # cannot specify 'datetime' (of any kind) here: would fail, need to change to 'object' and tell the date parser where it is
     date_columns = [] # Needs to be the numeric index of the column, as seems not to be able to work with tupples....
@@ -109,7 +116,7 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     logging.basicConfig(format='%(levelname)s\t[%(asctime)s](%(filename)s)\t%(message)s',
                     level=logging.INFO,datefmt='%Y%m%d %H:%M:%S',filename=None)
 
-    # 0. Validate input
+    # 0. VALIDATE INPUT
     if not data_model and not data_model_path:
         logging.error('A valid data model name or path to data model must be provided')
         return
@@ -127,7 +134,7 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     if not validate_path('out_path',out_path):
         return
 
-    # 1. Read data model
+    # 1. GET DATA MODEL
     # Schema reader will return empty if cannot read schema or is not valid
     # and will log the corresponding error
     # multiple_reports_per_line error also while reading schema
@@ -142,7 +149,7 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     code_tables_path = os.path.join(model_path,'code_tables')
 
 
-    # 2. Read and validate data
+    # 2. READ AND VALIDATE DATA
     imodel = data_model if data_model else data_model_path
     logging.info("EXTRACTING DATA FROM MODEL: {}".format(imodel))
 
@@ -163,12 +170,12 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     logging.info("Extracting and reading sections")
     data,valid = ERV(TextParser,read_sections_list, schema, code_tables_path)
 
-    # 3. Create out data attributes
+    # 3. CREATE OUTPUT DATA ATTRIBUTES 
     logging.info("CREATING OUTPUT DATA ATTRIBUTES FROM DATA MODEL")
     data_columns = [ x for x in data ] if isinstance(data,pd.DataFrame) else data.orig_options['names']
     out_atts = schemas.df_schema(data_columns, schema)
 
-    # 4. Output to files if requested
+    # 4. OUTPUT TO FILES IF REQUESTED
     if out_path:
         enlisted = False
         if not isinstance(data,pd.io.parsers.TextFileReader):
@@ -190,7 +197,7 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
                     header = cols
                     out_atts_json = out_atts
             data_df.to_csv(os.path.join(out_path,'data.csv'), header = header, mode = mode, encoding = 'utf-8',index = True, index_label='index')
-            valid_df.to_csv(os.path.join(out_path,'valid_mask.csv'), header = header, mode = mode, encoding = 'utf-8',index = True, index_label='index')
+            valid_df.to_csv(os.path.join(out_path,'mask.csv'), header = header, mode = mode, encoding = 'utf-8',index = True, index_label='index')
         if enlisted:
             data = data[0]
             valid = valid[0]
@@ -200,7 +207,7 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
         with open(os.path.join(out_path,'atts.json'),'w') as fileObj:
             json.dump(out_atts_json,fileObj,indent=4)
 
-    # 5. Return data
+    # 5. RETURN DATA
     class output():
         def __init__(self):
             self.data = data
