@@ -3,7 +3,7 @@
 """
 Created on Tue Apr 30 09:38:17 2019
 
-Reads source data (file, pandas DataFrame or pd.io.parsers.TextFileReader) to
+Reads source data (file) to
 a pandas DataFrame. The source data model needs to be input to the module as
 a named model (included in the module) or as the path to a valid data model.
 
@@ -109,14 +109,9 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
     if not data_model and not data_model_path:
         logging.error('A valid data model name or path to data model must be provided')
         return
-    if not isinstance(source,tuple(properties.supported_sources)):
-        if not source:
-            logging.error('Data source is empty (first argument to read()) ')
-            return
-        elif not os.path.isfile(source):
-            logging.error('Could not open data source file {}'.format(source))
-            logging.info('If input source was not a file: supported in-memory data sources are {}'.format(",".join([ str(x) for x in properties.supported_sources])))
-            return
+    if not os.path.isfile(source):
+        logging.error('Can\'t find input data file {}'.format(source))
+        return
     if not validate_arg('sections',sections,list):
         return
     if not validate_arg('chunksize',chunksize,int):
