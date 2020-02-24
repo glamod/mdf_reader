@@ -13,7 +13,7 @@ where appropriate and ensure its data type consistency.
 
 Output is a dataframe with columns as follows depending on the data model
 structure:
-    1) Data model with sections (1 or more): [(section0,element0),.......(sectionN,elementN)]
+    1) Data model with sections (1 or more): [(section0,element0),.......(sectionN,elementM)]
     2) Data model with no sections[element0...element1]
 
 

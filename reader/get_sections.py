@@ -6,7 +6,7 @@ Created on Tue Apr 30 09:38:17 2019
 Splits string reports in sections using a data model layout.
 
 Input and output are simple pandas dataframes, with the output dataframe
-column names being section names
+column names being the section names
 
 To work with a pandas TextParser, loop through this module.
 
@@ -29,6 +29,9 @@ use, also support to chunking would make converting to series a bit dirty...
         provided the section is in a sequential parsing_order group
 
 @author: iregon
+
+Have to documents the threads approach!!!!
+
 """
 
 import pandas as pd
