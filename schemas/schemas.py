@@ -3,7 +3,14 @@
 """
 Created on Thu Sep 13 15:14:51 2018
 
-Read data file format json schema to dictionary
+.read_schema: read data model json schema to dictionary
+
+.df_schema: create a simple version of the schema reflecting only relevant attributes
+of the data elements after being read into a dataframe
+
+.templates: get list of available schema file templates
+
+.copy_templates: get a copy of a schema file template
 
 """
 
@@ -29,7 +36,8 @@ templates_path = os.path.join(schema_lib,'templates','schemas')
 
 
 def read_schema(schema_name = None, ext_schema_path = None):
-
+    
+    # 1. Validate input
     if schema_name:
         if schema_name not in properties.supported_data_models:
             print('ERROR: \n\tInput data model "{}" not supported. See mdf_reader.properties.supported_data_models for supported data models'.format(schema_name))
@@ -44,24 +52,27 @@ def read_schema(schema_name = None, ext_schema_path = None):
     if not os.path.isfile(schema_file):
         logging.error('Can\'t find input schema file {}'.format(schema_file))
         return
+    
+    # 2. Get schema
     with open(schema_file) as fileObj:
         schema = json.load(fileObj)
+        
+    # 3. Expand schema
+    # Fill in the initial schema to "full complexity": to homogeneize schema,
+    # explicitly add info that is implicit to given situations/data models
 
-    #   ---------------------------------------------------------------------------
-    #   FILL IN THE INITIAL SCHEMA TO "FULL COMPLEXITY" TO HOMOGEINIZE
-    #   EXPLICITY ADD INFO THAT IS IMPLICIT TO GIVEN SITUATIONS/SUBFORMATS
-    #   ---------------------------------------------------------------------------
     # One report per record: make sure later changes are reflected in MULTIPLE
     # REPORTS PER RECORD case below if we ever use it!
-    # Currently only suppoerted case: one report per record (line)
-    # First check for no header case: sequential sections
+    # Currently only supported case: one report per record (line)
+    # 3.1. First check for no header case: sequential sections
     if not schema['header']:
         if not schema['sections']:
             logging.error('\'sections\' block needs to be defined in a schema with no header. Error in data model schema file {}'.format(schema_file))
             return
         schema['header'] = dict()
+        
     if not schema['header'].get('multiple_reports_per_line'):
-        # Make no section formats be 1 section format
+        # 3.2. Make no section formats be internally treated as 1 section format
         if not schema.get('sections'):
             if not schema.get('elements'):
                 logging.error('Data elements not defined in data model schema file {} under key \'elements\' '.format(schema_file))
@@ -73,10 +84,10 @@ def read_schema(schema_name = None, ext_schema_path = None):
             schema['header'].pop('delimiter',None)
             schema['sections'][properties.dummy_level]['header']['field_layout'] = schema['header'].get('field_layout')
             schema['header'].pop('field_layout',None)
-        # Make parsing order explicit
+        # 3.3. Make parsing order explicit
         if not schema['header'].get('parsing_order'):# assume sequential
             schema['header']['parsing_order'] = [{'s':list(schema['sections'].keys())}]
-        # Make disable_read and field_layout explicit: this is ruled by delimiter or length being set,
+        # 3.4. Make disable_read and field_layout explicit: this is ruled by delimiter being set,
         # unless explicitly set
         for section in schema['sections'].keys():
             if schema['sections'][section]['header'].get('disable_read'):
@@ -137,7 +148,6 @@ def df_schema(df_columns, schema):
 
 
     return flat_schema
-
 
 def templates():
     schemas = glob.glob(os.path.join(templates_path,'*.json'))
