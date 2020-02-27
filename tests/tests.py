@@ -16,7 +16,7 @@ import mdf_reader.common.plots as plots
 
 funPath = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(funPath,'data')
-schema_lib = os.path.join(os.path.dirname(funPath),'schemas','lib')
+schema_lib = os.path.join(os.path.dirname(funPath),'data_models','lib')
 
 # A. TESTS TO READ FROM DATA FROM DIFFERENT DATA MODELS WITH AND WITHOUT SUPP
 # -----------------------------------------------------------------------------
