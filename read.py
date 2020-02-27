@@ -34,7 +34,7 @@ from .common import pandas_TextParser_hdlr
 from .reader import import_data
 from .reader import get_sections
 from .reader.read_sections import main as read_sections
-from .validate import validate
+from .validator import validate
 
 toolPath = os.path.dirname(os.path.abspath(__file__))
 schema_lib = os.path.join(toolPath,'data_models','lib')
