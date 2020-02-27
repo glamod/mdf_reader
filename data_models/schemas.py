@@ -1,16 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 13 15:14:51 2018
 
-.read_schema: read data model json schema to dictionary
-
-.df_schema: create a simple version of the schema reflecting only relevant attributes
-of the data elements after being read into a dataframe
-
-.templates: get list of available schema file templates
-
-.copy_templates: get a copy of a schema file template
+This module has functions to manage data model
+schema files and objects according to the
+requirements of the data reader tool
 
 """
 
@@ -36,6 +30,30 @@ templates_path = os.path.join(schema_lib,'templates','schemas')
 
 
 def read_schema(schema_name = None, ext_schema_path = None):
+    """
+
+    Reads a data model schema file to a dictionary and
+    completes it by adding explicitly information the 
+    reader tool needs
+    
+    Keyword Arguments
+    -----------------
+    schema_name : str, optional
+        The name of data model to read. This is for
+        data models included in the tool
+    ext_schema_path : str, optional
+        The path to the external data model schema file 
+
+
+    Either schema_name or ext_schema_path must be provided.
+
+
+    Returns
+    -------
+    dict
+        Data model schema
+
+    """
     
     # 1. Validate input
     if schema_name:
@@ -126,6 +144,26 @@ def read_schema(schema_name = None, ext_schema_path = None):
         #return schema
 
 def df_schema(df_columns, schema):
+    """
+
+    Creates a simple attribute dictionary for the elements
+    in a dataframe from its data model schema
+    
+    Parameters
+    ----------
+    df_columns : list
+        The columns in the data frame (data elements from
+        the data model)
+    schema : dict
+        The data model schema
+
+
+    Returns
+    -------
+    dict
+        Data elements attributes
+
+    """
     def clean_schema(columns,schema):
         # Could optionally add cleaning of element descriptors that only apply
         # to the initial reading of the data model: field_length, etc....
@@ -150,10 +188,41 @@ def df_schema(df_columns, schema):
     return flat_schema
 
 def templates():
+    """
+
+    Lists the name of the available schema file templates
+
+    Returns
+    -------
+    list
+        Schema file templates alias
+
+    """
     schemas = glob.glob(os.path.join(templates_path,'*.json'))
     return [ os.path.basename(x).split(".")[0] for x in schemas ]
 
 def copy_template(schema, out_dir = None,out_path = None):
+    """
+
+    Creates a simple attribute dictionary for the elements
+    in a dataframe from its data model schema
+    
+    Parameters
+    ----------
+    schema : str
+        Schema template name to copy
+        
+    Keyword Arguments
+    -----------------
+    out_dir : dict, opt
+        Directory to copy schema file template to
+    out_path : dict, opt
+        Full filename to copy schema file template to
+    
+    Either out_dir or out_path must be provided
+
+
+    """
     schemas = templates()
     if schema in schemas:
         schema_path = os.path.join(templates_path,schema + '.json')
