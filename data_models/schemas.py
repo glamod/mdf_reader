@@ -115,6 +115,11 @@ def read_schema(schema_name = None, ext_schema_path = None):
             if not schema['sections'][section]['header'].get('field_layout'):
                 delimiter = schema['sections'][section]['header'].get('delimiter')
                 schema['sections'][section]['header']['field_layout'] = 'delimited' if delimiter else 'fixed_width'
+            for element in schema['sections'][section]['elements'].keys():
+                if schema['sections'][section]['elements'][element].get('column_type') in properties.numpy_integers:
+                    np_integer = schema['sections'][section]['elements'][element].get('column_type') 
+                    pd_integer = properties.pandas_nan_integers.get(np_integer)
+                    schema['sections'][section]['elements'][element].update({'column_type':pd_integer})
         return schema
     else:
         logging.error('Multile reports per line data model: not yet supported')
