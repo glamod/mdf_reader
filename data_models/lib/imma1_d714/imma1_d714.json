@@ -2232,7 +2232,8 @@
                   "description": "blank space",
                   "field_length": 1,
                   "column_type": "object",
-                  "ignore": true
+                  "ignore": true,
+                  "disable_white_strip": true
               },
               "Identifier": {
                   "description": "WMO Buoy number",
