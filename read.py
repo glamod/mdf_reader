@@ -14,6 +14,9 @@ Contains the following functions:
 
     * ERV - does the actual extraction, read and validation of data input data
     * main - the main function of the script
+    
+Can be run as a script with:
+    python -m mdf_reader data_file **kwargs
         
 """
 
@@ -337,8 +340,3 @@ def main(source, data_model = None, data_model_path = None, sections = None,chun
     
     return output()
 
-if __name__=='__main__':
-    kwargs = dict(arg.split('=') for arg in sys.argv[2:])
-    if 'sections' in kwargs.keys():
-        kwargs.update({ 'sections': [ x.strip() for x in kwargs.get('sections').split(",")] })
-    main(sys.argv[1], **kwargs) # kwargs
