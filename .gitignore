@@ -1,8 +1,3 @@
 /**/.DS_Store
 /**/*.py[cod]
 /**/__pycache__
-Tool_validation.py
-schemas/deck*
-schemas/td14
-schemas/wmo*
-schemas/lib/imma1_nodt
