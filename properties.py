@@ -11,7 +11,7 @@ import pandas as pd
 
 
 # Supported formats, sources and internal data models -------------------------
-schema_path = os.path.join(os.path.dirname(__file__),'schemas','lib')
+schema_path = os.path.join(os.path.dirname(__file__),'data_models','lib')
 supported_data_models = [ os.path.basename(x).split(".")[0] for x in glob.glob(schema_path + '/*/*.json') if os.path.basename(x).split(".")[0] == os.path.dirname(x).split("/")[-1]]
 
 # Data types ------------------------------------------------------------------
