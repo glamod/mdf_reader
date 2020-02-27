@@ -31,9 +31,9 @@ from io import StringIO as StringIO
 from .data_models import schemas
 from . import properties
 from .common import pandas_TextParser_hdlr
-from .reader import import_data
-from .reader import get_sections
-from .reader.read_sections import main as read_sections
+#from .reader import import_data
+#from .reader import get_sections
+from mdf_reader.reader import import_data, get_sections, read_sections
 from .validator import validate
 
 toolPath = os.path.dirname(os.path.abspath(__file__))
@@ -77,13 +77,13 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
         # - requested NA sections as NaN columns
         # - columns(sections) order as in read_sections_list
         
-        sections_df = get_sections.get_sections(string_df, schema, read_sections_list)
+        sections_df = get_sections.main(string_df, schema, read_sections_list)
 
         # 2. Read elements from sections: along data chunks, resulting data types
         # may vary if gaps, keep track of data types: add Intxx pandas classes rather than intxx to avoid this!
         # Sections are parsed in the same order as sections_df.columns
         
-        [data_df, valid_df, out_dtypesi ] = read_sections(sections_df, schema)
+        [data_df, valid_df, out_dtypesi ] = read_sections.main(sections_df, schema)
         if i_chunk == 0:
             out_dtypes = copy.deepcopy(out_dtypesi)
 
@@ -271,7 +271,7 @@ def main(source, data_model = None, data_model_path = None, sections = None,chun
     # 2.2 Homogeneize input data to an iterable with dataframes:
     # a list with a single dataframe or a pd.io.parsers.TextFileReader
     logging.info("Getting data string from source...")
-    TextParser = import_data.import_data(source, chunksize = chunksize, skiprows = skiprows)
+    TextParser = import_data.main(source, chunksize = chunksize, skiprows = skiprows)
 
     # 2.3. Extract, read and validate data in same loop
     logging.info("Extracting and reading sections")

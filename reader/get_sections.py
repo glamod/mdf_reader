@@ -199,7 +199,7 @@ def extract_sections(string_df):
 #   ---------------------------------------------------------------------------
 #   MAIN
 #   ---------------------------------------------------------------------------
-def get_sections(string_df, schema, read_sections):
+def main(string_df, schema, read_sections):
     global sentinals, section_lens, sentinals_lens
     global parsing_order
     # Proceed to split sections if more than one

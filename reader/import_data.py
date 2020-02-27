@@ -41,7 +41,7 @@ import os
 
 from .. import properties
 
-def import_data(source,chunksize = None, skiprows = None):
+def main(source,chunksize = None, skiprows = None):
 
     if os.path.isfile(source):
         TextParser = pd.read_fwf(source,widths=[properties.MAX_FULL_REPORT_WIDTH],header = None, delimiter="\t", skiprows = skiprows, chunksize = chunksize)
