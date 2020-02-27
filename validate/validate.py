@@ -24,8 +24,8 @@ import pandas as pd
 import numpy as np
 import logging
 from .. import properties
-from ..schemas import code_tables
-from ..schemas import schemas
+from ..data_models import code_tables
+from ..data_models import schemas
 
 def validate_numeric(elements,data,schema):
     # Find thresholds in schema. Flag if not available -> warn
