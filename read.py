@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Apr 30 09:38:17 2019
+ 
+Manages the integral sequence in data file reading
+from a data model:
+    - Access to data model
+    - Data file import
+    - Data file reading
+    - Data validation
+    - Output
 
-Reads a data file to a pandas DataFrame using a pre-defined data model.
+Contains the following functions:
 
-The data model needs to be input to the module as a named model (included in the module) or as the path to a valid data model.
-
-Data elements are validated against its data model after reading, producing a boolean mask.
-
-Uses submodules:
-- schemas
-- reader
-- valiate
-
-@author: iregon
+    * ERV - does the actual extraction, read and validation of data input data
+    * main - the main function of the script
+        
 """
+
 import os
 import sys
 import pandas as pd
@@ -24,20 +25,45 @@ import json
 import copy
 from io import StringIO as StringIO
 
-from . import schemas
+from .data_models import schemas
 from . import properties
 from .common import pandas_TextParser_hdlr
 from .reader import import_data
 from .reader import get_sections
-from .reader import read_sections
+from .reader.read_sections import main as read_sections
 from .validate import validate
 
 toolPath = os.path.dirname(os.path.abspath(__file__))
-schema_lib = os.path.join(toolPath,'schemas','lib')
+schema_lib = os.path.join(toolPath,'data_models','lib')
 
 # AUX FUNCTIONS ---------------------------------------------------------------
 def ERV(TextParser,read_sections_list, schema, code_tables_path):
+    """
+    
+    Extracts, reads and validates data input data.
 
+    
+    Parameters
+    ----------
+    TextParser : list or pandas.io.parsers.TextFileReader
+        The data to extract and read
+    read_sections_list : list
+        List with subset of data model sections to output 
+    schema : dict
+        Data model schema
+    code_tables_path : str
+        Path to data model code tables
+
+
+    Returns
+    -------
+    data : pandas.DataFrame, pandas.io.parsers.TextFileReader
+        Contains the input data extracted and read
+    valid : pandas.DataFrame, pandas.io.parsers.TextFileReader
+        Contains the a boolean mask with the data validation output
+        
+    """
+    
     data_buffer = StringIO()
     valid_buffer = StringIO()
 
@@ -54,7 +80,7 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
         # may vary if gaps, keep track of data types: add Intxx pandas classes rather than intxx to avoid this!
         # Sections are parsed in the same order as sections_df.columns
         
-        [data_df, valid_df, out_dtypesi ] = read_sections.read_sections(sections_df, schema)
+        [data_df, valid_df, out_dtypesi ] = read_sections(sections_df, schema)
         if i_chunk == 0:
             out_dtypes = copy.deepcopy(out_dtypesi)
 
@@ -94,6 +120,22 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
     return data, valid
 
 def validate_arg(arg_name,arg_value,arg_type):
+    """
+    
+    Validates input argument is as expected type
+    
+    Parameters
+    ----------
+    arg_name : str
+    arg_value : arg_type
+    arg_type : python type
+
+    Returns
+    -------
+    True,False
+        
+    """
+    
     if arg_value and not isinstance(arg_value,arg_type):
         logging.error('Argument {0} must be {1}, input type is {2}'.format(arg_name,arg_type,type(arg_value)))
         return False
@@ -101,6 +143,21 @@ def validate_arg(arg_name,arg_value,arg_type):
         return True
 
 def validate_path(arg_name,arg_value):
+    """
+    
+    Validates input argument is an existing directory
+    
+    Parameters
+    ----------
+    arg_name : str
+    arg_value : str
+
+    Returns
+    -------
+    True,False
+        
+    """
+    
     if arg_value and not os.path.isdir(arg_value):
         logging.error('{0} could not find path {1}'.format(arg_name,arg_value))
         return False
@@ -110,9 +167,56 @@ def validate_path(arg_name,arg_value):
 # END AUX FUNCTIONS -----------------------------------------------------------
         
 
-def read(source, data_model = None, data_model_path = None, sections = None,chunksize = None,
+def main(source, data_model = None, data_model_path = None, sections = None,chunksize = None,
          skiprows = None, out_path = None ):
-
+    """
+    
+    Reads a data file to a pandas DataFrame using a pre-defined data model.
+    Read data is validates against its data model producing a boolean mask
+    on output.
+    
+    The data model needs to be input to the module as a named model 
+    (included in the module) or as the path to a valid data model.
+    
+    Arguments
+    ---------
+    source : str
+        The file path to read
+        
+    Keyword Arguments
+    -----------------
+    data_model : str, optional
+        Name of internally available data model 
+    data_model_path : str, optional
+        Path to external data model 
+    sections : list, optional
+        List with subset of data model sections to outpu (default is
+        all)
+    chunksize : int, optional
+        Number of reports per chunk (default is
+        no chunking)    
+    skiprows : int, optional
+        Number of initial rows to skip from file (default is 0)
+    out_path : str, optional
+        Path to output data, valid mask and attributes (default is
+        no output)
+    
+    Returns
+    -------
+    output : object
+        Attributes data, mask and atts contain the corresponding
+        information from the data file.
+       
+    Note
+    ----
+    
+    This module can also be run as a script, with the keyword arguments
+    as name_arg=arg
+    
+    
+        
+    
+    """
     logging.basicConfig(format='%(levelname)s\t[%(asctime)s](%(filename)s)\t%(message)s',
                     level=logging.INFO,datefmt='%Y%m%d %H:%M:%S',filename=None)
 
@@ -209,6 +313,22 @@ def read(source, data_model = None, data_model_path = None, sections = None,chun
 
     # 5. RETURN DATA
     class output():
+        """ Class to represent reader output
+    
+    
+        Attributes
+        ----------
+        data : str
+            a pandas.DataFrame or pandas.io.parsers.TextFileReader
+            with the output data
+        atts : dict
+            a dictionary with the output data elements attributes
+        mask : str
+            a pandas.DataFrame or pandas.io.parsers.TextFileReader
+            with the output data validation mask
+        
+        """
+        
         def __init__(self):
             self.data = data
             self.atts = out_atts
@@ -221,4 +341,4 @@ if __name__=='__main__':
     kwargs = dict(arg.split('=') for arg in sys.argv[2:])
     if 'sections' in kwargs.keys():
         kwargs.update({ 'sections': [ x.strip() for x in kwargs.get('sections').split(",")] })
-    read(sys.argv[1], **kwargs) # kwargs
+    main(sys.argv[1], **kwargs) # kwargs
