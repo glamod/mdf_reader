@@ -68,7 +68,6 @@ def read_data(section_df,section_schema):
     section_valid = pd.DataFrame(index = section_df.index, columns = section_df.columns)
 
     for element in section_dtypes.keys():
-        print(element)
         missing = section_df[element].isna()
         if element in encoded:
             section_df[element] = decoders.get(section_encoding.get(element)).get(section_dtypes.get(element))(section_df[element])
@@ -141,10 +140,8 @@ def main(sections_df, schema):
             elements = [ x[1] for x in data_df.columns if x[0] == section ]
             if multiindex:
                 out_dtypes.update({ (section,i):properties.pandas_dtypes.get(section_schema['elements'][i].get('column_type')) for i in elements } )
-                out_dtypes.update({ (section,i):data_df[(section,i)].dtype.name for i in elements if data_df[(section,i)].dtype.name in properties.numpy_floats})
             else:
                 out_dtypes.update({ i:properties.pandas_dtypes.get(section_schema['elements'][i].get('column_type')) for i in elements } )
-                out_dtypes.update({ i:data_df[i].dtype.name for i in section_elements if data_df[i].dtype.name in properties.numpy_floats})
         else:
             if multiindex:
                     out_dtypes.update({ (section,section):'object' } )

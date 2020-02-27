@@ -79,17 +79,13 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
         
         sections_df = get_sections.main(string_df, schema, read_sections_list)
 
-        # 2. Read elements from sections: along data chunks, resulting data types
-        # may vary if gaps, keep track of data types: add Intxx pandas classes rather than intxx to avoid this!
+        # 2. Read elements from sections
+        # Along data chunks, resulting data types
+        # may vary if gaps, keep track of data dtypes: v1.0
+        # This has now been solved by working with Intxx pandas dtypes (nullable integers) 
         # Sections are parsed in the same order as sections_df.columns
         
-        [data_df, valid_df, out_dtypesi ] = read_sections.main(sections_df, schema)
-        if i_chunk == 0:
-            out_dtypes = copy.deepcopy(out_dtypesi)
-
-        for k in out_dtypesi:
-            if out_dtypesi in properties.numpy_floats:
-                out_dtypes.update({ k:out_dtypesi.get(k) })
+        [data_df, valid_df, out_dtypes ] = read_sections.main(sections_df, schema)
         
         # 3. Validate data elements
         
