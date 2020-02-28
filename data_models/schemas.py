@@ -209,8 +209,8 @@ def templates():
 def copy_template(schema, out_dir = None,out_path = None):
     """
 
-    Creates a simple attribute dictionary for the elements
-    in a dataframe from its data model schema
+    Copies a schema file template to an output
+    file or path
     
     Parameters
     ----------

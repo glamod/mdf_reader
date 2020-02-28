@@ -1,37 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Jan 10 13:17:43 2020
-
-Extracts and reads (decodes, scales, etc...) the elements of data sections.
-Each column of the input dataframe is a section with all its elements stored
-as a single string.
-
-Working on a section by section basis, this module uses the data model
-information provided in the schema to split the elements, decode and scale them
-where appropriate and ensure its data type consistency.
-
-Output is a dataframe with columns as follows depending on the data model
-structure:
-    1) Data model with sections (1 or more): [(section0,element0),.......(sectionN,elementM)]
-    2) Data model with no sections[element0...element1]
-
-
-DEV NOTES:
-1) the 'quoted' issue: in version 1.0:
- # Writing options from quoting on to prevent supp buoy data to be quoted:
- # maybe this happenned because buoy data has commas, and pandas makes its own decission about
- # how to write that.....
- #https://stackoverflow.com/questions/21147058/pandas-to-csv-output-quoting-issue
- # quoting=csv.QUOTE_NONE was failing when a section is empty (or just one record in a section,...)
- sections_df[section].to_csv(section_buffer,header=False, encoding = 'utf-8',index = False,quoting=csv.QUOTE_NONE,escapechar="\\",sep="\t")
-
- But we were still experiencing problems when reading fully empty sections, now
- we only write to the section buffer reports that are not empty. We afterwards
- recover the indexes....
-
-@author: iregon
-"""
+#"""
+#Created on Fri Jan 10 13:17:43 2020
+#
+#Extracts and reads (decodes, scales, etc...) the elements of data sections.
+#Each column of the input dataframe is a section with all its elements stored
+#as a single string.
+#
+#Working on a section by section basis, this module uses the data model
+#information provided in the schema to split the elements, decode and scale them
+#where appropriate and ensure its data type consistency.
+#
+#Output is a dataframe with columns as follows depending on the data model
+#structure:
+#    1) Data model with sections (1 or more): [(section0,element0),.......(sectionN,elementM)]
+#    2) Data model with no sections[element0...element1]
+#
+#
+#DEV NOTES:
+#1) the 'quoted' issue: in version 1.0:
+# # Writing options from quoting on to prevent supp buoy data to be quoted:
+# # maybe this happenned because buoy data has commas, and pandas makes its own decission about
+# # how to write that.....
+# #https://stackoverflow.com/questions/21147058/pandas-to-csv-output-quoting-issue
+# # quoting=csv.QUOTE_NONE was failing when a section is empty (or just one record in a section,...)
+# sections_df[section].to_csv(section_buffer,header=False, encoding = 'utf-8',index = False,quoting=csv.QUOTE_NONE,escapechar="\\",sep="\t")
+#
+# But we were still experiencing problems when reading fully empty sections, now
+# we only write to the section buffer reports that are not empty. We afterwards
+# recover the indexes....
+#
+#@author: iregon
+#"""
 
 import pandas as pd
 from io import StringIO as StringIO
@@ -80,7 +80,36 @@ def read_data(section_df,section_schema):
     return section_df,section_valid
 
 def main(sections_df, schema):
+    """
 
+    Returns a pandas dataframe with a report per row
+    and the report sections split along the columns.
+    Each section is a block string and only the sections
+    listed in read_sections parameter are output.
+    
+    Parameters
+    ----------
+    sections_df : pandas.DataFrame
+        Pandas dataframe with a column per report sections.
+        The sections in the columns as a block strings.    
+    schema : dict 
+        Data source data model schema 
+
+    Returns
+    -------
+    data : pandas.DataFrame 
+        Dataframe with the report section elements split 
+        along the columns. Multiindex if bla, regular index
+        if ble
+    mask : pandas.DataFrame 
+        Dataframe with the report section elements split 
+        along the columns. Multiindex if bla, regular index
+        if ble   
+    dtypes : dict
+        Dictionary with pandas data types for each of the
+        output elements
+        
+    """
     multiindex = True if len(sections_df.columns) > 1 or sections_df.columns[0] != properties.dummy_level else False
     data_df = pd.DataFrame(index = sections_df.index)
     valid_df = pd.DataFrame(index = sections_df.index)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
- 
+
 Manages the integral sequence in data file reading
 from a data model:
     - Access to data model
@@ -11,7 +11,6 @@ from a data model:
     - Output
 
 Contains the following functions:
-
     * ERV - does the actual extraction, read and validation of data input data
     * main - the main function of the script
     

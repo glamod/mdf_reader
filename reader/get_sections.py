@@ -1,38 +1,38 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Apr 30 09:38:17 2019
-
-Splits string reports in sections using a data model layout.
-
-Input and output are simple pandas dataframes, with the output dataframe
-column names being the section names
-
-To work with a pandas TextParser, loop through this module.
-
-Internally works assuming highest complexity in the input data model:
-multiple non sequential sections
-
-DEV NOTES:
-    
-1) make sure we use Series when working with Series, DataFrames otherwise...
-like now:
-  threads[thread_id]['data'] = pd.Series(threads[thread_id]['parent_data'][0].str[0:section_len])
-instead of:
-  threads[thread_id]['data'] = pd.DataFrame(threads[thread_id]['parent_data'][0].str[0:section_len])
-
-on data import in import_data.py, we use pd.read_fwf because is more general
-use, also support to chunking would make converting to series a bit dirty...
-
-2) Can we extend (do we need to?) this to reading sequential sections with
-    no sentinals? apparently (see td11) we are already able to do that:
-        provided the section is in a sequential parsing_order group
-
-@author: iregon
-
-Have to documents the threads approach!!!!
-
-"""
+#"""
+#Created on Tue Apr 30 09:38:17 2019
+#
+#Splits string reports in sections using a data model layout.
+#
+#Input and output are simple pandas dataframes, with the output dataframe
+#column names being the section names
+#
+#To work with a pandas TextParser, loop through this module.
+#
+#Internally works assuming highest complexity in the input data model:
+#multiple non sequential sections
+#
+#DEV NOTES:
+#    
+#1) make sure we use Series when working with Series, DataFrames otherwise...
+#like now:
+#  threads[thread_id]['data'] = pd.Series(threads[thread_id]['parent_data'][0].str[0:section_len])
+#instead of:
+#  threads[thread_id]['data'] = pd.DataFrame(threads[thread_id]['parent_data'][0].str[0:section_len])
+#
+#on data import in import_data.py, we use pd.read_fwf because is more general
+#use, also support to chunking would make converting to series a bit dirty...
+#
+#2) Can we extend (do we need to?) this to reading sequential sections with
+#    no sentinals? apparently (see td11) we are already able to do that:
+#        provided the section is in a sequential parsing_order group
+#
+#@author: iregon
+#
+#Have to documents the threads approach!!!!
+#
+#"""
 
 import pandas as pd
 from copy import deepcopy
@@ -200,6 +200,34 @@ def extract_sections(string_df):
 #   MAIN
 #   ---------------------------------------------------------------------------
 def main(string_df, schema, read_sections):
+    """
+
+    Returns a pandas dataframe with a report per row
+    and the report sections split along the columns.
+    Each section is a block string and only the sections
+    listed in read_sections parameter are output.
+    
+    Parameters
+    ----------
+    string_df : pandas.DataFrame
+        Pandas dataframe with a unique column with
+        the reports as a block string
+        
+    schema : dict 
+        Data source data model schema 
+    
+    read_sections : list 
+        Sections to output from the complete report
+        
+
+    Returns
+    -------
+    pandas.DataFrame 
+        Dataframe with the report sections split 
+        along the columns.
+    
+
+    """
     global sentinals, section_lens, sentinals_lens
     global parsing_order
     # Proceed to split sections if more than one

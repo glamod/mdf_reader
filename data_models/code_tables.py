@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 13 15:14:51 2018
+
+This module has functions to manage data model
+code table files and objects according to the
+requirements of the data reader tool
+
 """
 
 import sys
@@ -16,12 +20,6 @@ from copy import deepcopy
 from pandas.io.json.normalize import nested_to_record
 import ast
 
-if sys.version_info[0] >= 3:
-    py3 = True
-else:
-    py3 = False
-
-
 #https://stackoverflow.com/questions/10756427/loop-through-all-nested-dictionary-values
 #def print_nested(d):
 #    if isinstance(d, dict):
@@ -35,15 +33,87 @@ else:
 #
 #    else:
 #        print(d)
+
 toolPath = os.path.dirname(os.path.abspath(__file__))
 table_lib = os.path.join(toolPath,'lib')
 templates_path = os.path.join(table_lib,'templates','code_tables')
 
+
+def read_table(table_path):
+    """
+
+    Reads a data model code table file to a dictionary.
+    It completes the code table to the full complexity
+    the data reader expects, by appending information
+    on secondary keys and expanding range keys.
+    
+    Arguments
+    ---------
+    table_path : str
+        The file path of the code table.
+
+    Returns
+    -------
+    dict
+        Code table
+
+    """
+    
+    with open(table_path) as fileObj:
+        table = json.load(fileObj)
+    # Add keys for nested code tables    
+    keys_path = ".".join([".".join(table_path.split('.')[:-1]),'keys'])
+    if os.path.isfile(keys_path):
+        with open(keys_path) as fileObj:
+            table_keys = json.load(fileObj)
+            table['_keys'] = {}
+            for x,y in table_keys.items():
+                key = eval_dict_items(x)
+                values = [ eval_dict_items(k) for k in y ]
+                table['_keys'][key] = values
+    # Expand range keys            
+    expand_integer_range_key(table)
+    
+    return table
+
 def templates():
+    """
+
+    Lists the name of the available code table templates
+
+    Returns
+    -------
+    list
+        Code table template aliases
+
+    """
+    
     tables = glob.glob(os.path.join(templates_path,'*.json'))
     return [ os.path.basename(x).split(".")[0] for x in tables ]
 
 def copy_template(table, out_dir = None,out_path = None):
+    """
+
+    Copies a code table template to an output
+    file or path
+    
+    Parameters
+    ----------
+    table : str
+        Code table template name to copy
+        
+    Keyword Arguments
+    -----------------
+    out_dir : dict, opt
+        Directory to copy code table file template to
+    out_path : dict, opt
+        Full filename to copy code table file template to
+    
+    Either out_dir or out_path must be provided
+
+
+    """
+    
     tables = templates()
     if table in tables:
         table_path = os.path.join(templates_path,table + '.json')
@@ -109,21 +179,6 @@ def eval_dict_items(item):
         return ast.literal_eval(item)
     except:
         return item
-
-def read_table(table_path):
-    with open(table_path) as fileObj:
-        table = json.load(fileObj)
-    keys_path = ".".join([".".join(table_path.split('.')[:-1]),'keys'])
-    if os.path.isfile(keys_path):
-        with open(keys_path) as fileObj:
-            table_keys = json.load(fileObj)
-            table['_keys'] = {}
-            for x,y in table_keys.items():
-                key = eval_dict_items(x)
-                values = [ eval_dict_items(k) for k in y ]
-                table['_keys'][key] = values
-    expand_integer_range_key(table)
-    return table
 
 def table_keys(table):
     separator = '∿' # something hopefully not in keys...
