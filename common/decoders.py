@@ -1,5 +1,6 @@
 
 import numpy as np
+import pandas as pd
 import string
 
 from .. import properties
@@ -60,28 +61,16 @@ class df_decoders():
         self.dtype = dtype if dtype in properties.numeric_types else 'object'
     def signed_overpunch(self, data ):
         decoded_numeric = np.vectorize(signed_overpunch_i,otypes=[float])(data)
-        try:
-            return decoded_numeric.astype(self.dtype, casting = 'safe')
-        except:
-            return decoded_numeric
+        return pd.Series(decoded_numeric,dtype = self.dtype)
+
     def base36(self, data):
-        # int(str(np.nan),36) ==> 30191
-        # Had to do the following because the astype() below did not seem to convert
-        # to object element-wise, but the full thing. As a result, str methods
-        # in converters from objects originating here were failing: the column
-        # was dtype = 'object', but the elements inside where 'int'....
-        # Checked that manually a seemed to be happening that way....   
+        # Caution: int(str(np.nan),36) ==> 30191
         if self.dtype == 'object' : 
-            base10 = np.array([str(int(str(i), 36)) if i == i and i else np.nan for i in data ])
+            base10 = [ str(int(str(i), 36)) if i == i and i else np.nan for i in data ]
         else:
-            base10 = np.array([int(str(i), 36) if i == i and i else np.nan for i in data ])
+            base10 = [ int(str(i), 36) if i == i and i else np.nan for i in data ]
             
-        try:
-            return base10.astype(self.dtype, casting = 'safe')
-        except:
-            return base10
-
-
+        return pd.Series(base10,dtype = self.dtype)
 
 decoders = dict()
 
