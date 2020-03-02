@@ -44,7 +44,7 @@ def validate_numeric(elements,data,schema):
 def validate_codes(elements, data, code_tables_path, schema, supp = False):
 
     mask = pd.DataFrame(index = data.index, data = False, columns = elements)
-
+    
     if os.path.isdir(code_tables_path):
         for element in elements:
             code_table = schema.get(element).get('codetable')
