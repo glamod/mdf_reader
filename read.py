@@ -85,7 +85,7 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
         # Sections are parsed in the same order as sections_df.columns
         
         [data_df, valid_df, out_dtypes ] = read_sections.main(sections_df, schema)
-        
+
         # 3. Validate data elements
         
         valid_df = validate.validate(data_df, valid_df, schema, code_tables_path)
