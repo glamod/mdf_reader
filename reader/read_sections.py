@@ -74,9 +74,8 @@ def read_data(section_df,section_schema):
 
         kwargs = { converter_arg:section_schema['elements'][element].get(converter_arg) for converter_arg in properties.data_type_conversion_args.get(section_dtypes.get(element))  }
         section_df[element] = converters.get(section_dtypes.get(element))(section_df[element], **kwargs)
-
+        
         section_valid[element] = missing | section_df[element].notna()
-
     return section_df,section_valid
 
 def main(sections_df, schema):
@@ -147,6 +146,7 @@ def main(sections_df, schema):
             # Read the objects to their data types and apply decoding, scaling and so on...
             # Give them their actual indexes back
             section_elements, section_valid = read_data(section_elements_obj,section_schema)
+             
             section_elements.index = notna_idx
             section_valid.index = notna_idx
 
@@ -160,9 +160,7 @@ def main(sections_df, schema):
         data_df = pd.concat([data_df,section_elements],sort = False,axis=1)
         valid_df = pd.concat([valid_df,section_valid],sort = False,axis=1)
 
-    # We do the actual out_dtypes here: because the full indexing occurs only
-    # after concat, NaN values may arise only in data_df if a section is
-    # not existing in a given report!
+    # Do the dtypes after removing unwnated elements, etc..
     for section in sections_df.columns:
         section_schema = schema['sections'].get(section)
         if not section_schema.get('header').get('disable_read'):
@@ -176,5 +174,4 @@ def main(sections_df, schema):
                     out_dtypes.update({ (section,section):'object' } )
             else:
                 out_dtypes.update({ section:'object' } )
-
     return data_df, valid_df, out_dtypes
