@@ -2413,45 +2413,53 @@
                   "description": "latitude by account at noon",
                   "field_length": 4,
                   "scale": 0.01,
-                  "column_type": "float16"
+                  "column_type": "float16",
+                  "LMR6": true
               },
               "LAT_CP_AN": {
                   "description": "latitude by account at noon",
                   "field_length": 1,
-                  "column_type": "str"
+                  "column_type": "str",
+                  "LMR6": true
               },
               "LON_DEG_AN": {
                   "description": "longitude by account at noon",
                   "field_length": 5,
                   "scale": 0.01,
-                  "column_type": "float16"
+                  "column_type": "float16",
+                  "LMR6": true
               },
               "LON_DEG_CP": {
                   "description": "longitude by account at noon",
                   "field_length": 1,
-                  "column_type": "str"
+                  "column_type": "str",
+                  "LMR6": true
               },
               "LAT_DEG_ON": {
                   "description": "latitude by observation at noon",
                   "field_length": 4,
                   "scale": 0.01,
-                  "column_type": "float16"
+                  "column_type": "float16",
+                  "LMR6": true
               },
               "LAT_CP_ON": {
                   "description": "latitude by observation at noon",
                   "field_length": 1,
-                  "column_type": "str"
+                  "column_type": "str",
+                  "LMR6": true
               },
               "LON_DEG_OF": {
                   "description": "longitude by chronometer from forenoon observation",
                   "field_length": 5,
                   "scale": 0.01,
-                  "column_type": "float16"
+                  "column_type": "float16",
+                  "LMR6": true
               },
               "LON_CP_OF": {
                   "description": "longitude by chronometer from forenoon observation",
                   "field_length": 1,
-                  "column_type": "str"
+                  "column_type": "str",
+                  "LMR6": true
               },
               "Unknown2": {
                   "description": "Unknonwn",
@@ -2468,10 +2476,11 @@
                   "field_length": 1,
                   "column_type": "str"
               },
-              "JournalNo": {
-                  "description": "Journal #",
+              "ReelJournalNo": {
+                  "description": "Reel, Journal #, merge of Journal Record section fields 2 and 3?",
                   "field_length": 7,
-                  "column_type": "str"
+                  "column_type": "str",
+                  "LMR6": true
               },
               "Unknonwn2": {
                   "description": "Unknonwn",
@@ -2481,32 +2490,38 @@
               "YR": {
                   "description": "Year",
                   "field_length": 4,
-                  "column_type": "Int16"
+                  "column_type": "Int16",
+                  "LMR6": true
               },
               "MO": {
                   "description": "Month",
                   "field_length": 2,
-                  "column_type": "Int8"
+                  "column_type": "Int8",
+                  "LMR6": true
               },
               "DY": {
                   "description": "Day",
                   "field_length": 2,
-                  "column_type": "Int8"
+                  "column_type": "Int8",
+                  "LMR6": true
               },
               "TI_ND": {
                   "description": "Time indicator night/day?",
                   "field_length": 1,
-                  "column_type": "str"
+                  "column_type": "str",
+                  "LMR6": true
               },
               "HR": {
                   "description": "Hour (local)...?",
                   "field_length": 2,
-                  "column_type": "Int8"
+                  "column_type": "Int8",
+                  "LMR6": true
               },
               "SS": {
                   "description": "Ship speed units? knots?",
                   "field_length": 3,
-                  "column_type": "Int16"
+                  "column_type": "Int16",
+                  "LMR6": true
               },
               "Unknonwn3": {
                   "description": "Unknonwn",
@@ -2516,7 +2531,8 @@
               "SC_C": {
                   "description": "Ship course steered by compass",
                   "field_length": 7,
-                  "column_type": "str"
+                  "column_type": "str",
+                  "LMR6": true
               },
               "Unknonwn4": {
                   "description": "Unknonwn",
@@ -2526,52 +2542,62 @@
               "SC_T": {
                   "description": "Ship course true",
                   "field_length": 7,
-                  "column_type": "str"
+                  "column_type": "str",
+                  "LMR6": true
               },
               "WD_M": {
                   "description": "Wind direction - magnetic",
                   "field_length": 7,
-                  "column_type": "str"
+                  "column_type": "str",
+                  "LMR6": true
               },
               "WD_T": {
                   "description": "Wind direction - true",
                   "field_length": 7,
-                  "column_type": "str"
+                  "column_type": "str",
+                  "LMR6": true
               },
               "WF": {
                   "description": "Mean Beaufort force. Add code table",
                   "field_length": 2,
-                  "column_type": "key"
+                  "column_type": "key",
+                  "LMR6": true
               },
               "SLP": {
                   "description": "Sea level pressure",
                   "field_length": 4,
-                  "column_type": "Int16"
+                  "column_type": "Int16",
+                  "LMR6": true
               },
               "T1": {
                   "description": "Temperature indicator. Create code table?",
                   "field_length": 1,
-                  "column_type": "key"
+                  "column_type": "key",
+                  "LMR6": true
               },
               "T_ATT": {
                   "description": "Attached thermometer. It's integer values from tens to hundreds...",
                   "field_length": 4,
-                  "column_type": "Int16"
+                  "column_type": "Int16",
+                  "LMR6": true
               },
               "AT": {
                   "description": "Air temperature. Units according to T1",
                   "field_length": 4,
-                  "column_type": "Int16"
+                  "column_type": "Int16",
+                  "LMR6": true
               },
               "WBT": {
                   "description": "Wet bulb temperature. Units according to T1",
                   "field_length": 4,
-                  "column_type": "Int16"
+                  "column_type": "Int16",
+                  "LMR6": true
               },
               "SST": {
                   "description": "Sea surface temperature",
                   "field_length": 4,
-                  "column_type": "Int16"
+                  "column_type": "Int16",
+                  "LMR6": true
               },
               "Unknonwn5": {
                   "description": "Unknonwn",
@@ -2581,7 +2607,8 @@
               "SK_CL": {
                   "description": "Clear sky in tenths",
                   "field_length": 2,
-                  "column_type": "Int8"
+                  "column_type": "Int8",
+                  "LMR6": true
               },
               "Unknonwn6": {
                   "description": "Unknonwn",
