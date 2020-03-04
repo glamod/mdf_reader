@@ -58,17 +58,15 @@ def signed_overpunch_i(x):
 
 class df_decoders():
     def __init__(self, dtype):
-        self.dtype = dtype if dtype in properties.numeric_types else 'object'
+        # Return as object, conversion to actual type in converters only!
+        self.dtype = 'object'
     def signed_overpunch(self, data ):
         decoded_numeric = np.vectorize(signed_overpunch_i,otypes=[float])(data)
         return pd.Series(decoded_numeric,dtype = self.dtype)
 
     def base36(self, data):
         # Caution: int(str(np.nan),36) ==> 30191
-        if self.dtype == 'object' : 
-            base10 = [ str(int(str(i), 36)) if i == i and i else np.nan for i in data ]
-        else:
-            base10 = [ int(str(i), 36) if i == i and i else np.nan for i in data ]
+        base10 = [ str(int(str(i), 36)) if i == i and i else np.nan for i in data ]
             
         return pd.Series(base10,dtype = self.dtype)
 
