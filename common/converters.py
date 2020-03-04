@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 from .. import properties
 
@@ -33,8 +34,12 @@ class df_converters():
         self.numeric_scale = 1. if self.dtype in properties.numpy_floats else 1
         self.numeric_offset = 0. if self.dtype in properties.numpy_floats else 0
     def object_to_numeric(self, data, scale = None, offset = None):
+        
         scale = scale if scale else self.numeric_scale
         offset = offset if offset else self.numeric_offset
+        # First do the appropriate managing of white spaces, to the right, they mean 0!
+        data = data.replace(r'^\s*$', np.nan, regex=True)
+        data = data.str.replace(' ', '0')
         #  Convert to numeric, then scale (?!) and give it's actual int type
         data = pd.to_numeric(data,errors = 'coerce') # astype fails on strings, to_numeric manages errors....!
         data = offset + data * scale
