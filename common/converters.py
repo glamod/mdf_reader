@@ -39,7 +39,9 @@ class df_converters():
         offset = offset if offset else self.numeric_offset
         # First do the appropriate managing of white spaces, to the right, they mean 0!
         data = data.replace(r'^\s*$', np.nan, regex=True)
-        data = data.replace(' ', '0')
+        # str method fails if all nan
+        if data.count() > 0:
+            data = data.str.replace(' ', '0')
         #  Convert to numeric, then scale (?!) and give it's actual int type
         data = pd.to_numeric(data,errors = 'coerce') # astype fails on strings, to_numeric manages errors....!
         data = offset + data * scale
