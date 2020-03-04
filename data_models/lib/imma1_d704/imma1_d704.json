@@ -3,7 +3,7 @@
         "parsing_order": [
           {"s": ["core"]},
           {"o": ["c1","c5","c6","c7","c8","c9","c95","c96","c97","c98"]},
-          {"s": ["supp_sentinal","supp_journal","supp_voyage","supp_daily","supp_data"]}
+          {"s": ["c99_sentinal","c99_journal","c99_voyage","c99_daily","c99_data"]}
         ]
     },
     "sections": {
@@ -2215,7 +2215,7 @@
                 }
             }
         },
-        "supp_sentinal": {
+        "c99_sentinal": {
             "header": {"sentinal": "99 0 ", "length": 5, "field_layout":"fixed_width"},
             "elements": {
               "ATTI": {
@@ -2241,7 +2241,7 @@
               }
             }
         },
-        "supp_journal": {
+        "c99_journal": {
             "header": {"field_layout":"fixed_width","length": 117},
             "elements": {
               "header":{
@@ -2391,17 +2391,17 @@
               }
             }
         },
-        "supp_voyage": {
+        "c99_voyage": {
             "header": {"field_layout":"fixed_width","length": 52,"disable_read":true},
             "elements": {
-              "supp_rt2": {
+              "c99_rt2": {
                   "description": "Voyage header record",
                   "field_length": 52,
                   "column_type": "str"
               }
             }
         },
-        "supp_daily": {
+        "c99_daily": {
             "header": {"field_layout":"fixed_width","length": 61},
             "elements": {
               "Unknown1": {
@@ -2468,7 +2468,7 @@
               }
             }
         },
-        "supp_data": {
+        "c99_data": {
             "header": {"field_layout":"fixed_width","length": 103},
             "elements": {
               "Unknonwn1": {
