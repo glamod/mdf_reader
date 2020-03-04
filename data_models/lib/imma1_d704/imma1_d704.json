@@ -3,7 +3,8 @@
         "parsing_order": [
           {"s": ["core"]},
           {"o": ["c1","c5","c6","c7","c8","c9","c95","c96","c97","c98"]},
-          {"s": ["c99_sentinal","c99_journal","c99_voyage","c99_daily","c99_data"]}
+          {"s": ["c99_sentinal","c99_journal","c99_voyage","c99_daily"]},
+          {"e": ["c99_data4","c99_data5"]}
         ]
     },
     "sections": {
@@ -2242,14 +2243,12 @@
             }
         },
         "c99_journal": {
-            "header": {"field_layout":"fixed_width","length": 117},
+            "header": {"sentinal": "1", "field_layout":"fixed_width","length": 117},
             "elements": {
-              "header":{
+              "sentinal":{
                   "description": "Journal header record identifier",
                   "field_length": 1,
-                  "column_type": "Int8",
-                  "valid_min": 1,
-                  "valid_max": 1
+                  "column_type": "str"
               },
               "reel_no":{
                   "description": "Microfilm reel number. See if we want the zero padding or not...",
@@ -2392,21 +2391,31 @@
             }
         },
         "c99_voyage": {
-            "header": {"field_layout":"fixed_width","length": 52,"disable_read":true},
+            "header": {"sentinal": "2", "field_layout":"fixed_width","length": 52,"disable_read":true},
             "elements": {
+              "sentinal": {
+                  "description": "Voyage header record identifier",
+                  "field_length": 1,
+                  "column_type": "str"
+              },
               "c99_rt2": {
                   "description": "Voyage header record",
-                  "field_length": 52,
+                  "field_length": 51,
                   "column_type": "str"
               }
             }
         },
         "c99_daily": {
-            "header": {"field_layout":"fixed_width","length": 61},
+            "header": {"sentinal": "3", "field_layout":"fixed_width","length": 61},
             "elements": {
-              "Unknown1": {
+              "sentinal": {
+                  "description": "Daily information record identifier",
+                  "field_length": 1,
+                  "column_type": "str"
+              },
+              "Unknonwn1": {
                   "description": "Unknonwn",
-                  "field_length": 28,
+                  "field_length": 27,
                   "column_type": "str"
               },
               "LAT_DEG_AN": {
@@ -2468,152 +2477,377 @@
               }
             }
         },
-        "c99_data": {
-            "header": {"field_layout":"fixed_width","length": 103},
+        "c99_data4": {
+              "header": {"sentinal" : "4", "field_layout":"fixed_width","length": 97},
+              "elements": {
+                "sentinal": {
+                    "description": "Data information record type identifier",
+                    "field_length": 1,
+                    "column_type": "str"
+                },
+                "reel_no": {
+                    "description":"The number from the microfilm roll",
+                    "field_length": 3,
+                    "column_type": "str",
+                    "LMR6": true
+                },
+                "journal_no": {
+                    "description": "Meteorological Journal Number, right justified, zero filled",
+                    "field_length": 4,
+                    "column_type": "str",
+                    "LMR6": true
+                },
+                "frame_start": {
+                    "description": "As starting frame number in the voyage header record: ensures connection between header info and data",
+                    "field_length": 4,
+                    "column_type": "str",
+                    "LMR6": false
+                },
+                "frame": {
+                    "description": "Frame number at the top of each frame from which the daily inforation was extracted",
+                    "field_length": 4,
+                    "column_type": "str",
+                    "LMR6": false
+                },
+                "year": {
+                    "description": "Year",
+                    "field_length": 4,
+                    "column_type": "Int16",
+                    "LMR6": true
+                },
+                "month": {
+                    "description": "Month",
+                    "field_length": 2,
+                    "column_type": "Int8",
+                    "LMR6": true
+                },
+                "day": {
+                    "description": "Day",
+                    "field_length": 2,
+                    "column_type": "Int8",
+                    "LMR6": true
+                },
+                "time_ind": {
+                    "description": "Time indicator",
+                    "field_length": 1,
+                    "column_type": "key",
+                    "LMR6": true
+                },
+                "hour": {
+                    "description": "Hour, right justified, zero filled",
+                    "field_length": 2,
+                    "column_type": "Int8",
+                    "LMR6": true
+                },
+                "ship_speed": {
+                    "description": "Ship speed knots, to tenths",
+                    "field_length": 3,
+                    "column_type": "float16",
+                    "scale": 0.1,
+                    "LMR6": true
+                },
+                "compass_ind": {
+                    "description": "Compass indicator",
+                    "field_length": 1,
+                    "column_type": "key",
+                    "LMR6": false
+                },
+                "ship_course_compass": {
+                    "description": "Ship course steered by compass",
+                    "field_length": 7,
+                    "column_type": "key",
+                    "LMR6": true
+                },
+                "compass_correction": {
+                    "description": "Correction in points or degrees, as indicated in compass_ind. LMR6 false? see ref Jackson et. al. 2000 in translation info",
+                    "field_length": 2,
+                    "column_type": "Int8",
+                    "LMR6": false
+                },
+                "ship_course_true": {
+                    "description": "Ship course true",
+                    "field_length": 7,
+                    "column_type": "key",
+                    "LMR6": true
+                },
+                "wind_dir_mag": {
+                    "description": "Mean wind direction - magnetic",
+                    "field_length": 7,
+                    "column_type": "key",
+                    "LMR6": true
+                },
+                "wind_dir_true": {
+                    "description": "Wind direction - true",
+                    "field_length": 7,
+                    "column_type": "str",
+                    "LMR6": true
+                },
+                "wind_force": {
+                    "description": "Mean Beaufort force",
+                    "field_length": 2,
+                    "column_type": "key",
+                    "LMR6": true
+                },
+                "barometer": {
+                    "description": "Barometer in inches or millimetres. Left|right justified to confirm",
+                    "field_length": 4,
+                    "column_type": "str",
+                    "disable_white_strip": true,
+                    "LMR6": true
+                },
+                "temp_ind": {
+                    "description": "Temperature indicator",
+                    "field_length": 1,
+                    "column_type": "key",
+                    "LMR6": true
+                },
+                "attached_thermometer": {
+                    "description": "Attached thermometer. It's integer values from tens to hundreds...",
+                    "field_length": 4,
+                    "column_type": "float16",
+                    "scale": 0.1,
+                    "LMR6": true
+                },
+                "air_temperature": {
+                    "description": "Air temperature. Units according to temperature indicator",
+                    "field_length": 4,
+                    "column_type": "float16",
+                    "scale": 0.1,
+                    "LMR6": true
+                },
+                "wet_bulb_temperature": {
+                    "description": "Wet bulb temperature. Units according to temperature indicator",
+                    "field_length": 4,
+                    "column_type": "float16",
+                    "scale": 0.1,
+                    "LMR6": true
+                },
+                "sea_temperature": {
+                    "description": "Sea surface temperature",
+                    "field_length": 4,
+                    "column_type":  "float16",
+                    "scale": 0.1,
+                    "LMR6": true
+                },
+                "present_weather": {
+                    "description": "Present weather, left justified, blank filled. Split in 5?",
+                    "field_length": 5,
+                    "column_type": "key",
+                    "LMR6": false
+                },
+                "clouds": {
+                    "description": "Forms of clouds by symbols",
+                    "field_length": 2,
+                    "column_type": "key",
+                    "LMR6": false
+                },
+                "sky_clear": {
+                    "description": "Clear sky in tenths",
+                    "field_length": 2,
+                    "column_type": "Int8",
+                    "LMR6": true
+                },
+                "sea_state": {
+                    "description": "State of the sea, left justified, blank filled. Split in 4?",
+                    "field_length": 4,
+                    "column_type": "key",
+                    "LMR6": false
+                }
+              }
+          },
+        "c99_data5": {
+            "header": {"sentinal" : "5", "field_layout":"fixed_width","length": 103},
             "elements": {
-              "Unknonwn1": {
-                  "description": "Unknonwn",
+              "sentinal": {
+                  "description": "Data information record type identifier",
                   "field_length": 1,
                   "column_type": "str"
               },
-              "ReelJournalNo": {
-                  "description": "Reel, Journal #, merge of Journal Record section fields 2 and 3?",
-                  "field_length": 7,
+              "reel_no": {
+                  "description":"The number from the microfilm roll",
+                  "field_length": 3,
                   "column_type": "str",
                   "LMR6": true
               },
-              "Unknonwn2": {
-                  "description": "Unknonwn",
-                  "field_length": 8,
-                  "column_type": "str"
+              "journal_no": {
+                  "description": "Meteorological Journal Number, right justified, zero filled",
+                  "field_length": 4,
+                  "column_type": "str",
+                  "LMR6": true
               },
-              "YR": {
+              "frame_start": {
+                  "description": "As starting frame number in the voyage header record: ensures connection between header info and data",
+                  "field_length": 4,
+                  "column_type": "str",
+                  "LMR6": false
+              },
+              "frame": {
+                  "description": "Frame number at the top of each frame from which the daily inforation was extracted",
+                  "field_length": 4,
+                  "column_type": "str",
+                  "LMR6": false
+              },
+              "year": {
                   "description": "Year",
                   "field_length": 4,
                   "column_type": "Int16",
                   "LMR6": true
               },
-              "MO": {
+              "month": {
                   "description": "Month",
                   "field_length": 2,
                   "column_type": "Int8",
                   "LMR6": true
               },
-              "DY": {
+              "day": {
                   "description": "Day",
                   "field_length": 2,
                   "column_type": "Int8",
                   "LMR6": true
               },
-              "TI_ND": {
-                  "description": "Time indicator night/day?",
+              "time_ind": {
+                  "description": "Time indicator",
                   "field_length": 1,
-                  "column_type": "str",
+                  "column_type": "key",
                   "LMR6": true
               },
-              "HR": {
-                  "description": "Hour (local)...?",
+              "hour": {
+                  "description": "Hour, right justified, zero filled",
                   "field_length": 2,
                   "column_type": "Int8",
                   "LMR6": true
               },
-              "SS": {
-                  "description": "Ship speed units? knots?",
+              "ship_speed": {
+                  "description": "Ship speed knots, to tenths",
                   "field_length": 3,
-                  "column_type": "Int16",
+                  "column_type": "float16",
+                  "scale": 0.1,
                   "LMR6": true
               },
-              "Unknonwn3": {
-                  "description": "Unknonwn",
+              "compass_ind": {
+                  "description": "Compass inficator",
                   "field_length": 1,
-                  "column_type": "str"
+                  "column_type": "key",
+                  "LMR6": false
               },
-              "SC_C": {
+              "ship_course_compass": {
                   "description": "Ship course steered by compass",
                   "field_length": 7,
-                  "column_type": "str",
+                  "column_type": "key",
                   "LMR6": true
               },
-              "Unknonwn4": {
-                  "description": "Unknonwn",
+              "blank": {
+                  "description": "blank fields",
                   "field_length": 2,
                   "column_type": "str"
               },
-              "SC_T": {
+              "ship_course_true": {
                   "description": "Ship course true",
                   "field_length": 7,
-                  "column_type": "str",
+                  "column_type": "key",
                   "LMR6": true
               },
-              "WD_M": {
-                  "description": "Wind direction - magnetic",
+              "wind_dir_mag": {
+                  "description": "Mean wind direction - magnetic",
                   "field_length": 7,
-                  "column_type": "str",
+                  "column_type": "key",
                   "LMR6": true
               },
-              "WD_T": {
+              "wind_dir_true": {
                   "description": "Wind direction - true",
                   "field_length": 7,
                   "column_type": "str",
                   "LMR6": true
               },
-              "WF": {
+              "wind_force": {
                   "description": "Mean Beaufort force. Add code table",
                   "field_length": 2,
                   "column_type": "key",
                   "LMR6": true
               },
-              "SLP": {
-                  "description": "Sea level pressure",
+              "barometer": {
+                  "description": "Barometer in inches or millimetres. Left|right justified to confirm",
                   "field_length": 4,
-                  "column_type": "Int16",
+                  "column_type": "str",
+                  "disable_white_strip": true,
                   "LMR6": true
               },
-              "T1": {
-                  "description": "Temperature indicator. Create code table?",
+              "temp_ind": {
+                  "description": "Temperature indicator",
                   "field_length": 1,
                   "column_type": "key",
                   "LMR6": true
               },
-              "T_ATT": {
+              "attached_thermometer": {
                   "description": "Attached thermometer. It's integer values from tens to hundreds...",
                   "field_length": 4,
-                  "column_type": "Int16",
+                  "column_type": "float16",
+                  "scale": 0.1,
                   "LMR6": true
               },
-              "AT": {
-                  "description": "Air temperature. Units according to T1",
+              "air_temperature": {
+                  "description": "Air temperature. Units according to temperature indicator",
                   "field_length": 4,
-                  "column_type": "Int16",
+                  "column_type": "float16",
+                  "scale": 0.1,
                   "LMR6": true
               },
-              "WBT": {
-                  "description": "Wet bulb temperature. Units according to T1",
+              "wet_bulb_temperature": {
+                  "description": "Wet bulb temperature. Units according to temperature indicator",
                   "field_length": 4,
-                  "column_type": "Int16",
+                  "column_type": "float16",
+                  "scale": 0.1,
                   "LMR6": true
               },
-              "SST": {
+              "sea_temperature": {
                   "description": "Sea surface temperature",
                   "field_length": 4,
-                  "column_type": "Int16",
+                  "column_type":  "float16",
+                  "scale": 0.1,
                   "LMR6": true
               },
-              "Unknonwn5": {
-                  "description": "Unknonwn",
-                  "field_length": 7,
-                  "column_type": "str"
+              "present_weather": {
+                  "description": "Present weather, left justified, blank filled. Split in 5?",
+                  "field_length": 5,
+                  "column_type": "key",
+                  "LMR6": false
               },
-              "SK_CL": {
+              "clouds": {
+                  "description": "Forms of clouds by symbols",
+                  "field_length": 2,
+                  "column_type": "key",
+                  "LMR6": false
+              },
+              "sky_clear": {
                   "description": "Clear sky in tenths",
                   "field_length": 2,
                   "column_type": "Int8",
                   "LMR6": true
               },
-              "Unknonwn6": {
-                  "description": "Unknonwn",
-                  "field_length": 10,
-                  "column_type": "str"
+              "sea_state": {
+                  "description": "State of the sea, left justified, blank filled. Split in 4?",
+                  "field_length": 4,
+                  "column_type": "key",
+                  "LMR6": false
+              },
+              "compass_correction_ind": {
+                  "description": "Compass correction indicator",
+                  "field_length": 1,
+                  "column_type": "key",
+                  "LMR6": true
+              },
+              "compass_correction": {
+                  "description": "compass correction",
+                  "field_length": 4,
+                  "column_type": "float16",
+                  "scale": 0.1,
+                  "LMR6": true
+              },
+              "compass_correction_dir": {
+                  "description": "Direction of correction (of compass...)",
+                  "field_length": 1,
+                  "column_type": "key",
+                  "LMR6": true
               }
             }
         }
