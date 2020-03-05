@@ -26,6 +26,7 @@ import logging
 import json
 import copy
 from io import StringIO as StringIO
+import csv
 
 from .data_models import schemas
 from . import properties
@@ -77,7 +78,6 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
         # - columns(sections) order as in read_sections_list
         
         sections_df = get_sections.main(string_df, schema, read_sections_list)
-
         # 2. Read elements from sections
         # Along data chunks, resulting data types
         # may vary if gaps, keep track of data dtypes: v1.0
@@ -85,13 +85,13 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
         # Sections are parsed in the same order as sections_df.columns
         
         [data_df, valid_df, out_dtypes ] = read_sections.main(sections_df, schema)
-
         # 3. Validate data elements
         
         valid_df = validate.validate(data_df, valid_df, schema, code_tables_path)
-        
-        # 4. Save to buffer
-        data_df.to_csv(data_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
+        # 4. Save to buffer        
+        # Writing options from quoting on to prevent data with special characters, like commas, etc, to be quoted
+        #https://stackoverflow.com/questions/21147058/pandas-to-csv-output-quoting-issue
+        data_df.to_csv(data_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False,quoting=csv.QUOTE_NONE,escapechar='\\',sep=properties.internal_delimiter)
         valid_df.to_csv(valid_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
         
     # Create the output
@@ -112,7 +112,7 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
             date_columns.append(i)
             out_dtypes.update({element:'object'})
 
-    data = pd.read_csv(data_buffer,names = data_df.columns, chunksize = chunksize, dtype = out_dtypes, parse_dates = date_columns)
+    data = pd.read_csv(data_buffer,names = data_df.columns, chunksize = chunksize, dtype = out_dtypes, parse_dates = date_columns,delimiter=properties.internal_delimiter)
     valid = pd.read_csv(valid_buffer,names = data_df.columns, chunksize = chunksize)
 
     return data, valid
