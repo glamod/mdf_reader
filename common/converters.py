@@ -34,7 +34,33 @@ class df_converters():
         self.numeric_scale = 1. if self.dtype in properties.numpy_floats else 1
         self.numeric_offset = 0. if self.dtype in properties.numpy_floats else 0
     def object_to_numeric(self, data, scale = None, offset = None):
+        """
+    
+        Converts the object type elements of a pandas series to numeric type.
+        Right spaces are trated as ceros. Scale and offset can optionally be applied.
+        The final data type according to the class dtype.
         
+        Parameters
+        ----------
+        self : dtype, numeric_scale and numeric_offset
+            Pandas dataframe with a column per report sections.
+            The sections in the columns as a block strings.    
+        data : pandas.Series 
+            Series with data to convert. Data must be object type
+        
+        Keyword Arguments
+        -----------------
+        scale : numeric, optional
+            Scale to apply after conversion to numeric
+        offset : numeric, optional
+            Offset to apply after converion to numeric
+    
+        Returns
+        -------
+        data : pandas.Series
+            Data series of type self.dtype
+            
+        """
         scale = scale if scale else self.numeric_scale
         offset = offset if offset else self.numeric_offset
         # First do the appropriate managing of white spaces:
