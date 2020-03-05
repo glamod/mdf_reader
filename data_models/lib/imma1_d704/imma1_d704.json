@@ -2284,18 +2284,21 @@
                   "description": "Rig (type of ship) as appeared at beginning of journal",
                   "field_length": 2,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.RIG",
                   "LMR6": false
               },
               "ship_material": {
                   "description": "Construction material",
                   "field_length": 1,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.MAT",
                   "LMR6": false
               },
               "vessel_type": {
                   "description": "Type of vessel",
                   "field_length": 1,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.VESS",
                   "LMR6": false
               },
               "vessel_length": {
@@ -2320,12 +2323,14 @@
                   "description": "Nation of registry",
                   "field_length": 2,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.NAT",
                   "LMR6": false
               },
               "screw_paddle": {
                   "description": "Screw or paddle",
                   "field_length": 1,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.SP",
                   "LMR6": false
               },
               "hold_depth": {
@@ -2344,6 +2349,7 @@
                   "description": "Barometer type. Add code table",
                   "field_length": 1,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.BAROT",
                   "LMR6": true
               },
               "baro_height": {
@@ -2368,6 +2374,7 @@
                   "description": "Barometer units",
                   "field_length": 1,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.BAROU",
                   "LMR6": false
               },
               "baro_cor": {
@@ -2380,28 +2387,55 @@
                   "description": "Are thermos mounted as recommended in journal",
                   "field_length": 1,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.THERMOM",
                   "LMR6": false
               },
               "SST_I": {
-                  "description": "Sea surface temperature method. Add code table",
+                  "description": "Sea surface temperature method",
                   "field_length": 1,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.SSTM",
                   "LMR6": true
               }
             }
         },
         "c99_voyage": {
-            "header": {"sentinal": "2", "field_layout":"fixed_width","length": 52,"disable_read":true},
+            "header": {"sentinal": "2", "length": 52,"field_layout":"fixed_width"},
             "elements": {
               "sentinal": {
                   "description": "Voyage header record identifier",
                   "field_length": 1,
                   "column_type": "str"
               },
-              "c99_rt2": {
-                  "description": "Voyage header record",
-                  "field_length": 51,
-                  "column_type": "str"
+              "reel_no":{
+                  "description": "Microfilm reel number. See if we want the zero padding or not...",
+                  "field_length": 3,
+                  "column_type": "str",
+                  "LMR6": true
+              },
+              "journal_no": {
+                  "description": "Marine Meteorological Journal number,right justified, zero padded",
+                  "field_length": 4,
+                  "column_type": "str",
+                  "LMR6": true
+              },
+              "frame_start": {
+                  "description": "As starting frame number in the voyage header record: ensures connection between header info and data",
+                  "field_length": 4,
+                  "column_type": "str",
+                  "LMR6": false
+              },
+              "from_city": {
+                  "description": "Departure port as it appears on the form",
+                  "field_length": 20,
+                  "column_type": "str",
+                  "LMR6": false
+              },
+              "to_city": {
+                  "description": "Destination port as it appears on the form",
+                  "field_length": 20,
+                  "column_type": "str",
+                  "LMR6": false
               }
             }
         },
@@ -2413,67 +2447,136 @@
                   "field_length": 1,
                   "column_type": "str"
               },
-              "Unknonwn1": {
-                  "description": "Unknonwn",
-                  "field_length": 27,
-                  "column_type": "str"
+              "reel_no":{
+                  "description": "Microfilm reel number. See if we want the zero padding or not...",
+                  "field_length": 3,
+                  "column_type": "str",
+                  "LMR6": true
               },
-              "LAT_DEG_AN": {
-                  "description": "latitude by account at noon",
+              "journal_no": {
+                  "description": "Marine Meteorological Journal number,right justified, zero padded",
                   "field_length": 4,
-                  "scale": 0.01,
-                  "column_type": "float16",
-                  "LMR6": true
-              },
-              "LAT_CP_AN": {
-                  "description": "latitude by account at noon",
-                  "field_length": 1,
                   "column_type": "str",
                   "LMR6": true
               },
-              "LON_DEG_AN": {
-                  "description": "longitude by account at noon",
-                  "field_length": 5,
-                  "scale": 0.01,
-                  "column_type": "float16",
-                  "LMR6": true
-              },
-              "LON_DEG_CP": {
-                  "description": "longitude by account at noon",
-                  "field_length": 1,
-                  "column_type": "str",
-                  "LMR6": true
-              },
-              "LAT_DEG_ON": {
-                  "description": "latitude by observation at noon",
+              "frame_start": {
+                  "description": "As starting frame number in the voyage header record: ensures connection between header info and data",
                   "field_length": 4,
-                  "scale": 0.01,
+                  "column_type": "str",
+                  "LMR6": false
+              },
+              "frame": {
+                  "description": "Frame number at the top of each frame from which the daily inforation was extracted",
+                  "field_length": 4,
+                  "column_type": "str",
+                  "LMR6": false
+              },
+              "year": {
+                  "description": "As indicated in the form",
+                  "field_length": 4,
+                  "column_type": "Int16"
+              },
+              "month": {
+                  "description": "As indicated in the form",
+                  "field_length": 2,
+                  "column_type": "Int8"
+              },
+              "day": {
+                  "description": "As indicated in the form",
+                  "field_length": 2,
+                  "column_type": "Int8"
+              },
+              "distance": {
+                  "description": "Distance run by log since prededing run by log noon. Knots to tenths (tenth position blank if not reported)",
+                  "field_length": 4,
                   "column_type": "float16",
+                  "scale": 0.1,
+                  "LMR6": false
+              },
+              "lat_deg_an": {
+                  "description": "latitude by account at noon, degrees",
+                  "field_length": 2,
+                  "column_type": "Int8",
                   "LMR6": true
               },
-              "LAT_CP_ON": {
-                  "description": "latitude by observation at noon",
+              "lat_min_an": {
+                  "description": "latitude by account at noon, minutes",
+                  "field_length": 2,
+                  "column_type": "Int8",
+                  "LMR6": true
+              },
+              "lat_hemis_an": {
+                  "description": "latitude by account at noon, hemisphere",
                   "field_length": 1,
                   "column_type": "str",
                   "LMR6": true
               },
-              "LON_DEG_OF": {
-                  "description": "longitude by chronometer from forenoon observation",
-                  "field_length": 5,
-                  "scale": 0.01,
-                  "column_type": "float16",
+              "lon_deg_an": {
+                  "description": "longitude by account at noon, degrees",
+                  "field_length": 3,
+                  "column_type": "Int16",
                   "LMR6": true
               },
-              "LON_CP_OF": {
-                  "description": "longitude by chronometer from forenoon observation",
+              "lon_min_an": {
+                  "description": "longitude by account at noon, minutes",
+                  "field_length": 2,
+                  "column_type": "Int8",
+                  "LMR6": true
+              },
+              "lon_hemis_an": {
+                  "description": "longitude by account at noon, hemisphere",
                   "field_length": 1,
                   "column_type": "str",
                   "LMR6": true
               },
-              "Unknown2": {
-                  "description": "Unknonwn",
-                  "field_length": 11,
-                  "column_type": "str"
+              "lat_deg_on": {
+                  "description": "latitude by observation at noon, degrees",
+                  "field_length": 2,
+                  "column_type": "Int8",
+                  "LMR6": true
+              },
+              "lat_min_on": {
+                  "description": "latitude by observation at noon, minutes",
+                  "field_length": 2,
+                  "column_type": "Int8",
+                  "LMR6": true
+              },
+              "lat_hemis_on": {
+                  "description": "latitude by observation at noon, hemisphere",
+                  "field_length": 1,
+                  "column_type": "str",
+                  "LMR6": true
+              },
+              "lon_deg_of": {
+                  "description": "longitude by chronometer from forenoon observation, degrees",
+                  "field_length": 3,
+                  "column_type": "Int16",
+                  "LMR6": true
+              },
+              "lon_min_of": {
+                  "description": "longitude by chronometer from forenoon observation, minutes",
+                  "field_length": 2,
+                  "column_type": "Int8",
+                  "LMR6": true
+              },
+              "lon_hemis_of": {
+                  "description": "longitude by chronometer from forenoon observation, hemisphere",
+                  "field_length": 1,
+                  "column_type": "str",
+                  "LMR6": true
+              },
+              "current_speed": {
+                  "description": "Current speed in the past 24 hours. To knots hundreths",
+                  "field_length": 4,
+                  "column_type": "float16",
+                  "scale": 0.01,
+                  "LMR6": false
+              },
+              "current_direction": {
+                  "description": "Direction towards which the currents are moving. Code table? not in document, probably as other directions....",
+                  "field_length": 7,
+                  "column_type": "str",
+                  "LMR6": false
               }
             }
         },
@@ -2531,6 +2634,7 @@
                     "description": "Time indicator",
                     "field_length": 1,
                     "column_type": "key",
+                    "codetable": "ICOADS.C99.TI",
                     "LMR6": true
                 },
                 "hour": {
@@ -2547,15 +2651,16 @@
                     "LMR6": true
                 },
                 "compass_ind": {
-                    "description": "Compass indicator",
+                    "description": "Compass indicator. Reflects: course steered, compass correction, Leeway, ships true course",
                     "field_length": 1,
                     "column_type": "key",
+                    "codetable": "ICOADS.C99.CI",
                     "LMR6": false
                 },
                 "ship_course_compass": {
-                    "description": "Ship course steered by compass",
+                    "description": "Ship course steered by compass. See digitization format for translation",
                     "field_length": 7,
-                    "column_type": "key",
+                    "column_type": "str",
                     "LMR6": true
                 },
                 "compass_correction": {
@@ -2565,19 +2670,19 @@
                     "LMR6": false
                 },
                 "ship_course_true": {
-                    "description": "Ship course true",
+                    "description": "Ship course true. Same rules as course steered by compass",
                     "field_length": 7,
-                    "column_type": "key",
+                    "column_type": "str",
                     "LMR6": true
                 },
                 "wind_dir_mag": {
-                    "description": "Mean wind direction - magnetic",
+                    "description": "Mean wind direction - magnetic. Same rules as course steered by compass",
                     "field_length": 7,
-                    "column_type": "key",
+                    "column_type": "str",
                     "LMR6": true
                 },
                 "wind_dir_true": {
-                    "description": "Wind direction - true",
+                    "description": "Wind direction - true. Same rules as course steered by compass",
                     "field_length": 7,
                     "column_type": "str",
                     "LMR6": true
@@ -2586,6 +2691,7 @@
                     "description": "Mean Beaufort force",
                     "field_length": 2,
                     "column_type": "key",
+                    "codetable": "ICOADS.C99.BEAU",
                     "LMR6": true
                 },
                 "barometer": {
@@ -2599,6 +2705,7 @@
                     "description": "Temperature indicator",
                     "field_length": 1,
                     "column_type": "key",
+                    "codetable": "ICOADS.C99.TEMPI",
                     "LMR6": true
                 },
                 "attached_thermometer": {
@@ -2725,7 +2832,7 @@
                   "LMR6": true
               },
               "compass_ind": {
-                  "description": "Compass inficator",
+                  "description": "Compass indicator",
                   "field_length": 1,
                   "column_type": "key",
                   "LMR6": false
