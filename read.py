@@ -91,7 +91,9 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
         # 4. Save to buffer        
         # Writing options from quoting on to prevent data with special characters, like commas, etc, to be quoted
         #https://stackoverflow.com/questions/21147058/pandas-to-csv-output-quoting-issue
-        data_df.to_csv(data_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False,quoting=csv.QUOTE_NONE,escapechar='\\',sep=properties.internal_delimiter)
+        data_df.to_csv(data_buffer,header = False, mode = 'a', encoding = 'utf-8',
+                       index = False,quoting=csv.QUOTE_NONE, sep=properties.internal_delimiter,
+                       quotechar='\0',escapechar='\0')
         valid_df.to_csv(valid_buffer,header = False, mode = 'a', encoding = 'utf-8',index = False)
         
     # Create the output
@@ -112,7 +114,11 @@ def ERV(TextParser,read_sections_list, schema, code_tables_path):
             date_columns.append(i)
             out_dtypes.update({element:'object'})
 
-    data = pd.read_csv(data_buffer,names = data_df.columns, chunksize = chunksize, dtype = out_dtypes, parse_dates = date_columns,delimiter=properties.internal_delimiter)
+    data = pd.read_csv(data_buffer,names = data_df.columns, 
+                       chunksize = chunksize, dtype = out_dtypes, 
+                       parse_dates = date_columns,
+                       delimiter=properties.internal_delimiter,
+                       quotechar='\0',escapechar='\0')
     valid = pd.read_csv(valid_buffer,names = data_df.columns, chunksize = chunksize)
 
     return data, valid
@@ -298,8 +304,9 @@ def main(source, data_model = None, data_model_path = None, sections = None,chun
                 else:
                     header = cols
                     out_atts_json = out_atts
-            data_df.to_csv(os.path.join(out_path,'data.csv'), header = header, mode = mode, encoding = 'utf-8',index = True, index_label='index')
-            valid_df.to_csv(os.path.join(out_path,'mask.csv'), header = header, mode = mode, encoding = 'utf-8',index = True, index_label='index')
+            kwargs = {'header' : header, 'mode' : mode, 'encoding' : 'utf-8','index' : True, 'index_label' : 'index','quotechar':'\0','escapechar':'\0'}
+            data_df.to_csv(os.path.join(out_path,'data.csv'), **kwargs)
+            valid_df.to_csv(os.path.join(out_path,'mask.csv'), **kwargs)
         if enlisted:
             data = data[0]
             valid = valid[0]

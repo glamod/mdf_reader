@@ -75,7 +75,7 @@ def main(source,chunksize = None, skiprows = None):
     """
     
     if os.path.isfile(source):
-        TextParser = pd.read_fwf(source,widths=[properties.MAX_FULL_REPORT_WIDTH],header = None, delimiter="\t", skiprows = skiprows, chunksize = chunksize)
+        TextParser = pd.read_fwf(source,widths=[properties.MAX_FULL_REPORT_WIDTH],header = None, delimiter="\t", skiprows = skiprows, chunksize = chunksize, quotechar='\0',escapechar='\0')
         if not chunksize:
             TextParser = [TextParser]
         return TextParser

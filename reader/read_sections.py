@@ -48,16 +48,21 @@ def extract_fixed_width(section_serie_bf,section_schema):
     section_missing = { i:section_schema['elements'][i].get('missing_value') if section_schema['elements'][i].get('disable_white_strip') == True
                                else [section_schema['elements'][i].get('missing_value')," "*section_schema['elements'][i].get('field_length', properties.MAX_FULL_REPORT_WIDTH)]
                                for i in section_names }
-    section_elements = pd.read_fwf(section_serie_bf, widths = section_widths, header = None, names = section_names , na_values = section_missing, encoding = 'utf-8', dtype = 'object', skip_blank_lines = False )
+    section_elements = pd.read_fwf(section_serie_bf, widths = section_widths,
+                                   header = None, names = section_names , 
+                                   na_values = section_missing, encoding = 'utf-8', 
+                                   dtype = 'object', skip_blank_lines = False,
+                                   quotechar='\0',escapechar='\0')
     return section_elements
 
 def extract_delimited(section_serie_bf,section_schema):
     delimiter = section_schema['header'].get('delimiter')
     section_names = section_schema['elements'].keys()
     section_missing = { x:section_schema['elements'][x].get('missing_value') for x in section_names }
-    section_elements = pd.read_csv(section_serie_bf,header = None, delimiter = delimiter, encoding = 'utf-8',
-                                 dtype = 'object', skip_blank_lines = False,
-                                 names = section_names, na_values = section_missing)
+    section_elements = pd.read_csv(section_serie_bf,header = None, delimiter = delimiter, 
+                                   encoding = 'utf-8', dtype = 'object', 
+                                   skip_blank_lines = False, names = section_names, 
+                                   na_values = section_missing,quotechar='\0',escapechar='\0')
 
     return section_elements
 
@@ -134,7 +139,7 @@ def main(sections_df, schema):
             # Only pass records with data to avoid the hassle of dealing with
             # how the NaN rows are written and then read!
             notna_idx = sections_df[sections_df[section].notna()].index
-            sections_df[section].loc[notna_idx].to_csv(section_buffer,header=False, encoding = 'utf-8',index = False,quoting=csv.QUOTE_NONE,escapechar='\\',sep=properties.internal_delimiter)
+            sections_df[section].loc[notna_idx].to_csv(section_buffer,header=False, encoding = 'utf-8',index = False,quoting=csv.QUOTE_NONE,quotechar='\0',escapechar='\0',sep=properties.internal_delimiter)
             ssshh = section_buffer.seek(0)
             # Get the individual elements as objects
             if field_layout == 'fixed_width':
