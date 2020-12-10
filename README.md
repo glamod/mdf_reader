@@ -9,19 +9,24 @@ model](https://cds.climate.copernicus.eu/toolbox/doc/how-to/15_how_to_understand
 - Reports that have a fixed width or field delimited types
 - Reports that can be organized in sections, in which case each section can be of different types (fixed width of delimited)
 
+1. Clone the repository
 
-1. Run a test:
+```
+git clone git@git.noc.ac.uk:brecinosrivas/mdf_reader.git
+```
+
+2. Run a test:
 ```
 import sys
-sys.path.append('/path_to_dir_containing_the_mdf_reader_folder/')
+sys.path.append('/path_to_folder_directory_containing_the_mdf_reader_folder/')
 import mdf_reader
 import matplotlib.pyplot as plt
 
 data = mdf_reader.tests.read_imma1_buoys_nosupp()
 ```
-2. Read imma data
+3. Read imma data
 ```
 imma_data = mdf_reader.read(filepath, data_model = 'imma1',sections = ['core','c1','c98'])
 ```
 
-For more details on how to use the `mdf_reader` tool see the following jupyter notebooks.
+For more details on how to use the `mdf_reader` tool see the following [jupyter notebooks](https://git.noc.ac.uk/brecinosrivas/mdf_reader/-/tree/master/docs/notebooks).
