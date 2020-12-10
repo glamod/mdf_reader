@@ -1,4 +1,4 @@
-# Mdf_reader
+# Model Data Format reader: `mdf_reader` toolbox
 
 The `mdf_reader` is a [python3](https://www.python.org/) tool designed to read data files compliant with a user specified [data
 model](https://cds.climate.copernicus.eu/toolbox/doc/how-to/15_how_to_understand_the_common_data_model/15_how_to_understand_the_common_data_model.html). It was developed to read the [IMMA](https://icoads.noaa.gov/e-doc/imma/R3.0-imma1.pdf) (International Maritime Meteorological Archive) data format, but it has been enhanced to account for meteorological data formats in the case of:
