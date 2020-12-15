@@ -41,7 +41,7 @@ import os
 
 from .. import properties
 
-def main(source,chunksize = None, skiprows = None):
+def main(source, encoding=None, chunksize = None, skiprows = None):
     """
 
     Returns an iterable object with a pandas dataframe from
@@ -75,7 +75,7 @@ def main(source,chunksize = None, skiprows = None):
     """
     
     if os.path.isfile(source):
-        TextParser = pd.read_fwf(source,widths=[properties.MAX_FULL_REPORT_WIDTH],header = None, delimiter="\t", skiprows = skiprows, chunksize = chunksize, quotechar='\0',escapechar='\0')
+        TextParser = pd.read_fwf(source, encoding=encoding, widths=[properties.MAX_FULL_REPORT_WIDTH], header = None, delimiter="\t", skiprows = skiprows, chunksize = chunksize, quotechar='\0',escapechar='\0')
         if not chunksize:
             TextParser = [TextParser]
         return TextParser

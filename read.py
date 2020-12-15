@@ -262,6 +262,7 @@ def main(source, data_model = None, data_model_path = None, sections = None,chun
     logging.info("EXTRACTING DATA FROM MODEL: {}".format(imodel))
 
     # 2.1. Subset data model sections to requested sections
+    encoding = schema['header'].get('encoding')
     parsing_order = schema['header'].get('parsing_order')
     if not sections:
         sections = [ x.get(y) for x in parsing_order for y in x ]
@@ -272,7 +273,7 @@ def main(source, data_model = None, data_model_path = None, sections = None,chun
     # 2.2 Homogeneize input data to an iterable with dataframes:
     # a list with a single dataframe or a pd.io.parsers.TextFileReader
     logging.info("Getting data string from source...")
-    TextParser = import_data.main(source, chunksize = chunksize, skiprows = skiprows)
+    TextParser = import_data.main(source, encoding=encoding, chunksize = chunksize, skiprows = skiprows)
 
     # 2.3. Extract, read and validate data in same loop
     logging.info("Extracting and reading sections")
