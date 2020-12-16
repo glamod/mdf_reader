@@ -14,8 +14,10 @@ model](https://cds.climate.copernicus.eu/toolbox/doc/how-to/15_how_to_understand
 ```
 git clone git@git.noc.ac.uk:brecinosrivas/mdf_reader.git
 ```
+2. Install requirements (see [requirements.txt](https://git.noc.ac.uk/brecinosrivas/mdf_reader/-/blob/master/requirements.txt)).
+   > More information about python environments [here](https://git.noc.ac.uk/brecinosrivas/guide-to-jupyter-notebooks).
 
-2. Run a test:
+3. Run a test:
 ```
 import sys
 sys.path.append('/path_to_folder_directory_containing_the_mdf_reader_folder/')
@@ -24,7 +26,7 @@ import matplotlib.pyplot as plt
 
 data = mdf_reader.tests.read_imma1_buoys_nosupp()
 ```
-3. Read imma data
+4. Read imma data
 ```
 imma_data = mdf_reader.read(filepath, data_model = 'imma1',sections = ['core','c1','c98'])
 ```
