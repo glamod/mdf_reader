@@ -2739,13 +2739,13 @@
                 "present_weather": {
                     "description": "Present weather, left justified, blank filled. Split in 5?",
                     "field_length": 5,
-                    "column_type": "key",
+                    "column_type": "str",
                     "LMR6": false
                 },
                 "clouds": {
                     "description": "Forms of clouds by symbols",
                     "field_length": 2,
-                    "column_type": "key",
+                    "column_type": "str",
                     "LMR6": false
                 },
                 "sky_clear": {
@@ -2757,7 +2757,7 @@
                 "sea_state": {
                     "description": "State of the sea, left justified, blank filled. Split in 4?",
                     "field_length": 4,
-                    "column_type": "key",
+                    "column_type": "str",
                     "LMR6": false
                 }
               }
@@ -2816,7 +2816,8 @@
                   "description": "Time indicator",
                   "field_length": 1,
                   "column_type": "key",
-                  "LMR6": true
+                  "codetable": "ICOADS.C99.TI",
+                  "LMR6": false
               },
               "hour": {
                   "description": "Hour, right justified, zero filled",
@@ -2835,13 +2836,14 @@
                   "description": "Compass indicator",
                   "field_length": 1,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.CI",
                   "LMR6": false
               },
               "ship_course_compass": {
                   "description": "Ship course steered by compass",
                   "field_length": 7,
-                  "column_type": "key",
-                  "LMR6": true
+                  "column_type": "str",
+                  "LMR6": false
               },
               "blank": {
                   "description": "blank fields",
@@ -2851,13 +2853,13 @@
               "ship_course_true": {
                   "description": "Ship course true",
                   "field_length": 7,
-                  "column_type": "key",
+                  "column_type": "str",
                   "LMR6": true
               },
               "wind_dir_mag": {
                   "description": "Mean wind direction - magnetic",
                   "field_length": 7,
-                  "column_type": "key",
+                  "column_type": "str",
                   "LMR6": true
               },
               "wind_dir_true": {
@@ -2870,6 +2872,7 @@
                   "description": "Mean Beaufort force. Add code table",
                   "field_length": 2,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.BEAU",
                   "LMR6": true
               },
               "barometer": {
@@ -2883,6 +2886,7 @@
                   "description": "Temperature indicator",
                   "field_length": 1,
                   "column_type": "key",
+                  "codetable": "ICOADS.C99.TEMPI",
                   "LMR6": true
               },
               "attached_thermometer": {
@@ -2916,13 +2920,13 @@
               "present_weather": {
                   "description": "Present weather, left justified, blank filled. Split in 5?",
                   "field_length": 5,
-                  "column_type": "key",
+                  "column_type": "str",
                   "LMR6": false
               },
               "clouds": {
                   "description": "Forms of clouds by symbols",
                   "field_length": 2,
-                  "column_type": "key",
+                  "column_type": "str",
                   "LMR6": false
               },
               "sky_clear": {
@@ -2934,13 +2938,13 @@
               "sea_state": {
                   "description": "State of the sea, left justified, blank filled. Split in 4?",
                   "field_length": 4,
-                  "column_type": "key",
+                  "column_type": "str",
                   "LMR6": false
               },
               "compass_correction_ind": {
                   "description": "Compass correction indicator",
                   "field_length": 1,
-                  "column_type": "key",
+                  "column_type": "str",
                   "LMR6": true
               },
               "compass_correction": {
@@ -2953,7 +2957,7 @@
               "compass_correction_dir": {
                   "description": "Direction of correction (of compass...)",
                   "field_length": 1,
-                  "column_type": "key",
+                  "column_type": "str",
                   "LMR6": true
               }
             }
