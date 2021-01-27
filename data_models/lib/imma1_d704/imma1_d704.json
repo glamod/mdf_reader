@@ -2661,7 +2661,7 @@
                     "description": "Ship course steered by compass. See digitization format for translation",
                     "field_length": 7,
                     "column_type": "str",
-                    "LMR6": true
+                    "LMR6": false
                 },
                 "compass_correction": {
                     "description": "Correction in points or degrees, as indicated in compass_ind. LMR6 false? see ref Jackson et. al. 2000 in translation info",
