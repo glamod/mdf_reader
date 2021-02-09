@@ -5,6 +5,8 @@ Gather field stats from CLIWOC c99
 """
 import os
 import sys
+sys.path.append('/home/users/brecinos/c3s_work')
+import mdf_reader
 import pandas as pd
 import numpy as np
 import mdf_reader
@@ -13,21 +15,21 @@ import pickle
 from collections import defaultdict
 
 funPath = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(funPath,'data/133-730/')
-print(data_path)
+#data_path = os.path.join(funPath,'data/133-730/')
+#print(data_path)
 
-data_jasmin = '/group_workspaces/jasmin2/glamod_marine/data/datasets/ICOADS_R3.0.0T/level0/133-730/'
+data_jasmin = '/group_workspaces/jasmin2/glamod_marine/data/datasets/ICOADS_R3.0.0T/level0/133-730'
 print(data_jasmin)
 
 years = np.arange(1661,1895)
+print(years)
 
-output_path = '/Users/brivas/c3s_work/mdf_reader/tests/data/'
+output_path = '/home/users/brecinos/c3s_work/133-730/'
 
-i = 1
-# i_in_jasmin = int(sys.argv[1])
+#i = 1
+i = int(sys.argv[1])
 
 year = years[i]
-
 print(year)
 
 months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
@@ -35,7 +37,8 @@ months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'
 # TODO: for running in jasmin we must change several things.. the year and data_path
 paths_files = []
 for m in months:
-    path = os.path.join(data_path, str(year)+'-'+m+'.imma')
+    path = os.path.join(data_jasmin, str(year)+'-'+m+'.imma')
+    #print(path)
     if os.path.exists(path):
         paths_files.append(path)
 
@@ -60,6 +63,7 @@ ap_units = []
 bart_units = []
 lon_units = []
 baro_types = []
+
 
 for path in paths_files:
     data = mdf_reader.read(path, data_model_path= model_path)
@@ -105,3 +109,6 @@ print(fp)
 
 with open(fp, 'wb') as f:
     pickle.dump(d, f, protocol=-1)
+
+print('Done!')
+
