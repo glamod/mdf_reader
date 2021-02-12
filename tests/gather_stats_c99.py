@@ -18,7 +18,7 @@ funPath = os.path.dirname(os.path.abspath(__file__))
 #data_path = os.path.join(funPath,'data/133-730/')
 #print(data_path)
 
-data_jasmin = '/group_workspaces/jasmin2/glamod_marine/data/datasets/ICOADS_R3.0.0T/level0/133-730'
+data_jasmin = '/gws/nopw/j04/glamod_marine/data/datasets/ICOADS_R3.0.0T/level0/133-730'
 print(data_jasmin)
 
 years = np.arange(1661,1895)
