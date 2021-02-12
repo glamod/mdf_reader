@@ -1,13 +1,15 @@
 #!/bin/bash
-#SBATCH --partition=short-serial
-#SBATCH --array=101-233
+#SBATCH --partition=short-serial-4hr
+#SBATCH --array=31-233
 #SBATCH --job-name=cliwoc_ct
 #SBATCH --output=slurm_log_output/cliwoc_ct_%A_%a.out
 #SBATCH --error=slurm_log_output/cliwoc_ct_%A_%a.err
 #SBATCH --mem=4000
 #SBATCH --time=00:29:00
 
-source /home/users/brecinos/c3s_work/
+module load jaspy
+
+source /home/users/brecinos/c3s_work/env0/bin/activate
 
 echo "starting from $SLURM_ARRAY_TASK_ID"
 

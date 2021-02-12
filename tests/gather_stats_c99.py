@@ -63,6 +63,7 @@ ap_units = []
 bart_units = []
 lon_units = []
 baro_types = []
+releases = []
 
 
 for path in paths_files:
@@ -81,6 +82,7 @@ for path in paths_files:
     bart_unit = data.data[["c99_data"]].c99_data.BART_reading_units.value_counts(dropna=False).to_frame()
     lon_unit = data.data[["c99_data"]].c99_data.Longitude_units.value_counts(dropna=False).to_frame()
     baro_type = data.data[["c99_data"]].c99_data.BARO_type.value_counts(dropna=False).to_frame()
+    release = data.data[["c99_data"]].c99_data.Release.value_counts(dropna=False).to_frame()
 
     ship_types.append(rig)
     lat_inds.append(lat_ind)
@@ -91,17 +93,19 @@ for path in paths_files:
     bart_units.append(bart_unit)
     lon_units.append(lon_unit)
     baro_types.append(baro_type)
+    releases.append(release)
 
 
-d['ship_types'] = pd.concat(ship_types, axis=1, join='inner').sum(axis=1)
-d['lan_inds'] = pd.concat(lat_inds, axis=1, join='inner').sum(axis=1)
-d['lon_inds'] = pd.concat(lon_inds, axis=1, join='inner').sum(axis=1)
-d['at_units'] = pd.concat(at_units, axis=1, join='inner').sum(axis=1)
-d['sst_units'] = pd.concat(sst_units, axis=1, join='inner').sum(axis=1)
-d['ap_units'] = pd.concat(ap_units, axis=1, join='inner').sum(axis=1)
-d['bart_units'] = pd.concat(bart_units, axis=1, join='inner').sum(axis=1)
-d['lon_units'] = pd.concat(lon_units, axis=1, join='inner').sum(axis=1)
-d['baro_types'] = pd.concat(baro_types, axis=1, join='inner').sum(axis=1)
+d['ship_types'] = pd.concat(ship_types, axis=1).sum(axis=1)
+d['lan_inds'] = pd.concat(lat_inds, axis=1).sum(axis=1)
+d['lon_inds'] = pd.concat(lon_inds, axis=1).sum(axis=1)
+d['at_units'] = pd.concat(at_units, axis=1).sum(axis=1)
+d['sst_units'] = pd.concat(sst_units, axis=1).sum(axis=1)
+d['ap_units'] = pd.concat(ap_units, axis=1).sum(axis=1)
+d['bart_units'] = pd.concat(bart_units, axis=1).sum(axis=1)
+d['lon_units'] = pd.concat(lon_units, axis=1).sum(axis=1)
+d['baro_types'] = pd.concat(baro_types, axis=1).sum(axis=1)
+d['releases'] = pd.concat(releases, axis=1).sum(axis=1)
 
 print(d)
 fp = os.path.join(output_path, str(year) + '.pkl')
