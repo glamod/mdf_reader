@@ -4,29 +4,28 @@
 Gather field stats from CLIWOC c99
 """
 import os
+import pandas as pd
+import numpy as np
+import pickle
+from collections import defaultdict
 import sys
 sys.path.append('/home/users/brecinos/c3s_work')
 import mdf_reader
-import pandas as pd
-import numpy as np
-import mdf_reader
-import json
-import pickle
-from collections import defaultdict
+
 
 funPath = os.path.dirname(os.path.abspath(__file__))
-#data_path = os.path.join(funPath,'data/133-730/')
-#print(data_path)
+# data_path = os.path.join(funPath,'data/133-730/')
+# print(data_path)
 
 data_jasmin = '/gws/nopw/j04/glamod_marine/data/datasets/ICOADS_R3.0.0T/level0/133-730'
 print(data_jasmin)
 
-years = np.arange(1661,1895)
+years = np.arange(1661, 1895)
 print(years)
 
 output_path = '/home/users/brecinos/c3s_work/133-730/'
 
-#i = 1
+# i = 1
 i = int(sys.argv[1])
 
 year = years[i]
@@ -38,13 +37,13 @@ months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'
 paths_files = []
 for m in months:
     path = os.path.join(data_jasmin, str(year)+'-'+m+'.imma')
-    #print(path)
+    # print(path)
     if os.path.exists(path):
         paths_files.append(path)
 
 print(paths_files)
 
-schema_lib = os.path.join(os.path.dirname(funPath),'data_models','lib')
+schema_lib = os.path.join(os.path.dirname(funPath), 'data_models', 'lib')
 
 print(schema_lib)
 
@@ -72,7 +71,7 @@ releases = []
 
 
 for path in paths_files:
-    data = mdf_reader.read(path, data_model_path= model_path)
+    data = mdf_reader.read(path, data_model_path=model_path)
     names = os.path.split(path)[1][0:7]
 
     # Getting elements from voyage section
@@ -127,12 +126,11 @@ d['units_of_other_measurements'] = pd.concat(units_of_other_measurements, axis=1
 d['humidity_units'] = pd.concat(humidity_units, axis=1).sum(axis=1)
 d['releases'] = pd.concat(releases, axis=1).sum(axis=1)
 
-#print(d)
+# print(d)
 fp = os.path.join(output_path, str(year) + '.pkl')
-#print(fp)
+# print(fp)
 
 with open(fp, 'wb') as f:
     pickle.dump(d, f, protocol=-1)
 
 print('Done!')
-
