@@ -63,6 +63,11 @@ ap_units = []
 bart_units = []
 lon_units = []
 baro_types = []
+dist_units = []
+dist_units_toland = []
+dist_units_travelled = []
+units_of_other_measurements = []
+humidity_units = []
 releases = []
 
 
@@ -82,6 +87,11 @@ for path in paths_files:
     bart_unit = data.data[["c99_data"]].c99_data.BART_reading_units.value_counts(dropna=False).to_frame()
     lon_unit = data.data[["c99_data"]].c99_data.Longitude_units.value_counts(dropna=False).to_frame()
     baro_type = data.data[["c99_data"]].c99_data.BARO_type.value_counts(dropna=False).to_frame()
+    Distance_unit = data.data[["c99_data"]].c99_data.Distance_units.value_counts(dropna=False).to_frame()
+    Distance_unit_land = data.data[["c99_data"]].c99_data.Distance_units_to_landmark.value_counts(dropna=False).to_frame()
+    Distance_unit_travel = data.data[["c99_data"]].c99_data.Distance_units_travelled.value_counts(dropna=False).to_frame()
+    units_of_measures = data.data[["c99_data"]].c99_data.units_of_measurement.value_counts(dropna=False).to_frame()
+    humidity_u = data.data[["c99_data"]].c99_data.humidity_units.value_counts(dropna=False).to_frame()
     release = data.data[["c99_data"]].c99_data.Release.value_counts(dropna=False).to_frame()
 
     ship_types.append(rig)
@@ -93,6 +103,11 @@ for path in paths_files:
     bart_units.append(bart_unit)
     lon_units.append(lon_unit)
     baro_types.append(baro_type)
+    dist_units.append(Distance_unit)
+    dist_units_toland.append(Distance_unit_land)
+    dist_units_travelled.append(Distance_unit_travel)
+    units_of_other_measurements.append(units_of_measures)
+    humidity_units.append(humidity_u)
     releases.append(release)
 
 
@@ -105,11 +120,16 @@ d['ap_units'] = pd.concat(ap_units, axis=1).sum(axis=1)
 d['bart_units'] = pd.concat(bart_units, axis=1).sum(axis=1)
 d['lon_units'] = pd.concat(lon_units, axis=1).sum(axis=1)
 d['baro_types'] = pd.concat(baro_types, axis=1).sum(axis=1)
+d['distance_units'] = pd.concat(dist_units, axis=1).sum(axis=1)
+d['distance_units_to_land'] = pd.concat(dist_units_toland, axis=1).sum(axis=1)
+d['distance_units_travelled'] = pd.concat(dist_units_travelled, axis=1).sum(axis=1)
+d['units_of_other_measurements'] = pd.concat(units_of_other_measurements, axis=1).sum(axis=1)
+d['humidity_units'] = pd.concat(humidity_units, axis=1).sum(axis=1)
 d['releases'] = pd.concat(releases, axis=1).sum(axis=1)
 
-print(d)
+#print(d)
 fp = os.path.join(output_path, str(year) + '.pkl')
-print(fp)
+#print(fp)
 
 with open(fp, 'wb') as f:
     pickle.dump(d, f, protocol=-1)
