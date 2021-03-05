@@ -2243,7 +2243,7 @@
             }
         },
         "c99_data": {
-            "header": {"format":"delimtied", "delimiter":"}"},
+            "header": {"format":"delimited", "delimiter":"}"},
             "elements": {
               "control_No": {
                   "description": "Ship control number",
@@ -2365,6 +2365,10 @@
               },
               "ocean_crossed": {
                   "description": "Ocean crossed in the voyage",
+                  "column_type": "str"
+              },
+              "extra_data": {
+                  "description": "Extra truncated data",
                   "column_type": "str"
               }
             }
