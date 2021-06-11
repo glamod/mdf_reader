@@ -2381,7 +2381,7 @@
                 "baro_pressure_one": {
                     "description": "Barometric pressure (first entry). First two characters are either inches or millimeters, last two characters correspond to hundredths of inch or tenths of mm",
                     "field_length": 4,
-                    "column_type": "str",
+                    "column_type": "int16",
                     "LMR6": false
                 },
                 "temp_ind": {

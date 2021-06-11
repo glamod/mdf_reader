@@ -2,5 +2,9 @@
 	"01":"Breeze",
 	"02":"Gale",
 	"03":"Trade",
-	"04":"Wind"
+	"04":"Wind",
+        "1":"Breeze",
+	"2":"Gale",
+	"3":"Trade",
+	"4":"Wind"
 }
