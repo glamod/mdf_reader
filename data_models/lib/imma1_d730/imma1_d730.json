@@ -2525,9 +2525,8 @@
             "logbook_date": {
                 "description": "Date of the observation from logbook",
                 "field_length": 8,
-                "column_type": "datetime",
-                "datetime_format": "%Y-%m-%d",
-                "LMR6": true
+                "column_type": "str",
+                "LMR6": false
             },
             "TimeOB": {
                 "description": "Time on board of the observation from logbook at noon 12 hrs",
@@ -2662,9 +2661,8 @@
             "VoyageIni": {
                 "description": "Initial date of the start of the voyage of this ship. Format is year-month-day (YYYYMMDD) and is extracted from the logbooks date (i.e. it is not corrected to UTC)",
                 "field_length": 8,
-                "column_type": "datetime",
-                "datetime_format": "%Y-%m-%d",
-                "LMR6": true
+                "column_type": "str",
+                "LMR6": false
             },
             "Course_ship": {
                 "description": "Course made good; course of the ship during the past 24 hours",
