@@ -999,6 +999,11 @@
       "DecLongitude":-6.3,
       "Source":"Google Earth"
    },
+   "CÁDIZ":{
+      "DecLatitude":36.52,
+      "DecLongitude":-6.3,
+      "Source":"Google Earth"
+   },
    "C\u00b7DIZ":{
       "DecLatitude":36.52,
       "DecLongitude":-6.3,
@@ -2320,6 +2325,11 @@
       "Source":"Pilot #39"
    },
    "COMMENDA":{
+      "DecLatitude":5.05,
+      "DecLongitude":-1.48,
+      "Source":"Google Earth"
+   },
+   "COMMENDA (AFRICA?)":{
       "DecLatitude":5.05,
       "DecLongitude":-1.48,
       "Source":"Google Earth"
