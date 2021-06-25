@@ -2556,23 +2556,20 @@
                 "wind_speed": {
                     "description": "Wind speed. Beaufort Force value or blank if strength is given.",
                     "field_length": 2,
-                    "column_type": "key",
-                    "codetable": "ICOADS.C99.BEAUG1",
-                    "LMR6": true
+                    "column_type": "str",
+                    "LMR6": false
                 },
                 "wind_force": {
                     "description": "Wind strength, Beaufort Wind scale (0-12) unless the observation was in a descriptive form (20-71).",
                     "field_length": 2,
-                    "column_type": "key",
-                    "codetable": "ICOADS.C99.BEAUG1",
-                    "LMR6": true
+                    "column_type": "str",
+                    "LMR6": false
                 },
                 "wind_force_info": {
                     "description": "Wind strength extra information to complement beaufort scale or descriptive. See documentation for wrong combinations between wind_force and wind_force_info.",
                     "field_length": 1,
-                    "column_type": "key",
-                    "codetable": "ICOADS.C99.BEAUG2",
-                    "LMR6": true
+                    "column_type": "str",
+                    "LMR6": false
                 },
                 "weather_indic": {
                     "description": "Present weather indicator.",
