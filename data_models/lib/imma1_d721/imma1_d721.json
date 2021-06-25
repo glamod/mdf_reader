@@ -2381,9 +2381,8 @@
                 "celestial_ind": {
                   "description": "Celestial or Dead Reckoning Indicator.",
                   "field_length": 1,
-                  "column_type": "key",
-                  "codetable": "ICOADS.C99.CELI",
-                  "LMR6": true
+                  "column_type": "str",
+                  "LMR6": false
                 },
                 "lat_deg_an": {
                     "description": "latitude by account at noon, degrees",
