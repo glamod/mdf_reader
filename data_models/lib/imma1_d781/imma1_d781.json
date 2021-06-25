@@ -2340,35 +2340,32 @@
               "cloud_amount": {
                   "description": "Total could amount",
                   "field_length": 2,
-                  "column_type": "key",
-                  "codetable": "ICOADS.C99.CLOUD"
+                  "column_type": "str",
+                  "LMR6": false
               },
               "low_cloud_amount": {
                   "description": "Low cloud amount",
                   "field_length": 2,
-                  "column_type": "key",
-                  "codetable": "ICOADS.C99.CLOUD"
+                  "column_type": "str",
+                  "LMR6": false
               },
               "type_hi_cloud": {
                   "description": "Type of high cloud.",
                   "field_length": 4,
-                  "column_type": "key",
-                  "codetable": "ICOADS.C99.CLOUDT",
-                  "LMR6": true
+                  "column_type": "str",
+                  "LMR6": false
               },
               "type_middle_cloud": {
                   "description": "Type of high cloud.",
                   "field_length": 4,
-                  "column_type": "key",
-                  "codetable": "ICOADS.C99.CLOUDT",
-                  "LMR6": true
+                  "column_type": "str",
+                  "LMR6": false
               },
               "type_low_cloud": {
                   "description": "Type of high cloud.",
                   "field_length": 4,
-                  "column_type": "key",
-                  "codetable": "ICOADS.C99.CLOUDT",
-                  "LMR6": true
+                  "column_type": "str",
+                  "LMR6": false
               },
               "cloud_height": {
                   "description": "Cloud Height, 8888 is Unknown.",
