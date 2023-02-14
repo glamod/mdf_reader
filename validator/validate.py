@@ -40,6 +40,10 @@ def validate_numeric(elements,data,schema):
 
     mask[elements] = ((data[elements] >= [ lower.get(x) for x in elements ] ) & (data[elements] <= [ upper.get(x) for x in elements ])) | data[elements].isna()
     return mask
+    
+def validate_str(elements, data, schema):
+    mask = pd.DataFrame(index=data.index, data=True, columns=elements)
+    return mask
 
 def validate_codes(elements, data, code_tables_path, schema, supp = False):
 
@@ -71,7 +75,7 @@ def validate_codes(elements, data, code_tables_path, schema, supp = False):
                         table_keys_str = [ "∿".join(x) if isinstance(x,list) else x for x in table_keys ]
                         validation_df = data[key_elements]
                         imask = pd.Series(index = data.index, data =True)
-                        imask.iloc[np.where(validation_df.notna().all(axis = 1))[0]] = validation_df.iloc[np.where(validation_df.notna().all(axis = 1))[0],:].astype(dtypes).astype('str').apply("∿".join, axis=1).isin(table_keys_str)
+                        imask.iloc[np.where(validation_df.notna().all(axis = 1))[0]] = validation_df.iloc[np.where(validation_df.notna().all(axis = 1))[0],:].astype(dtypes).astype('str').apply("~".join, axis=1).isin(table_keys_str)
                         mask[element] = imask
                     except Exception as e:
                         logging.error('Error validating coded element {}:'.format(element))
@@ -89,6 +93,59 @@ def validate_codes(elements, data, code_tables_path, schema, supp = False):
     return mask
 
 
+#def validate(data, mask0, schema, code_tables_path):
+#    logging.basicConfig(format='%(levelname)s\t[%(asctime)s](%(filename)s)\t%(message)s',
+#                    level=logging.INFO,datefmt='%Y%m%d %H:%M:%S',filename=None)
+#
+#    # Check input
+#    if not isinstance(data,pd.DataFrame) or not isinstance(mask0,pd.DataFrame):
+#        logging.error('Input data and mask must be a pandas data frame object')
+#        return
+#
+#    # Get the data elements from the input data: might be just a subset of
+#    # data model and flatten the schema to get a simple and sequential list
+#    # of elements included in the input data
+#    elements = [ x for x in data ]
+#    element_atts = schemas.df_schema(elements, schema)
+#    # See what elements we need to validate
+#    numeric_elements =  [ x for x in elements if element_atts.get(x).get('column_type') in properties.numeric_types ]
+#    datetime_elements = [ x for x in elements if element_atts.get(x).get('column_type') == 'datetime' ]
+#    coded_elements =    [ x for x in elements if element_atts.get(x).get('column_type') == 'key' ]
+#
+#    if any([isinstance(x,tuple) for x in numeric_elements + datetime_elements + coded_elements ]):
+#        validated_columns = pd.MultiIndex.from_tuples(list(set(numeric_elements + coded_elements + datetime_elements)))
+#    else:
+#        validated_columns = list(set(numeric_elements + coded_elements + datetime_elements))
+#
+#    mask = pd.DataFrame(index = data.index, columns = data.columns)
+#
+#    # Validate elements by dtype:
+#    # 1. Numeric elements
+#    mask[numeric_elements] = validate_numeric(numeric_elements, data, element_atts)
+#
+#    # 2. Table coded elements
+#    # See following: in multiple keys code tables, the non parameter element,
+#    # won't have a code_table attribute in the element_atts:
+#    # So we need to check the code_table.keys files in addition to the element_atts
+#    # Additionally, a YEAR key can fail in one table, but be compliant with anbother, then, how would we mask this?
+#    #               also, a YEAR defined as an integer, will undergo its own check.....
+#    # So I think we need to check nested keys as a whole, and mask only the actual parameterized element:
+#    # Get the full list of keys combinations (tuples, triplets...) and check the column combination against that: if it fails, mark the element!
+#    # Need to see how to grab the YEAR part of a datetime when YEAR comes from a datetime element
+#    # pd.DatetimeIndex(df['_datetime']).year
+#    if len(coded_elements)> 0:
+#        mask[coded_elements] = validate_codes(coded_elements, data, code_tables_path, element_atts)
+#
+#    # 3. Datetime elements
+#    # Those declared as such in element_atts
+#    # Because of the way they are converted, read into datetime,
+#    # they should already be NaT if they not validate as a valid datetime;
+#    # let's check: hurray! they are!
+#    mask[datetime_elements] = data[datetime_elements].notna()
+#
+#    mask[validated_columns] = mask[validated_columns].mask(mask0[validated_columns] == False, False)
+#
+#    return mask
 def validate(data, mask0, schema, code_tables_path):
     logging.basicConfig(format='%(levelname)s\t[%(asctime)s](%(filename)s)\t%(message)s',
                     level=logging.INFO,datefmt='%Y%m%d %H:%M:%S',filename=None)
@@ -101,19 +158,19 @@ def validate(data, mask0, schema, code_tables_path):
     # Get the data elements from the input data: might be just a subset of
     # data model and flatten the schema to get a simple and sequential list
     # of elements included in the input data
-    elements = [ x for x in data ]
+    elements = [x for x in data]
     element_atts = schemas.df_schema(elements, schema)
     # See what elements we need to validate
-    numeric_elements =  [ x for x in elements if element_atts.get(x).get('column_type') in properties.numeric_types ]
-    datetime_elements = [ x for x in elements if element_atts.get(x).get('column_type') == 'datetime' ]
-    coded_elements =    [ x for x in elements if element_atts.get(x).get('column_type') == 'key' ]
-
-    if any([isinstance(x,tuple) for x in numeric_elements + datetime_elements + coded_elements ]):
+    numeric_elements = [x for x in elements if element_atts.get(x).get('column_type') in properties.numeric_types]
+    datetime_elements = [x for x in elements if element_atts.get(x).get('column_type') == 'datetime']
+    coded_elements = [x for x in elements if element_atts.get(x).get('column_type') == 'key']
+    str_elements = [x for x in elements if element_atts.get(x).get('column_type') == 'str']
+    if any([isinstance(x, tuple) for x in numeric_elements+datetime_elements+coded_elements]):
         validated_columns = pd.MultiIndex.from_tuples(list(set(numeric_elements + coded_elements + datetime_elements)))
     else:
-        validated_columns = list(set(numeric_elements + coded_elements + datetime_elements))
+        validated_columns = list(set(numeric_elements+coded_elements+datetime_elements))
 
-    mask = pd.DataFrame(index = data.index, columns = data.columns)
+    mask = pd.DataFrame(index=data.index, columns=data.columns)
 
     # Validate elements by dtype:
     # 1. Numeric elements
@@ -138,7 +195,10 @@ def validate(data, mask0, schema, code_tables_path):
     # they should already be NaT if they not validate as a valid datetime;
     # let's check: hurray! they are!
     mask[datetime_elements] = data[datetime_elements].notna()
+    
+    # 4. str elements
+    mask[str_elements] = validate_str(str_elements, data, element_atts)
 
-    mask[validated_columns] = mask[validated_columns].mask(mask0[validated_columns] == False, False)
-
+    mask[validated_columns] = mask[validated_columns].mask(
+        mask0[validated_columns] == False, False)
     return mask

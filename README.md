@@ -1,7 +1,7 @@
 # Model Data Format reader: `mdf_reader` toolbox
 
 The `mdf_reader` is a [python3](https://www.python.org/) tool designed to read data files compliant with a user specified [data
-model](https://glamod.github.io/cdm-obs-documentation/#). It was developed to read the [IMMA](https://icoads.noaa.gov/e-doc/imma/R3.0-imma1.pdf) (International Maritime Meteorological Archive) data format, but it has been enhanced to account for meteorological data formats in the case of:
+model](https://cds.climate.copernicus.eu/toolbox/doc/how-to/15_how_to_understand_the_common_data_model/15_how_to_understand_the_common_data_model.html). It was developed to read the [IMMA](https://icoads.noaa.gov/e-doc/imma/R3.0-imma1.pdf) (International Maritime Meteorological Archive) data format, but it has been enhanced to account for meteorological data formats in the case of:
 
 - Data that is stored in a human-readable manner: “ASCII” format.
 - Data that is organized in single line reports
@@ -12,9 +12,10 @@ model](https://glamod.github.io/cdm-obs-documentation/#). It was developed to re
 1. Clone the repository
 
 ```
-git clone git@github.com:glamod/mdf_reader.git
+git clone git@git.noc.ac.uk:brecinosrivas/mdf_reader.git
 ```
-2. Install the tool, more information in the [documentation website](https://glamod.github.io/mdf_reader_documentation/tool-set-up.html#)
+2. Install requirements (see [requirements.txt](https://git.noc.ac.uk/brecinosrivas/mdf_reader/-/blob/master/requirements.txt)).
+   > More information about python environments [here](https://git.noc.ac.uk/brecinosrivas/guide-to-jupyter-notebooks).
 
 3. Run a test:
 ```
@@ -30,4 +31,4 @@ data = mdf_reader.tests.read_imma1_buoys_nosupp()
 imma_data = mdf_reader.read(filepath, data_model = 'imma1',sections = ['core','c1','c98'])
 ```
 
-For more details on how to use the `mdf_reader` tool see the following [documenation website](https://glamod.github.io/mdf_reader_documentation).
+For more details on how to use the `mdf_reader` tool see the following [jupyter notebooks](https://git.noc.ac.uk/brecinosrivas/mdf_reader/-/tree/master/docs/notebooks).
