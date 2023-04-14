@@ -71,7 +71,7 @@ def read_data(section_df,section_schema):
     section_dtypes = { i:section_schema['elements'][i]['column_type'] for i in section_names }
     encoded = [ (x) for x in section_names if 'encoding' in section_schema['elements'][x]]
     section_encoding = { i:section_schema['elements'][i]['encoding'] for i in encoded }
-    section_valid = pd.DataFrame(index = section_df.index, columns = section_df.columns)
+    section_valid = pd.DataFrame(index = section_df.index, columns = section_df.columns, dtype=object)
 
     for element in section_dtypes.keys():
         missing = section_df[element].isna()

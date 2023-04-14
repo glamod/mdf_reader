@@ -17,7 +17,10 @@ import os
 import glob
 import shutil
 from copy import deepcopy
-from pandas.io.json.normalize import nested_to_record
+try:
+    from pandas.io.json._normalize import nested_to_record
+except:
+    from pandas.io.json.normalize import nested_to_record
 import ast
 
 #https://stackoverflow.com/questions/10756427/loop-through-all-nested-dictionary-values
