@@ -107,6 +107,7 @@
 	"795":"NCEP BUFR GTS: Coastal-Marine Automated Network (C-MAN code) Data",
 	"796":"NCEP BUFR GTS: Miscellaneous (OSV, plat, and rig) Data",
 	"797":"NCEP BUFR GTS: CREX code",
+        "798":"NCEP BUFR",
 	"849":"First GARP Global Experiment (FGGE)",
 	"850":"German FGGE",
 	"874":"Shipboard Environmental (Data) Acquisition System (SEAS)",
