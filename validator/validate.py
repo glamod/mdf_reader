@@ -170,7 +170,7 @@ def validate(data, mask0, schema, code_tables_path):
     else:
         validated_columns = list(set(numeric_elements+coded_elements+datetime_elements))
 
-    mask = pd.DataFrame(index=data.index, columns=data.columns, dtype=object)
+    mask = pd.DataFrame(index=data.index, columns=data.columns)
 
     # Validate elements by dtype:
     # 1. Numeric elements

@@ -30,7 +30,7 @@
 # we only write to the section buffer reports that are not empty. We afterwards
 # recover the indexes....
 #
-#@author: iregon
+#@author: iregon, sbiri
 #"""
 
 import pandas as pd
@@ -41,48 +41,80 @@ from .. import properties
 from ..common.converters import converters
 from ..common.decoders import decoders
 
-def extract_fixed_width(section_serie_bf,section_schema):
+def extract_fixed_width(section_serie_bf, section_schema):
     # Read section elements descriptors
     section_names = section_schema['elements'].keys()
-    section_widths = list(map(lambda x: x if x else properties.MAX_FULL_REPORT_WIDTH, [ section_schema['elements'][i].get('field_length') for i in section_names ]))
-    section_missing = { i:section_schema['elements'][i].get('missing_value') if section_schema['elements'][i].get('disable_white_strip') == True
-                               else [section_schema['elements'][i].get('missing_value')," "*section_schema['elements'][i].get('field_length', properties.MAX_FULL_REPORT_WIDTH)]
-                               for i in section_names }
-    section_elements = pd.read_fwf(section_serie_bf, widths = section_widths,
-                                   header = None, names = section_names , 
-                                   na_values = section_missing, encoding = 'utf-8', 
-                                   dtype = 'object', skip_blank_lines = False,
-                                   quotechar='\0',escapechar='\0')
+    section_widths = list(
+        map(lambda x: x if x else properties.MAX_FULL_REPORT_WIDTH, 
+            [ section_schema['elements'][i].get(
+                'field_length') for i in section_names ]))
+    section_missing = {
+        i:section_schema['elements'][i].get(
+            'missing_value') if section_schema['elements'][i].get(
+                'disable_white_strip') == True else [
+                    section_schema['elements'][i].get(
+                        'missing_value')," "*section_schema[
+                            'elements'][i].get(
+                                'field_length',
+                                properties.MAX_FULL_REPORT_WIDTH)] 
+                                for i in section_names }
+    quotechar = section_schema['header'].get('quotechar').replace('\x00', '"')
+    section_elements = pd.read_fwf(
+        section_serie_bf, widths = section_widths, header = None, 
+        names = section_names, na_values = section_missing, encoding = 'utf-8',
+        dtype = 'object', skip_blank_lines = False,
+        quotechar=quotechar, escapechar=quotechar)
     return section_elements
 
 def extract_delimited(section_serie_bf,section_schema):
     delimiter = section_schema['header'].get('delimiter')
     section_names = section_schema['elements'].keys()
-    section_missing = { x:section_schema['elements'][x].get('missing_value') for x in section_names }
-    section_elements = pd.read_csv(section_serie_bf,header = None, delimiter = delimiter, 
-                                   encoding = 'utf-8', dtype = 'object', 
-                                   skip_blank_lines = False, names = section_names, 
-                                   na_values = section_missing,quotechar='\0',escapechar='\0')
+    section_missing = {x:section_schema['elements'][x].get(
+        'missing_value') for x in section_names }
+    quotechar = section_schema['header'].get('quotechar')
+    if quotechar == '\x00':
+        section_elements = pd.read_csv(
+            section_serie_bf, header=None, delimiter=delimiter, 
+            encoding='utf-8', dtype='object',
+            skip_blank_lines=False, names=section_names, 
+            na_values=section_missing)
+    else:
+        section_elements = pd.read_csv(
+            section_serie_bf, header=None, delimiter=delimiter, 
+            encoding='utf-8', dtype='object',
+            skip_blank_lines=False, names=section_names, 
+            na_values=section_missing, quotechar='\0', escapechar='\0')
+
 
     return section_elements
 
-def read_data(section_df,section_schema):
+def read_data(section_df, section_schema):
     section_names = section_df.columns
-    section_dtypes = { i:section_schema['elements'][i]['column_type'] for i in section_names }
-    encoded = [ (x) for x in section_names if 'encoding' in section_schema['elements'][x]]
-    section_encoding = { i:section_schema['elements'][i]['encoding'] for i in encoded }
-    section_valid = pd.DataFrame(index = section_df.index, columns = section_df.columns, dtype=object)
+    section_dtypes = {i:section_schema['elements'][i]['column_type'] 
+                      for i in section_names }
+    encoded = [(x) for x in section_names 
+               if 'encoding' in section_schema['elements'][x]]
+    section_encoding = {i:section_schema['elements'][i]['encoding'] 
+                        for i in encoded }
+    section_valid = pd.DataFrame(
+        index = section_df.index, columns = section_df.columns)
 
     for element in section_dtypes.keys():
         missing = section_df[element].isna()
         if element in encoded:
-            section_df[element] = decoders.get(section_encoding.get(element)).get(section_dtypes.get(element))(section_df[element])
-        kwargs = { converter_arg:section_schema['elements'][element].get(converter_arg) for converter_arg in properties.data_type_conversion_args.get(section_dtypes.get(element))  }
-        section_df[element] = converters.get(section_dtypes.get(element))(section_df[element], **kwargs)
-        
+            section_df[element] = decoders.get(
+                section_encoding.get(element)).get(section_dtypes.get(
+                    element))(section_df[element])
+        kwargs = {converter_arg:section_schema['elements'][element].get(
+            converter_arg) for converter_arg in 
+            properties.data_type_conversion_args.get(
+                section_dtypes.get(element))  }
+        section_df[element] = converters.get(
+            section_dtypes.get(element))(section_df[element], **kwargs)
+
 
         section_valid[element] = missing | section_df[element].notna()
-    return section_df,section_valid
+    return section_df, section_valid
 
 def main(sections_df, schema):
     """
@@ -91,32 +123,33 @@ def main(sections_df, schema):
     and the report sections split along the columns.
     Each section is a block string and only the sections
     listed in read_sections parameter are output.
-    
+
     Parameters
     ----------
     sections_df : pandas.DataFrame
         Pandas dataframe with a column per report sections.
-        The sections in the columns as a block strings.    
-    schema : dict 
-        Data source data model schema 
+        The sections in the columns as a block strings.
+    schema : dict
+        Data source data model schema
 
     Returns
     -------
-    data : pandas.DataFrame 
-        Dataframe with the report section elements split 
+    data : pandas.DataFrame
+        Dataframe with the report section elements split
         along the columns. Multiindex if bla, regular index
         if ble
-    mask : pandas.DataFrame 
-        Dataframe with the report section elements split 
+    mask : pandas.DataFrame
+        Dataframe with the report section elements split
         along the columns. Multiindex if bla, regular index
-        if ble   
+        if ble
     dtypes : dict
         Dictionary with pandas data types for each of the
         output elements
-        
+
     """
-    multiindex = True if len(sections_df.columns) > 1 or sections_df.columns[0] != properties.dummy_level else False
-    data_df = pd.DataFrame(index = sections_df.index)
+    multiindex = True if len(
+        sections_df.columns) > 1 or sections_df.columns[0] != properties.dummy_level else False
+    data_df = pd.DataFrame(index=sections_df.index)
     valid_df = pd.DataFrame(index = sections_df.index)
     out_dtypes = dict()
 
@@ -127,41 +160,52 @@ def main(sections_df, schema):
 
         if not disable_read:
             field_layout = section_schema.get('header').get('field_layout')
-            ignore = [ i for i in section_schema['elements'].keys() if section_schema['elements'][i].get('ignore') ] # evals to True if set and true, evals to False if not set or set and false
-             # Get rid of false delimiters in fixed_width
+            ignore = [i for i in section_schema['elements'].keys() 
+                      if section_schema['elements'][i].get('ignore')]  # evals to True if set and true, evals to False if not set or set and false
+            # Get rid of false delimiters in fixed_width
             delimiter = section_schema['header'].get('delimiter')
             if delimiter and field_layout == 'fixed_width':
-                sections_df[section] = sections_df[section].str.replace(delimiter,'')
+                sections_df[section] = sections_df[section].str.replace(
+                    delimiter, '')
 
             section_buffer = StringIO()
             # Here indices are lost, have to give the real ones, those in section_strings:
             # we'll see if we do that in the caller module or here....
             # Only pass records with data to avoid the hassle of dealing with
-            # how the NaN rows are written and then read!
+            # how the NaN rows are written and then read!            
             notna_idx = sections_df[sections_df[section].notna()].index
-            sections_df[section].loc[notna_idx].to_csv(section_buffer,header=False, encoding = 'utf-8',index = False,quoting=csv.QUOTE_NONE,quotechar='\0',escapechar='\0',sep=properties.internal_delimiter)
+            sections_df[section].loc[notna_idx].to_csv(
+                section_buffer,header=False, encoding = 'utf-8', 
+                index = False, quoting=csv.QUOTE_NONE, 
+                quotechar='\0', escapechar='\0', 
+                sep=properties.internal_delimiter)
             ssshh = section_buffer.seek(0)
             # Get the individual elements as objects
             if field_layout == 'fixed_width':
-                section_elements_obj = extract_fixed_width(section_buffer,section_schema)
+                section_elements_obj = extract_fixed_width(
+                    section_buffer, section_schema)
             elif field_layout == 'delimited':
-                section_elements_obj = extract_delimited(section_buffer,section_schema)
+                section_elements_obj = extract_delimited(
+                    section_buffer, section_schema)
 
             section_elements_obj.drop(ignore, axis = 1, inplace = True)
 
             # Read the objects to their data types and apply decoding, scaling and so on...
             # Give them their actual indexes back
-            section_elements, section_valid = read_data(section_elements_obj,section_schema)
-             
+            section_elements, section_valid = read_data(
+                section_elements_obj, section_schema)
+
             section_elements.index = notna_idx
             section_valid.index = notna_idx
 
         else:
-            section_elements = pd.DataFrame(sections_df[section],columns = [section])
-            section_valid = pd.DataFrame(index = section_elements.index,data = True, columns = [section])
+            section_elements = pd.DataFrame(
+                sections_df[section], columns = [section])
+            section_valid = pd.DataFrame(
+                index=section_elements.index, data = True, columns = [section])
 
 
-        section_elements.columns = [ (section, x) for x in section_elements.columns] if multiindex else section_elements.columns
+        section_elements.columns = [(section, x) for x in section_elements.columns] if multiindex else section_elements.columns
         section_valid.columns = section_elements.columns
         data_df = pd.concat([data_df,section_elements],sort = False,axis=1)
         valid_df = pd.concat([valid_df,section_valid],sort = False,axis=1)
@@ -172,9 +216,15 @@ def main(sections_df, schema):
         if not section_schema.get('header').get('disable_read'):
             elements = [ x[1] for x in data_df.columns if x[0] == section ]
             if multiindex:
-                out_dtypes.update({ (section,i):properties.pandas_dtypes.get(section_schema['elements'][i].get('column_type')) for i in elements } )
+                out_dtypes.update(
+                    {(section,i) : properties.pandas_dtypes.get(
+                        section_schema['elements'][i].get(
+                            'column_type')) for i in elements } )
             else:
-                out_dtypes.update({ i:properties.pandas_dtypes.get(section_schema['elements'][i].get('column_type')) for i in elements } )
+                out_dtypes.update(
+                    {i : properties.pandas_dtypes.get(
+                        section_schema['elements'][i].get(
+                            'column_type')) for i in elements } )
         else:
             if multiindex:
                     out_dtypes.update({ (section,section):'object' } )

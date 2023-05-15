@@ -49,7 +49,7 @@ def extract_data():
     else:
         threads[thread_id]['data'] = pd.Series(threads[thread_id]['parent_data'][0].str[0:]) #threads[thread_id]['parent_data'].copy()
         # Could even be like with section_len (None in section_len will read to the end)
-        threads[thread_id]['modulo'] = pd.DataFrame(columns = [0], dtype=object) # Just for consistency
+        threads[thread_id]['modulo'] = pd.DataFrame(columns = [0]) # Just for consistency
     del threads[thread_id]['parent_data']
 
 def add_next_children():

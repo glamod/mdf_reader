@@ -18,7 +18,7 @@
 #delimiter="\t" option in pandas.read_fwf avoids white spaces at tails
 #to be stripped
 #
-#@author: iregon
+#@author: iregon, sbiri
 #
 #
 #
@@ -41,7 +41,7 @@ import os
 
 from .. import properties
 
-def main(source, encoding=None, chunksize = None, skiprows = None):
+def main(source, encoding=None, chunksize=None, skiprows=None, quotechar='\0'):
     """
 
     Returns an iterable object with a pandas dataframe from
@@ -51,12 +51,12 @@ def main(source, encoding=None, chunksize = None, skiprows = None):
     Currently only supports a data file path as source data,
     but could be easily extended to accept a different
     source object.
-    
+
     Parameters
     ----------
     source : str
         Path to data file
-        
+
     Keyword Arguments
     -----------------
     chunksize : int, opt
@@ -67,15 +67,19 @@ def main(source, encoding=None, chunksize = None, skiprows = None):
 
     Returns
     -------
-    iterable 
+    iterable
         List of with a single pandas dataframe
         or pandas.io.parsers.textfilereader
-    
+
 
     """
-    
+
     if os.path.isfile(source):
-        TextParser = pd.read_fwf(source, encoding=encoding, widths=[properties.MAX_FULL_REPORT_WIDTH], header = None, delimiter="\t", skiprows = skiprows, chunksize = chunksize, quotechar='\0',escapechar='\0')
+        TextParser = pd.read_fwf(
+            source, encoding=encoding,
+            widths=[properties.MAX_FULL_REPORT_WIDTH],
+            header = None, delimiter="\t", skiprows = skiprows,
+            chunksize = chunksize, quotechar=quotechar, escapechar=quotechar)
         if not chunksize:
             TextParser = [TextParser]
         return TextParser
