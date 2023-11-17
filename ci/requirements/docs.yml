@@ -1,0 +1,24 @@
+name: mdf_reader-docs
+
+channels:
+	- conda-forge
+	- nodefaults
+
+dependencies:
+	- python>=3.10
+	- docutils==0.17.1
+	- nbconvert	
+	- numpydoc
+	- pillow
+	- pip
+	- nbsphinx
+	- nbsphinx-link
+	- ipython
+	- sphinx
+	- pydata-sphinx-theme
+	- sphinx-book-theme>=0.3.3
+	- sphix-autosummary-accessor
+
+	- pip:
+	  - sphinxcontrib-mockautodoc
+	
