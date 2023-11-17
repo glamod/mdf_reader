@@ -1,0 +1,14 @@
+{
+  "header":
+  {
+    "format":"fixed_width",
+    "delimiter":null,
+    "date_parser":{"elements":[],"format":[]}
+  },
+  "elements":
+  {
+    "": {"description":"","field_length":,"column_type":"","missing_value":,"codetable":"","ignore":"","encoding":"","scale":,"offset":,"valid_max":,"valid_min":,"precision":},
+    "": {"description":"","field_length":,"column_type":"","missing_value":"","codetable":"","ignore":"","keep_blank":false},
+    "": {"description":"","field_length":,"column_type":"","missing_value":"","codetable":"","ignore":"","datetime_format":"%Y%m%d"}
+  }
+}
