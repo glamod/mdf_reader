@@ -1,7 +1,7 @@
-.. mdf_reader documentation master file, created by
+﻿.. mdf_reader documentation master file, created by
    sphinx-quickstart on Fri Apr 16 14:18:24 2021.
    You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+   contain the root ``toctree`` directive.
 
 .. _data-models:
 
@@ -82,9 +82,10 @@ The following commands typed in a python console, show how to access code table 
 To copy a template to edit::
 
       mdf_reader.code_tables.copy_template(template_name,out_path=file_path)
+
 or::
 
-      mdf_reader. code_tables.copy_template(template_name,out_dir=dir_path)
+      mdf_reader.code_tables.copy_template(template_name,out_dir=dir_path)
 
 
 Common features

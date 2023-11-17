@@ -1,7 +1,7 @@
 .. mdf_reader documentation master file, created by
    sphinx-quickstart on Fri Apr 16 14:18:24 2021.
    You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+   contain the root ``toctree`` directive.
 
 .. _how-to-build-a-data-model:
 
@@ -182,7 +182,7 @@ The elements block is a feature common to all data model types. It is the second
                           "units": "hour"
                       }}
 
-Elements in the data are parsed in the order they are declare here. The element block above would define a file / section with elements named: `YR`, `MO`, `DY` and `HR`.
+Elements in the data are parsed in the order they are declare here. The element block above would define a file / section with elements named: ``YR``, ``MO``, ``DY`` and ``HR``.
 All elements attributes, some of which are data type specific, are listed and detailed in the following table:
 
 +---------------------------+----------------------------------------------------------------+
@@ -195,7 +195,7 @@ All elements attributes, some of which are data type specific, are listed and de
 | Numeric types             | ``decimal_places``, ``encoding``, ``offset``, ``scale``,       |
 |                           | ``valid_max``, ``valid_min``                                   |
 +---------------------------+----------------------------------------------------------------+
-| Object, `str` types       | ``disable_white_strip``                                        |
+| Object, ``str`` types     | ``disable_white_strip``                                        |
 +---------------------------+----------------------------------------------------------------+
 | Key type                  | ``codetable``, ``disable_white_strip``, ``encoding``           |
 +---------------------------+----------------------------------------------------------------+

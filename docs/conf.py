@@ -17,12 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'mdf_reader'
-copyright = '2021, David Berry, Irene Perez Gonzalez and Beatriz Recinos'
-author = 'David Berry, Irene Perez Gonzalez and Beatriz Recinos'
+project = "mdf_reader"
+copyright = "2021, David Berry, Irene Perez Gonzalez and Beatriz Recinos"
+author = "David Berry, Irene Perez Gonzalez and Beatriz Recinos"
 
 # The full version, including alpha/beta/rc tags
-release = 'v1.3'
+release = "v1.3"
 
 
 # -- General configuration ---------------------------------------------------
@@ -33,48 +33,57 @@ release = 'v1.3'
 # extensions = []
 
 # extensions.append('autoapi.extension')
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.autosummary',
-              'sphinx.ext.viewcode',
-              'autoapi.extension',
-              'sphinx.ext.napoleon',
-              'sphinx_autodoc_typehints']
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.viewcode",
+    "autoapi.extension",
+    "sphinx.ext.napoleon",
+    "sphinx_autodoc_typehints",
+]
 
 
-autoapi_type = 'python'
-autoapi_dirs = ['../']
+autoapi_type = "python"
+autoapi_dirs = ["../"]
 add_module_names = False
 autoapi_keep_files = False
 autodoc_typehints = "description"
 
-#autoapi_options = ['members', 'undoc-members', 'private-members']
-autoapi_options = ['members', 'undoc-members', 'private-members', 'show-inheritance',
-                    'show-module-summary', 'special-members', 'imported-members']
-autoapi_ignore = ['*mymodel*', '*conf*', '*gather_stats_c99.py*']
+# autoapi_options = ['members', 'undoc-members', 'private-members']
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "private-members",
+    "show-inheritance",
+    "show-module-summary",
+    "special-members",
+    "imported-members",
+]
+autoapi_ignore = ["*mymodel*", "*conf*", "*gather_stats_c99.py*"]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
 
 html_theme_options = {
-    'logo_only': True,
-    'display_version': False,
+    "logo_only": True,
+    "display_version": False,
     "collapse_navigation": False,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]

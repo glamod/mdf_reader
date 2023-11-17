@@ -1,9 +1,9 @@
-==============================================
-Model Data Format reader: `mdf_reader` toolbox
-==============================================
+﻿================================================
+Model Data Format reader: ``mdf_reader`` toolbox
+================================================
 
-The `mdf_reader` is a python_ tool designed to read data files compliant with a user specified `data
-model`_. It was developed to read the IMMA_ (International Maritime Meteorological Archive) data format, but it has been enhanced to account for meteorological data formats in the case of:
+The ``mdf_reader`` is a python_ tool designed to read data files compliant with a user specified `data model`_.
+It was developed to read the IMMA_ (International Maritime Meteorological Archive) data format, but it has been enhanced to account for meteorological data formats in the case of:
 
 * Data that is stored in a human-readable manner: “ASCII” format.
 * Data that is organized in single line reports
@@ -44,9 +44,10 @@ Run a test
 		imma_data = mdf_reader.read(filepath, data_model = 'imma1',sections = ['core','c1','c98'])
 
 
-For more details on how to use the `mdf_reader` tool see the following [jupyter notebooks](https://git.noc.ac.uk/brecinosrivas/mdf_reader/-/tree/master/docs/notebooks).
+For more details on how to use the ``mdf_reader`` tool see the following `jupyter notebooks`_.
 
 
 .. _python: https://www.python.org
 .. _data model: https://cds.climate.copernicus.eu/toolbox/doc/how-to/15_how_to_understand_the_common_data_model/15_how_to_understand_the_common_data_model.html
 .. _IMMA: https://icoads.noaa.gov/e-doc/imma/R3.0-imma1.pdf
+.. _jupyter notebooks: https://git.noc.ac.uk/brecinosrivas/mdf_reader/-/tree/master/docs/notebooks
