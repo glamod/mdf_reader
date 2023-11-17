@@ -1,6 +1,9 @@
 ci:
     autoupdate_schedule: quarterly
 
+default_language_version:
+  python: python3.11
+
 repos:
 
   - repo: https://github.com/asottile/pyupgrade
@@ -62,11 +65,6 @@ repos:
     hooks:
       - id: blackdoc
         files: .+\.py$
-
-  - repo: https://github.com/citation-file-format/cff-converter-python
-    rev: "44e8fc9"
-    hooks:
-    - id: validate-cff
 
   - repo: https://github.com/abravalheri/validate-pyproject
     rev: v0.15
