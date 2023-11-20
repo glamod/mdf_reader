@@ -267,8 +267,9 @@ def validate(data, mask0, schema, code_tables_path):
 
     # 4. str elements
     mask[str_elements] = validate_str(str_elements, data, element_atts)
-
     mask[validated_columns] = mask[validated_columns].mask(
-        mask0[validated_columns] is False, False
+        # mask0[validated_columns] == False, False
+        ~mask0[validated_columns],
+        False,
     )
     return mask
