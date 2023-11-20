@@ -39,12 +39,30 @@ toolPath = os.path.dirname(os.path.abspath(__file__))
 schema_lib = os.path.join(toolPath, "data_models", "library")
 
 
-# AUX FUNCTIONS ---------------------------------------------------------------
-def ERV(TextParser, read_sections_list, schema, code_tables_path):
+class output:
+    """Class to represent reader output
+
+    Attributes
+    ----------
+    data : pd.DataFrame or pd.io.parsers.TextFileReader
+        a pandas.DataFrame or pandas.io.parsers.TextFileReader
+        with the output data
+    atts : dict
+        a dictionary with the output data elements attributes
+    mask : pd.DataFrame or pd.io.parsers.TextFileReader
+        a pandas.DataFrame or pandas.io.parsers.TextFileReader
+        with the output data validation mask
     """
 
-    Extracts, reads and validates data input data.
+    def __init__(self, data=None, out_atts=None, valid=None):
+        self.data = data
+        self.atts = out_atts
+        self.mask = valid
 
+
+# AUX FUNCTIONS ---------------------------------------------------------------
+def ERV(TextParser, read_sections_list, schema, code_tables_path):
+    """Extracts, reads and validates input data.
 
     Parameters
     ----------
@@ -60,11 +78,10 @@ def ERV(TextParser, read_sections_list, schema, code_tables_path):
 
     Returns
     -------
-    data : pandas.DataFrame, pandas.io.parsers.TextFileReader
+    data: pandas.DataFrame or pandas.io.parsers.TextFileReader
         Contains the input data extracted and read
-    valid : pandas.DataFrame, pandas.io.parsers.TextFileReader
-        Contains the a boolean mask with the data validation output
-
+    valid: pandas.DataFrame, pandas.io.parsers.TextFileReader
+        Contains a boolean mask with the data validation output
     """
 
     data_buffer = StringIO()
@@ -145,20 +162,21 @@ def ERV(TextParser, read_sections_list, schema, code_tables_path):
 
 
 def validate_arg(arg_name, arg_value, arg_type):
-    """
-
-    Validates input argument is as expected type
+    """Validates input argument is as expected type.
 
     Parameters
     ----------
     arg_name : str
+        Name of the argument
     arg_value : arg_type
-    arg_type : python type
+        Value fo the argument
+    arg_type : type
+        Type of the argument
 
     Returns
     -------
-    True,False
-
+    boolean:
+        Returns True if type of `arg_value` equals `arg_type`
     """
 
     if arg_value and not isinstance(arg_value, arg_type):
@@ -166,46 +184,43 @@ def validate_arg(arg_name, arg_value, arg_type):
             f"Argument {arg_name} must be {arg_type}, input type is {type(arg_value)}"
         )
         return False
-    else:
-        return True
+    return True
 
 
 def validate_path(arg_name, arg_value):
-    """
-
-    Validates input argument is an existing directory
+    """Validates input argument is an existing directory.
 
     Parameters
     ----------
     arg_name : str
+        Name of the arguemnt
     arg_value : str
+        Value of the argument
 
     Returns
     -------
-    True,False
-
+    boolean
+        Returns True if `arg_name` is an existing directory.
     """
-
     if arg_value and not os.path.isdir(arg_value):
         logging.error(f"{arg_name} could not find path {arg_value}")
         return False
-    else:
-        return True
+    return True
 
 
 # END AUX FUNCTIONS -----------------------------------------------------------
 
 
-def main(
+def read(
     source,
     data_model=None,
     data_model_path=None,
     sections=None,
     chunksize=None,
-    skiprows=None,
+    skiprows=0,
     out_path=None,
 ):
-    """
+    """Read data files compliant with a user specific data model.
 
     Reads a data file to a pandas DataFrame using a pre-defined data model.
     Read data is validates against its data model producing a boolean mask
@@ -214,13 +229,10 @@ def main(
     The data model needs to be input to the module as a named model
     (included in the module) or as the path to a valid data model.
 
-    Arguments
-    ---------
+    Parameters
+    ----------
     source : str
         The file path to read
-
-    Keyword Arguments
-    -----------------
     data_model : str, optional
         Name of internally available data model
     data_model_path : str, optional
@@ -231,7 +243,7 @@ def main(
     chunksize : int, optional
         Number of reports per chunk (default is
         no chunking)
-    skiprows : int, optional
+    skiprows : int
         Number of initial rows to skip from file (default is 0)
     out_path : str, optional
         Path to output data, valid mask and attributes (default is
@@ -239,19 +251,9 @@ def main(
 
     Returns
     -------
-    output : object
+    object
         Attributes data, mask and atts contain the corresponding
         information from the data file.
-
-    Note
-    ----
-
-    This module can also be run as a script, with the keyword arguments
-    as name_arg=arg
-
-
-
-
     """
     logging.basicConfig(
         format="%(levelname)s\t[%(asctime)s](%(filename)s)\t%(message)s",
@@ -310,8 +312,6 @@ def main(
     # 2.2 Homogeneize input data to an iterable with dataframes:
     # a list with a single dataframe or a pd.io.parsers.TextFileReader
     logging.info("Getting data string from source...")
-    # print(source)
-    # exit()
     TextParser = import_data.main(
         source, encoding=encoding, chunksize=chunksize, skiprows=skiprows
     )
@@ -373,26 +373,4 @@ def main(
             json.dump(out_atts_json, fileObj, indent=4)
 
     # 5. RETURN DATA
-    class output:
-        """Class to represent reader output
-
-
-        Attributes
-        ----------
-        data : str
-            a pandas.DataFrame or pandas.io.parsers.TextFileReader
-            with the output data
-        atts : dict
-            a dictionary with the output data elements attributes
-        mask : str
-            a pandas.DataFrame or pandas.io.parsers.TextFileReader
-            with the output data validation mask
-
-        """
-
-        def __init__(self):
-            self.data = data
-            self.atts = out_atts
-            self.mask = valid
-
-    return output()
+    return output(data, out_atts, valid)
