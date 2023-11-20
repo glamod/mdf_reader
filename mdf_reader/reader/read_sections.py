@@ -207,7 +207,7 @@ def main(sections_df, schema):
                 escapechar="\0",
                 sep=properties.internal_delimiter,
             )
-            # ssshh = section_buffer.seek(0)
+            section_buffer.seek(0)
             # Get the individual elements as objects
             if field_layout == "fixed_width":
                 section_elements_obj = extract_fixed_width(
@@ -226,7 +226,6 @@ def main(sections_df, schema):
 
             section_elements.index = notna_idx
             section_valid.index = notna_idx
-
         else:
             section_elements = pd.DataFrame(sections_df[section], columns=[section])
             section_valid = pd.DataFrame(
