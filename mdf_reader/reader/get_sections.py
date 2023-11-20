@@ -236,7 +236,7 @@ def extract_sections(string_df):
 #   ---------------------------------------------------------------------------
 #   MAIN
 #   ---------------------------------------------------------------------------
-def main(string_df, schema, read_sections):
+def get_sections(string_df, schema, read_sections):
     """
 
     Returns a pandas dataframe with a report per row

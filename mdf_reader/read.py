@@ -26,9 +26,9 @@ from io import StringIO as StringIO
 
 import pandas as pd
 
-# from .reader import import_data
-# from .reader import get_sections
-from mdf_reader.reader import get_sections, import_data, read_sections
+from mdf_reader.reader.get_sections import get_sections
+from mdf_reader.reader.import_data import import_data
+from mdf_reader.reader.read_sections import read_sections
 
 from . import properties
 from .common import pandas_TextParser_hdlr
@@ -93,14 +93,14 @@ def ERV(TextParser, read_sections_list, schema, code_tables_path):
         # - requested NA sections as NaN columns
         # - columns(sections) order as in read_sections_list
 
-        sections_df = get_sections.main(string_df, schema, read_sections_list)
+        sections_df = get_sections(string_df, schema, read_sections_list)
         # 2. Read elements from sections
         # Along data chunks, resulting data types
         # may vary if gaps, keep track of data dtypes: v1.0
         # This has now been solved by working with Intxx pandas dtypes (nullable integers)
         # Sections are parsed in the same order as sections_df.columns
 
-        [data_df, valid_df, out_dtypes] = read_sections.main(sections_df, schema)
+        [data_df, valid_df, out_dtypes] = read_sections(sections_df, schema)
         # 3. Validate data elements
 
         valid_df = validate.validate(data_df, valid_df, schema, code_tables_path)
@@ -312,7 +312,7 @@ def read(
     # 2.2 Homogeneize input data to an iterable with dataframes:
     # a list with a single dataframe or a pd.io.parsers.TextFileReader
     logging.info("Getting data string from source...")
-    TextParser = import_data.main(
+    TextParser = import_data(
         source, encoding=encoding, chunksize=chunksize, skiprows=skiprows
     )
 

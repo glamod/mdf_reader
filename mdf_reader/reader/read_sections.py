@@ -133,7 +133,7 @@ def read_data(section_df, section_schema):
     return section_df, section_valid
 
 
-def main(sections_df, schema):
+def read_sections(sections_df, schema):
     """
 
     Returns a pandas dataframe with a report per row

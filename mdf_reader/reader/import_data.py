@@ -42,7 +42,7 @@ import pandas as pd
 from .. import properties
 
 
-def main(source, encoding=None, chunksize=None, skiprows=None):
+def import_data(source, encoding=None, chunksize=None, skiprows=None):
     """
 
     Returns an iterable object with a pandas dataframe from
