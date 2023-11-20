@@ -10,3 +10,4 @@ HISTORY
 * make use of pre-commit
 * make pypi release
 * use ``setuptools_scm`` for automatic updating of version numbers
+* optionally: use ``mdf_reader`` as a command-line interface tool

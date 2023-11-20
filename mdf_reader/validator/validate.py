@@ -198,8 +198,7 @@ def validate(data, mask0, schema, code_tables_path):
     # Get the full list of keys combinations (tuples, triplets...) and check the column combination against that: if it fails, mark the element!
     # Need to see how to grab the YEAR part of a datetime when YEAR comes from a datetime element
     # pd.DatetimeIndex(df['_datetime']).year
-    # print(data)
-    # exit()
+
     if len(coded_elements) > 0:
         mask[coded_elements] = validate_codes(
             coded_elements, data, code_tables_path, element_atts
@@ -214,9 +213,9 @@ def validate(data, mask0, schema, code_tables_path):
 
     # 4. str elements
     mask[str_elements] = validate_str(str_elements, data, element_atts)
+    mask0_n = mask0[validated_columns].fillna(False)
     mask[validated_columns] = mask[validated_columns].mask(
-        # mask0[validated_columns] == False, False
-        ~mask0[validated_columns],
+        ~mask0_n,
         False,
     )
     return mask

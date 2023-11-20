@@ -121,7 +121,7 @@ def ERV(TextParser, read_sections_list, schema, code_tables_path):
         valid_df.to_csv(
             valid_buffer, header=False, mode="a", encoding="utf-8", index=False
         )
-    # exit()
+
     # Create the output
     # WE'LL NEED TO POSPROCESS THIS WHEN READING MULTIPLE REPORTS PER LINE, IF EVER...
     data_buffer.seek(0)
