@@ -6,6 +6,7 @@ channels:
 
 dependencies:
     - pandas
+    - dask
     - matplotlib
     # for testing
     - pytest

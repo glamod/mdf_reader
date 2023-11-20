@@ -18,6 +18,8 @@ classifiers = [
 dependencies = [
     "matplotlib",
     "pandas>=2.1.0",
+    "dask",
+    "distributed"
 ]
 dynamic = ["version"]
 
@@ -27,8 +29,8 @@ documentation = "https://mdf-reader.readthedocs.io"
 repository = "https://github.com/glamod/mdf_reader.git"
 changelog = "https://mdf-reader.readthedocs.io/en/latest/history.html"
 
-#[project.scripts]
-#mdf_reader = "mdf_reader.cli:main"
+[project.scripts]
+mdf_reader = "mdf_reader.cli:main"
 
 [build-system]
 requires = [
