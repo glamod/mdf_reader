@@ -378,8 +378,10 @@ def read(
             data = data[0]
             valid = valid[0]
         else:
-            data = pandas_TextParser_hdlr.restore(data.f, data.orig_options)
-            valid = pandas_TextParser_hdlr.restore(valid.f, valid.orig_options)
+            data_ref = data.handles.handle
+            valid_ref = valid.handles.handle
+            data = pandas_TextParser_hdlr.restore(data_ref, data.orig_options)
+            valid = pandas_TextParser_hdlr.restore(valid_ref, valid.orig_options)
         with open(os.path.join(out_path, "atts.json"), "w") as fileObj:
             json.dump(out_atts_json, fileObj, indent=4)
 
