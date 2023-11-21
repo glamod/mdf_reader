@@ -19,7 +19,7 @@ data_path = os.path.join(cwd, "data")
 def test_read_imma1_buoys_nosupp(plot_validation=False):
     schema = "imma1"
     data_file_path = os.path.join(data_path, "063-714_2010-07_subset.imma")
-    output = mdf_reader.read(data_file_path, data_model=schema)
+    output = mdf_reader.read(data_file_path, data_model=schema, out_path=".")
     if plot_validation:
         plots.plot_model_validation(output)
     assert output
@@ -36,6 +36,7 @@ def test_read_imma1_buoys_supp(plot_validation=False):
         sections=[
             supp_section,
         ],
+        out_path=".",
     )
     if plot_validation:
         plots.plot_model_validation(output)
@@ -49,7 +50,9 @@ def test_read_imma1_buoys_nosupp_chunks():
     data_model = "imma1"
     chunksize = 10000
     data_file_path = os.path.join(data_path, "063-714_2010-07_subset.imma")
-    assert mdf_reader.read(data_file_path, data_model=data_model, chunksize=chunksize)
+    assert mdf_reader.read(
+        data_file_path, data_model=data_model, chunksize=chunksize, out_path="."
+    )
 
 
 def test_read_imma1_buoys_supp_chunks():
@@ -63,4 +66,5 @@ def test_read_imma1_buoys_supp_chunks():
         data_model=data_model,
         sections=[supp_section],
         chunksize=chunksize,
+        out_path=".",
     )
