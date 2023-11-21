@@ -5,19 +5,17 @@ channels:
     - nodefaults
 
 dependencies:
+    #mdf_reader
     - python>=3.10
-    - docutils==0.17.1
-    - nbconvert
-    - numpydoc
-    - pillow
-    - pip
-    - nbsphinx
-    - nbsphinx-link
+    - pandas
+    
+    #documentation
     - ipython
+    - nbsphinx
     - sphinx
-    - pydata-sphinx-theme
-    - sphinx-book-theme>=0.3.3
-    - sphix-autosummary-accessor
+    - sphinx-autodoc-typehints
+    - sphinx-codeautolink
+    - sphinx-copybutton
+    - sphinx_rtd_theme >=1.0
 
-    - pip:
-      - sphinxcontrib-mockautodoc
+

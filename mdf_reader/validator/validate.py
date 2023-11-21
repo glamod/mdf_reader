@@ -1,22 +1,3 @@
-#!/usr/bin/env python3
-"""
-Created on Tue Apr 30 09:38:17 2019
-
-Validates elements in a pandas DataFrame against its input data model. Output
-is a boolean DataFrame
-
-Validated elements are those with the following column_types:
-    - any in properties.numeric_types: range validation
-    - 'key': code table validation
-    - 'datetime': because of the way they are converted, read into datetime,
-    they should already be NaT if they not validate as a valid datetime. The
-    correspoding mask is just created for them
-
-DEV notes:
-need to add tolerance to the numeric range validation
-
-@author: iregon
-"""
 
 import logging
 import os

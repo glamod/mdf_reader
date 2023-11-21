@@ -38,12 +38,16 @@ Several data models have been added to the tool including the IMMA schema: ``~/m
    :hidden:
    :caption: Guide
 
-   tool-set-up.rst
-   tool-overview.rst
-   getting-started.rst
-   data-models.rst
-   how-to-build-a-data-model.rst
-
+   tool-set-up
+   tool-overview
+   getting-started
+   data-models
+   how-to-build-a-data-model
+   how_to_read_csv
+   example_notebooks/CLIWOC_datamodel.ipynb
+   example_notebooks/CLIWOC_missing_code_tables.ipynb
+   example_notebooks/create_data_model.ipynb
+   example_notebooks/mdf_reader_test_overview.ipynb
 
 
 About
@@ -56,7 +60,7 @@ About
 :License:
 
 :Authors:
-   David Berry, Irene Perez Gonzalez and Beatriz Recinos
+   David Berry, Irene Perez Gonzalez, Beatriz Recinos, Andreas Wernecke and Ludwig Lierhammer
 
 
 .. image:: _static/images/logos_c3s/logo_c3s-392x154.png

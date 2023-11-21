@@ -1,22 +1,3 @@
-#!/usr/bin/env python3
-"""
-
-Manages the integral sequence in data file reading
-from a data model:
-    - Access to data model
-    - Data file import
-    - Data file reading
-    - Data validation
-    - Output
-
-Contains the following functions:
-    * ERV - does the actual extraction, read and validation of data input data
-    * main - the main function of the script
-
-Can be run as a script with:
-    python -m mdf_reader data_file **kwargs
-
-"""
 
 import csv
 import json
@@ -49,7 +30,7 @@ def convert_float_format(out_dtypes):
 
 
 class output:
-    """Class to represent reader output
+    """Class to represent reader output.
 
     Attributes
     ----------
@@ -62,7 +43,6 @@ class output:
         a pandas.DataFrame or pandas.io.parsers.TextFileReader
         with the output data validation mask
     """
-
     def __init__(self, data=None, out_atts=None, valid=None):
         self.data = data
         self.atts = out_atts
@@ -92,7 +72,6 @@ def ERV(TextParser, read_sections_list, schema, code_tables_path):
     valid: pandas.DataFrame, pandas.io.parsers.TextFileReader
         Contains a boolean mask with the data validation output
     """
-
     data_buffer = StringIO()
     valid_buffer = StringIO()
 
@@ -189,7 +168,6 @@ def validate_arg(arg_name, arg_value, arg_type):
     boolean:
         Returns True if type of `arg_value` equals `arg_type`
     """
-
     if arg_value and not isinstance(arg_value, arg_type):
         logging.error(
             f"Argument {arg_name} must be {arg_type}, input type is {type(arg_value)}"
