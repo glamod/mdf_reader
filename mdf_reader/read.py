@@ -39,6 +39,15 @@ toolPath = os.path.dirname(os.path.abspath(__file__))
 schema_lib = os.path.join(toolPath, "data_models", "library")
 
 
+def convert_float_format(out_dtypes):
+    out_dtypes_ = {}
+    for k, v in out_dtypes.items():
+        if "float" in v:
+            v = "float"
+        out_dtypes_[k] = v
+    return out_dtypes_
+
+
 class output:
     """Class to represent reader output
 
@@ -101,6 +110,7 @@ def ERV(TextParser, read_sections_list, schema, code_tables_path):
         # Sections are parsed in the same order as sections_df.columns
 
         [data_df, valid_df, out_dtypes] = read_sections(sections_df, schema)
+        out_dtypes = convert_float_format(out_dtypes)
         # 3. Validate data elements
 
         valid_df = validate.validate(data_df, valid_df, schema, code_tables_path)
@@ -118,6 +128,7 @@ def ERV(TextParser, read_sections_list, schema, code_tables_path):
             quotechar="\0",
             escapechar="\0",
         )
+
         valid_df.to_csv(
             valid_buffer, header=False, mode="a", encoding="utf-8", index=False
         )

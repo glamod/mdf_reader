@@ -9,8 +9,7 @@ import logging
 
 
 def init_logger(module, level="INFO", fn=None):
-    # !!! here overriide potential previous config of logging
-    from imp import reload  # python 2.x don't need to import reload, use it directly
+    from importlib import reload
 
     reload(logging)
     level = logging.getLevelName(level)
