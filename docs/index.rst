@@ -34,9 +34,8 @@ Several data models have been added to the tool including the IMMA schema: ``~/m
 
 .. toctree::
    :maxdepth: 2
-   :glob:
    :hidden:
-   :caption: Guide
+   :caption: Contents:
 
    tool-set-up
    tool-overview
@@ -48,6 +47,10 @@ Several data models have been added to the tool including the IMMA schema: ``~/m
    example_notebooks/CLIWOC_missing_code_tables.ipynb
    example_notebooks/create_data_model.ipynb
    example_notebooks/mdf_reader_test_overview.ipynb
+   contributing
+   authors
+   api
+   history
 
 
 About
