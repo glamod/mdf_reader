@@ -1,4 +1,3 @@
-
 import csv
 import json
 import logging
@@ -43,6 +42,7 @@ class output:
         a pandas.DataFrame or pandas.io.parsers.TextFileReader
         with the output data validation mask
     """
+
     def __init__(self, data=None, out_atts=None, valid=None):
         self.data = data
         self.atts = out_atts
