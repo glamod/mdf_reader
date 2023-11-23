@@ -28,7 +28,7 @@ def convert_float_format(out_dtypes):
     return out_dtypes_
 
 
-class output:
+class MDFFileReader:
     """Class to represent reader output.
 
     Attributes
@@ -36,7 +36,7 @@ class output:
     data : pd.DataFrame or pd.io.parsers.TextFileReader
         a pandas.DataFrame or pandas.io.parsers.TextFileReader
         with the output data
-    atts : dict
+    attrs : dict
         a dictionary with the output data elements attributes
     mask : pd.DataFrame or pd.io.parsers.TextFileReader
         a pandas.DataFrame or pandas.io.parsers.TextFileReader
@@ -45,7 +45,7 @@ class output:
 
     def __init__(self, data=None, out_atts=None, valid=None):
         self.data = data
-        self.atts = out_atts
+        self.attrs = out_atts
         self.mask = valid
 
 
@@ -240,9 +240,10 @@ def read(
 
     Returns
     -------
-    object
-        Attributes data, mask and atts contain the corresponding
-        information from the data file.
+    MDFFileReader
+        Containing data (``data``), validation mask (``mask``)
+        and attributes (``attrs``) corresponding to the information
+        from ``source``.
     """
     logging.basicConfig(
         format="%(levelname)s\t[%(asctime)s](%(filename)s)\t%(message)s",
@@ -364,4 +365,4 @@ def read(
             json.dump(out_atts_json, fileObj, indent=4)
 
     # 5. RETURN DATA
-    return output(data, out_atts, valid)
+    return MDFFileReader(data, out_atts, valid)

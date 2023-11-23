@@ -3,7 +3,8 @@ import os
 import pytest  # noqa
 
 import mdf_reader
-import mdf_reader.common.plots as plots
+
+# import mdf_reader.common.plots as plots
 
 cwd = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(cwd, "data")
@@ -16,7 +17,7 @@ def test_read_imma1_buoys_nosupp(plot_validation=False):
     data_file_path = os.path.join(data_path, "063-714_2010-07_subset.imma")
     output = mdf_reader.read(data_file_path, data_model=schema)
     if plot_validation:
-        plots.plot_model_validation(output)
+        mdf_reader.plot_model_validation(output)
     assert output
 
 
@@ -33,7 +34,7 @@ def test_read_imma1_buoys_supp(plot_validation=False):
         ],
     )
     if plot_validation:
-        plots.plot_model_validation(output)
+        mdf_reader.plot_model_validation(output)
     assert output
 
 
