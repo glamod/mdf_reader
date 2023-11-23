@@ -1,5 +1,5 @@
 {
-	"ALC":"Alcohol Thermometer",
-	"ELE":"Electric (resistance) Thermometer",
-	"MER":"Dry Bulb Mercury Thermometer"
+  "ALC": "Alcohol Thermometer",
+  "ELE": "Electric (resistance) Thermometer",
+  "MER": "Dry Bulb Mercury Thermometer"
 }

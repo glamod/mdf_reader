@@ -1,17 +1,11 @@
 {
-  "range_key(ini,end)":
-  {
-    "":"",
-    "":""
+  "range_key(ini,end)": {
+    "": ""
   },
-  "range_key(ini,yyyy)":
-  {
-    "":"",
-    "":""
+  "range_key(ini,yyyy)": {
+    "": ""
   },
-  "":
-  {
-    "":"",
-    "":""
+  "": {
+    "": ""
   }
 }
