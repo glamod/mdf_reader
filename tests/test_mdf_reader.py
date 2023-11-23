@@ -1,11 +1,6 @@
-#!/usr/bin/env python3
-"""
-Created on Wed Feb 20 08:05:50 2019
-
-@author: iregon
-"""
-
 import os
+
+import pytest  # noqa
 
 import mdf_reader
 import mdf_reader.common.plots as plots

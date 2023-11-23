@@ -1,5 +1,7 @@
 import os
 
+import pytest  # noqa
+
 cwd = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(cwd, "data")
 
