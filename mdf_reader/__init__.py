@@ -1,8 +1,7 @@
-# Following to access the subpackages main modules (or/and functions) directly wihout loops through the full subpackage path
-from mdf_reader.read import read  # noqa
-
+from .common.plots import plot_model_validation  # noqa
 from .data_models import code_tables  # noqa
 from .data_models import schemas  # noqa
+from .read import read  # noqa
 
 
 def _get_version():

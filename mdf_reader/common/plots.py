@@ -126,20 +126,20 @@ def plot_categorical_validation(data, mask, element, codetable):
 
 
 def plot_model_validation(imodel):
-    for element in imodel["atts"].keys():
+    for element in imodel.atts.keys():
         title_element = (
             element
             if not isinstance(element, tuple)
             else element[1] + " (" + element[0] + ")"
         )
-        dtype = imodel["atts"].get(element).get("column_type")
+        dtype = imodel.atts.get(element).get("column_type")
         if dtype in properties.numeric_types:
-            valid_max = imodel["atts"].get(element).get("valid_max")
-            valid_min = imodel["atts"].get(element).get("valid_min")
-            units = imodel["atts"].get(element).get("units")
+            valid_max = imodel.atts.get(element).get("valid_max")
+            valid_min = imodel.atts.get(element).get("valid_min")
+            units = imodel.atts.get(element).get("units")
             plot_numeric_validation(
-                imodel["data"][element],
-                imodel["valid_mask"][element],
+                imodel.data[element],
+                imodel.mask[element],
                 title_element,
                 valid_max,
                 valid_min,
@@ -147,12 +147,12 @@ def plot_model_validation(imodel):
             )
         elif dtype == "key":
             # ...mmm should account for multi-keyed combinations
-            codetable = imodel["atts"].get(element).get("codetable")
+            codetable = imodel.atts.get(element).get("codetable")
             if not codetable:
                 codetable = "undefined"
             plot_categorical_validation(
-                imodel["data"][element],
-                imodel["valid_mask"][element],
+                imodel.data[element],
+                imodel.mask[element],
                 title_element,
                 codetable,
             )
