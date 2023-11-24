@@ -62,13 +62,6 @@ repos:
       - id: nbqa-isort
         args: ['--settings-file=pyproject.toml']
 
-  #- repo: https://github.com/kynan/nbstripout
-  #  rev: 0.6.1
-  #  hooks:
-  #  - id: nbstripout
-  #    files: '.ipynb'
-  #    args: [ "--extra-keys", "metadata.kernelspec" ]
-
   - repo: https://github.com/keewis/blackdoc
     rev: v0.3.9
     hooks:
