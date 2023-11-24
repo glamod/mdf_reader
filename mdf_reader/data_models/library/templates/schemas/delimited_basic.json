@@ -1,6 +1,5 @@
 {
-  "header":
-  {
+  "header": {
     "format": "delimited",
     "delimiter": "",
     "date_parser": {
@@ -8,8 +7,7 @@
       "format": []
     }
   },
-  "elements":
-  {
+  "elements": {
     "": {
       "description": "",
       "field_length": "",
@@ -24,8 +22,7 @@
       "valid_min": "",
       "precision": "",
       "keep_blank": false,
-      "datetime_format":"%Y%m%d"
+      "datetime_format": "%Y%m%d"
     }
   }
 }
-

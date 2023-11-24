@@ -1,14 +1,13 @@
 {
-  "header":
-  {
-    "format":"fixed_width",
-    "delimiter":null,
-    "date_parser":{
+  "header": {
+    "format": "fixed_width",
+    "delimiter": null,
+    "date_parser": {
       "elements": [],
-      "format": []}
+      "format": []
+    }
   },
-  "elements":
-  {
+  "elements": {
     "": {
       "description": "",
       "field_length": "",
@@ -22,8 +21,8 @@
       "valid_max": "",
       "valid_min": "",
       "precision": "",
-      "keep_blank":false,
-      "datetime_format":"%Y%m%d"
+      "keep_blank": false,
+      "datetime_format": "%Y%m%d"
     }
   }
 }

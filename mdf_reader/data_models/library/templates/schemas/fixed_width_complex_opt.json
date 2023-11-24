@@ -1,18 +1,40 @@
 {
-  "header":
-  {
+  "header": {
     "format": "fixed_width",
     "delimiter": null,
-    "parsing_order": [{"s": ["s1"]}, {"o": ["o1","oN"]}, {"s": ["s2","s3"]}],
-    "date_parser":{"section": "","elements": [],"format": []}
+    "parsing_order": [
+      {
+        "s": [
+          "s1"
+        ]
+      },
+      {
+        "o": [
+          "o1",
+          "oN"
+        ]
+      },
+      {
+        "s": [
+          "s2",
+          "s3"
+        ]
+      }
+    ],
+    "date_parser": {
+      "section": "",
+      "elements": [],
+      "format": []
+    }
   },
-  "sections":
-  {
-    "s1":
-    {
-      "header": {"sentinal": null, "sentinal_length": null, "length": ""},
-      "elements":
-      {
+  "sections": {
+    "s1": {
+      "header": {
+        "sentinal": null,
+        "sentinal_length": null,
+        "length": ""
+      },
+      "elements": {
         "": {
           "description": "",
           "field_length": "",
@@ -26,16 +48,18 @@
           "valid_max": "",
           "valid_min": "",
           "precision": "",
-          "keep_blank":false,
-          "datetime_format":"%Y%m%d"
+          "keep_blank": false,
+          "datetime_format": "%Y%m%d"
         }
       }
     },
-    "o1":
-    {
-      "header": {"sentinal": "", "sentinal_length": "", "length": ""},
-      "elements":
-      {
+    "o1": {
+      "header": {
+        "sentinal": "",
+        "sentinal_length": "",
+        "length": ""
+      },
+      "elements": {
         "": {
           "description": "",
           "field_length": "",
@@ -49,16 +73,18 @@
           "valid_max": "",
           "valid_min": "",
           "precision": "",
-          "keep_blank":false,
-          "datetime_format":"%Y%m%d"
+          "keep_blank": false,
+          "datetime_format": "%Y%m%d"
         }
       }
     },
-    "oN":
-    {
-      "header": {"sentinal": "", "sentinal_length": "", "length": ""},
-      "elements":
-      {
+    "oN": {
+      "header": {
+        "sentinal": "",
+        "sentinal_length": "",
+        "length": ""
+      },
+      "elements": {
         "": {
           "description": "",
           "field_length": "",
@@ -72,16 +98,18 @@
           "valid_max": "",
           "valid_min": "",
           "precision": "",
-          "keep_blank":false,
-          "datetime_format":"%Y%m%d"
+          "keep_blank": false,
+          "datetime_format": "%Y%m%d"
         }
       }
     },
-    "s2":
-    {
-      "header": {"sentinal": null, "sentinal_length": null, "length": ""},
-      "elements":
-      {
+    "s2": {
+      "header": {
+        "sentinal": null,
+        "sentinal_length": null,
+        "length": ""
+      },
+      "elements": {
         "": {
           "description": "",
           "field_length": "",
@@ -95,16 +123,18 @@
           "valid_max": "",
           "valid_min": "",
           "precision": "",
-          "keep_blank":false,
-          "datetime_format":"%Y%m%d"
+          "keep_blank": false,
+          "datetime_format": "%Y%m%d"
         }
       }
     },
-    "s3":
-    {
-      "header": {"sentinal": null, "sentinal_length": null, "length": null},
-      "elements":
-      {
+    "s3": {
+      "header": {
+        "sentinal": null,
+        "sentinal_length": null,
+        "length": null
+      },
+      "elements": {
         "": {
           "description": "",
           "field_length": "",
@@ -118,8 +148,8 @@
           "valid_max": "",
           "valid_min": "",
           "precision": "",
-          "keep_blank":false,
-          "datetime_format":"%Y%m%d"
+          "keep_blank": false,
+          "datetime_format": "%Y%m%d"
         }
       }
     }
