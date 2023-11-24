@@ -1,30 +1,56 @@
 {
   "header":
   {
-    "format":"fixed_width",
-    "delimiter":null,
-    "date_parser":{"section":"","elements":[],"format":[]}
+    "format": "fixed_width",
+    "delimiter": null,
+    "date_parser": {"section": "","elements": [],"format": []}
   },
   "sections":
   {
     "section 1":
     {
-      "header": {"sentinal": null, "sentinal_length": null, "length":},
+      "header": {"sentinal": null, "sentinal_length": null, "length": ""},
       "elements":
       {
-        "": {"description":"","field_length":,"column_type":"","missing_value":,"codetable":"","ignore":"","encoding":"","scale":,"offset":,"valid_max":,"valid_min":,"precision":},
-        "": {"description":"","field_length":,"column_type":"","missing_value":"","codetable":"","ignore":"","keep_blank":false},
-        "": {"description":"","field_length":,"column_type":"","missing_value":"","codetable":"","ignore":"","datetime_format":"%Y%m%d"}
+        "": {
+          "description": "",
+          "field_length": "",
+          "column_type": "",
+          "missing_value": "",
+          "codetable": "",
+          "ignore": "",
+          "encoding": "",
+          "scale": "",
+          "offset": "",
+          "valid_max": "",
+          "valid_min": "",
+          "precision": "",
+          "keep_blank":false,
+          "datetime_format":"%Y%m%d"
+        }
       }
     },
     "section N":
     {
-      "header": {"sentinal": null, "sentinal_length": null, "length":null},
+      "header": {"sentinal": null, "sentinal_length": null, "length": null},
       "elements":
       {
-        "": {"description":"","field_length":,"column_type":"","missing_value":,"codetable":"","ignore":"","encoding":"","scale":,"offset":,"valid_max":,"valid_min":,"precision":},
-        "": {"description":"","field_length":,"column_type":"","missing_value":"","codetable":"","ignore":"","keep_blank":false},
-        "": {"description":"","field_length":,"column_type":"","missing_value":"","codetable":"","ignore":"","datetime_format":"%Y%m%d"}
+        "": {
+          "description": "",
+          "field_length": "",
+          "column_type": "",
+          "missing_value": "",
+          "codetable": "",
+          "ignore": "",
+          "encoding": "",
+          "scale": "",
+          "offset": "",
+          "valid_max": "",
+          "valid_min": "",
+          "precision": "",
+          "keep_blank":false,
+          "datetime_format":"%Y%m%d"
+        }
       }
     }
   }
