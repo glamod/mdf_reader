@@ -1,0 +1,135 @@
+[build-system]
+requires = [
+  "setuptools>=45",
+  "wheel",
+  "setuptools_scm[toml]>=6.2"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mdf_reader"
+description = "Model Data Format reader toolbox"
+readme = "README.rst"
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
+keywords = ["mdf_reader"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11"
+]
+dependencies = [
+  "matplotlib",
+  "pandas>=2.1.0",
+  "dask",
+  "distributed"
+]
+dynamic = ["version"]
+
+[project.scripts]
+mdf_reader = "mdf_reader.cli:main"
+
+[project.urls]
+homepage = "https://mdf-reader.readthedocs.io"
+documentation = "https://mdf-reader.readthedocs.io"
+repository = "https://github.com/glamod/mdf_reader.git"
+changelog = "https://mdf-reader.readthedocs.io/en/latest/history.html"
+
+[tool.black]
+target-version = ["py38"]
+
+[tool.coverage.run]
+relative_files = true
+omit = ["tests/*.py"]
+
+[tool.isort]
+profile = "black"
+py_version = 38
+append_only = true
+
+[tool.mypy]
+exclude = "doc|flycheck"
+files = "index_calculator/"
+show_error_codes = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = [
+  "pandas",
+  "matplotlib",
+  "pytest"
+]
+ignore_missing_imports = true
+
+[tool.nbqa.md]
+mdformat = true
+
+[tool.pytest]
+python_files = "test_*.py"
+testpaths = ["./tests"]
+
+[tool.rstcheck]
+report_level = "WARNING"
+ignore_roles = [
+  "pull",
+  "issue"
+]
+ignore_directives = [
+  "ipython",
+  "autodata",
+  "autosummary"
+]
+
+[tool.ruff]
+target-version = "py38"
+builtins = ["ellipsis"]
+exclude = [
+  ".eggs",
+  "doc"
+]
+# E402: module level import not at top of file
+# E501: line too long - let black worry about that
+# E731: do not assign a lambda expression, use a def
+ignore = [
+  "E203",
+  "E402",
+  "E501",
+  "E731"
+]
+select = [
+  # Pyflakes
+  "F",
+  # Pycodestyle
+  "E",
+  "W",
+  # isort
+  "I",
+  # Pyupgrade
+  "UP"
+]
+
+[tool.ruff.isort]
+known-first-party = ["mdf_reader"]
+known-third-party = [
+  "matplotlib",
+  "numpy",
+  "pandas",
+  "pkg_resources",
+  "pytest",
+  "setuptools",
+  "sphinx_autosummary_accessors"
+]
+
+[tool.setuptools]
+packages = ["mdf_reader"]
+
+[tool.setuptools_scm]
+fallback_version = "999"
+write_to = "mdf_reader/_version.py"
+write_to_template = '__version__ = "{version}"'
+tag_regex = "^(?P<prefix>v)?(?P<version>[^\\+]+)(?P<suffix>.*)?$"

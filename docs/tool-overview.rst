@@ -1,7 +1,7 @@
-.. mdf_reader documentation master file, created by
+﻿.. mdf_reader documentation master file, created by
    sphinx-quickstart on Fri Apr 16 14:18:24 2021.
    You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+   contain the root ``toctree`` directive.
 
 Tool overview
 =============
@@ -69,7 +69,7 @@ The data element extraction and transformation from the initial string to the ou
 
    Done using `mdf_reader.import_data.main() <https://mdf-reader.readthedocs.io/en/mdf_reader/autoapi/mdf_reader/reader/import_data/index.html#module-mdf_reader.reader.import_data>`_, where individual data elements are extracted as 'objects' from the full report string and missing data is recognised as ``NA/NaN`` values in the resulting dataframe.
 
-   Strings that are recognised as missing from the source are `pandas` defaults, plus:
+   Strings that are recognised as missing from the source are ``pandas`` defaults, plus:
 
       * Those defined in the data model's/schema as NaN by making use of the ``missing_value`` attribute.
       * Those defined as blanks if ``disable_white_strip`` is set to not ``True``
@@ -116,6 +116,3 @@ Overall, the validation process exception handling is:
 
 .. rubric:: Footnotes
 .. [#f1] If ``NaN`` values are present, and column_type is integer, conversion to column_type will not be possible and data type will be as pandas casting rules (`Missing data casting rules and indexing <https://pandas.pydata.org/pandas-docs/stable/user_guide/missing_data.html>`_).
-
-
-

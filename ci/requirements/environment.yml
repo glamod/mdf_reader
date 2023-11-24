@@ -1,0 +1,14 @@
+name: mdf_reader-test
+
+channels:
+    - conda-forge
+    - nodefaults
+
+dependencies:
+    - pandas
+    - dask
+    - matplotlib
+    # for testing
+    - pytest
+    - pytest-cov
+    - pytest-env

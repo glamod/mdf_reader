@@ -1,7 +1,7 @@
 .. mdf_reader documentation master file, created by
    sphinx-quickstart on Fri Apr 16 14:18:24 2021.
    You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+   contain the root ``toctree`` directive.
 
 .. _how-to-read-a-simple-csv:
 
@@ -11,6 +11,7 @@ Introduction
 This is a guide on how to use the mdf_reader to read a ``delimited`` csv file containing X<sub>i</sub> for i variables of different types e.g. float, integers, or string.
 
 .. _step-by-step-guide:
+
 =========================
 Step by step guide
 =========================
@@ -19,24 +20,26 @@ Step by step guide
 
 2. As described in section ref:`_how-to-build-a-data-model`, create a valid directory tree where the model you will create (**(mymodel)**) should be saved. This can be placed either in the mdf_reader library directory (``~/mdf_reader/data_models/lib/``) or in a user defined path which will be provided into the mdf_reader at a later step.
 
-3. Create the **schema** file under ``../lib/mymodel/mymodel.json`` or ``path/mymodel/mymodel.json``. For example for a data file without sections, stored in comma delimeted csv format, that contains 8 columns (year, month, day, longitude, latitude, wind speed, sea surface temperature and sea level pressure respectively) like the following:
+3. Create the **schema** file under ``../lib/mymodel/mymodel.json`` or ``path/mymodel/mymodel.json``.
+For example for a data file without sections, stored in comma delimeted csv format, that contains 8 columns (year, month, day, longitude, latitude, wind speed, sea surface temperature and sea level pressure respectively) like the following:
 
++------+------+------+---------+--------+--------+---------+---------+
+| YR   | MO   | DY   | LON     | LAT    | W      | SST     | SLP     |
++------+------+------+---------+--------+--------+---------+---------+
+| 2007 | 2    | 3    | 255.708 | 9.829  | 5.902  | 301.323 | 1008.57 |
+| 2007 | 2    | 4    | 255.682 | 12.691 | 5.222  | 300.971 | 1009.14 |
+| 2007 | 7    | 2    | 242.764 | 32.707 | 1.3    | 296.556 | 1010.37 |
+| 2007 | 7    | 3    | 242.158 | 32.943 | 4.792  | 294.558 | 1009.92 |
+| 2007 | 7    | 4    | 240.329 | 34.218 | 3.739  | 290.405 | 1008.32 |
+| 2007 | 7    | 5    | 239.889 | 34.377 | 5.629  | 288.273 | 1007.38 |
+| 2007 | 7    | 6    | 240.054 | 34.38  | 4.322  | 289.752 | 1008.54 |
+| 2007 | 7    | 7    | 240.011 | 34.229 | 4.717  | 288.624 | 1010.59 |
+| 2007 | 7    | 8    | 240.054 | 34.394 | 3.924  | 290.584 | 1008.85 |
+| 2007 | 7    | 9    | 241.352 | 33.8   | 2.852  | 293.248 | 1010.51 |
+| 2007 | 7    | 10   | 241.499 | 33.804 | 2.308  | 293.03  | 1011.51 |
++------+------+------+---------+--------+--------+---------+---------+
 
-|   YR |   MO |   DY |     LON |    LAT |      W |     SST |     SLP |
-|-----:|-----:|-----:|--------:|-------:|-------:|--------:|--------:|
-| 2007 |    2 |    3 | 255.708 |  9.829 |  5.902 | 301.323 | 1008.57 |
-| 2007 |    2 |    4 | 255.682 | 12.691 |  5.222 | 300.971 | 1009.14 |
-| 2007 |    7 |    2 | 242.764 | 32.707 |  1.3   | 296.556 | 1010.37 |
-| 2007 |    7 |    3 | 242.158 | 32.943 |  4.792 | 294.558 | 1009.92 |
-| 2007 |    7 |    4 | 240.329 | 34.218 |  3.739 | 290.405 | 1008.32 |
-| 2007 |    7 |    5 | 239.889 | 34.377 |  5.629 | 288.273 | 1007.38 |
-| 2007 |    7 |    6 | 240.054 | 34.38  |  4.322 | 289.752 | 1008.54 |
-| 2007 |    7 |    7 | 240.011 | 34.229 |  4.717 | 288.624 | 1010.59 |
-| 2007 |    7 |    8 | 240.054 | 34.394 |  3.924 | 290.584 | 1008.85 |
-| 2007 |    7 |    9 | 241.352 | 33.8   |  2.852 | 293.248 | 1010.51 |
-| 2007 |    7 |   10 | 241.499 | 33.804 |  2.308 | 293.03  | 1011.51 |
-
-the basic schema would look like this::
+The basic schema would look like this::
 
        {
          "header":

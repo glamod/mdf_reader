@@ -1,0 +1,19 @@
+name: mdf_reader-docs
+
+channels:
+    - conda-forge
+    - nodefaults
+
+dependencies:
+    #mdf_reader
+    - python>=3.10
+    - pandas
+
+    #documentation
+    - ipython
+    - nbsphinx
+    - sphinx
+    - sphinx-autodoc-typehints
+    - sphinx-codeautolink
+    - sphinx-copybutton
+    - sphinx_rtd_theme >=1.0
