@@ -18,7 +18,7 @@ The main steps to create a data model (or schema) for the mdf_reader are:
 
     Data model directory
 
-2. Create a valid **schema** file under ``../lib/mymodel/mymodel.json``:
+2. Create a valid **schema** file under ``mdf_reader/data_models/library/mymodel/mymodel.json``:
 
 To create the schema file, two important aspects of the schema need to be clear beforehand; i) the order and field lengths of each element in the data input string, ii) do the information in the data input needs to be organised into sections, like ICOADS ``.imma`` data format. With this in mind, one can access all the schema file templates available from within the tool via::
 

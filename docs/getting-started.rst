@@ -50,7 +50,3 @@ For more details how to run the command-line interface please call the heklper f
 .. code-block:: console
 
    mdf_reader -h
-
-#For more details and an overview of the tool check out the following python notebook:
-
-#- `Test and overview of the mdf_reader tool <https://git.noc.ac.uk/brecinosrivas/mdf_reader/-/blob/master/docs/notebooks/mdf_reader_test_overview.ipynb>`_

@@ -5,16 +5,9 @@
 
 .. _how-to-read-a-simple-csv:
 
-=========================
-Introduction
-=========================
-This is a guide on how to use the mdf_reader to read a ``delimited`` csv file containing X<sub>i</sub> for i variables of different types e.g. float, integers, or string.
-
-.. _step-by-step-guide:
-
-=========================
-Step by step guide
-=========================
+=============================
+How to read a simple csv file
+=============================
 
 1. Have a clear understanding of the structure of the data file you wish to read in, namely delimiter used, the variables contained per column, the units, acceptable limits for each variable etc.
 
