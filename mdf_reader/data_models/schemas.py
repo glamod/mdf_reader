@@ -52,7 +52,6 @@ def read_schema(schema_name=None, ext_schema_path=None):
         Data model schema
 
     """
-
     # 1. Validate input
     if schema_name:
         if schema_name not in properties.supported_data_models:

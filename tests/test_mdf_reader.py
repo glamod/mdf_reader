@@ -3,8 +3,7 @@ import os
 import pytest  # noqa
 
 import mdf_reader
-
-from .data import test_data
+from mdf_reader import test_data
 
 # A. TESTS TO READ FROM DATA FROM DIFFERENT DATA MODELS WITH AND WITHOUT SUPP
 # -----------------------------------------------------------------------------
@@ -50,5 +49,3 @@ def test_read_imma1_buoys_supp_chunks():
         sections=[supp_section],
         chunksize=chunksize,
     )
-
-test_read_imma1_buoys_nosupp_()

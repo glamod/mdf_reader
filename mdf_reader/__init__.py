@@ -2,7 +2,7 @@ from .common.plots import plot_model_validation  # noqa
 from .data_models import code_tables  # noqa
 from .data_models import schemas  # noqa
 from .read import read  # noqa
-from ..tests import test_data  # noqa
+from .data import test_data  # noqa
 
 def _get_version():
     __version__ = "unknown"
