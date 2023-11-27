@@ -28,7 +28,7 @@ This tool outputs a python object with the following attributes:
 
 The reader allows for basic transformations of the data. This feature includes `basic numeric data decoding`_ (base36, signed_overpunch) and numeric data conversion (scale and offset).
 
-Several data models have been added to the tool including the IMMA schema: 
+Several data models have been added to the tool including the IMMA schema:
 
 .. code-block:: console
 
@@ -90,13 +90,11 @@ About
 .. |logo_c3s| image:: _static/images/logos_c3s/logo_c3s-392x154.png
     :width: 25%
     :target: https://climate.copernicus.eu/
-    
+
 .. |logo_NOC| image:: _static/images/logos_c3s/LOGO_2020_-_NOC_1_COLOUR.png
     :width: 25%
     :target: https://noc.ac.uk/
-    
+
 .. |logo_ICOADS| image:: _static/images/logos_c3s/icoadsLogo.png
     :width: 20%
     :target: https://icoads.noaa.gov/
-    
-    

@@ -146,7 +146,7 @@ def read_sections(sections_df, schema):
     sections_df : pd.DataFrame
         Pandas dataframe with a column per report sections.
         The sections in the columns as a block strings.
-        
+
     schema : dict
         Data source data model schema
 
@@ -154,14 +154,14 @@ def read_sections(sections_df, schema):
     -------
     data : pd.DataFrame
         Dataframe with the report section elements split
-        along the columns. Both multiindex and regular 
+        along the columns. Both multiindex and regular
         are possible.
-        
+
     mask : pd.DataFrame
         Dataframe with the report section elements split
-        along the columns. Both multiindex and regular 
+        along the columns. Both multiindex and regular
         are possible.
-        
+
     dtypes : dict
         Dictionary with pandas data types for each of the
         output elements

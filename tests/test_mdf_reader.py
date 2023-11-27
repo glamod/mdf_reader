@@ -1,5 +1,3 @@
-import os
-
 import pytest  # noqa
 
 import mdf_reader
@@ -7,6 +5,7 @@ from mdf_reader import test_data
 
 # A. TESTS TO READ FROM DATA FROM DIFFERENT DATA MODELS WITH AND WITHOUT SUPP
 # -----------------------------------------------------------------------------
+
 
 def test_read_imma1_buoys_nosupp(plot_validation=False):
     output = mdf_reader.read(**test_data.test_063_714)

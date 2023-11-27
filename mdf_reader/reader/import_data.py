@@ -61,11 +61,11 @@ def import_data(source, encoding=None, chunksize=None, skiprows=None):
     encoding: dict, optional
         Encoding dictionary passed to function
         ``pd.read_fwf``.
-        
+
     chunksize : int, optional
         Number of lines to chunk the input data into
         passed to function ``pd.read_fwf``.
-        
+
     skiprows : int, optional
         Number of lines to skip from input file
         passed to function ``pd.read_fwf``.

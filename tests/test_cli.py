@@ -4,6 +4,7 @@ import pytest  # noqa
 
 from mdf_reader import test_data
 
+
 # A. TESTS TO READ FROM DATA FROM DIFFERENT DATA MODELS WITH AND WITHOUT SUPP
 # -----------------------------------------------------------------------------
 def test_cli_imma1_buoys_nosupp():

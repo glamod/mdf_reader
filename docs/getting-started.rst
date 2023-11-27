@@ -16,16 +16,16 @@ You can test the tool very easy by using a sample data set that comes with the r
 .. code-block:: console
 
    from mdf_reader.test_data import test_069_701 as test_data
-   
+
    filepath = test_data.source
    data_model = test_data.data_model
 
    data = mdf_reader.read(filepath, data_model=data_model)
-   
+
 or simplify the command by passing `test_data`:
 
 .. code-block:: console
-  
+
   data = mdf_reader.read(**test_data)
 
 2. Read  subsection of an IMMA file
@@ -44,7 +44,7 @@ You can also read subsections from the IMMA test file:
 You can also run **mdf_reader** as a command-line interface. To call the function from a terminal type:
 
    mdf_reader_dir <your-file-path> --data_model imma1 --out_path <yout-output-path>
-   
+
 For more details how to run the command-line interface please call the heklper function:
 
 .. code-block:: console
