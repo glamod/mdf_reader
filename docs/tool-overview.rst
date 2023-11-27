@@ -22,27 +22,27 @@ Workflow
 Input data: ``.imma`` files and schemas
 ---------------------------------------
 
-The tool has been created to read meteorological data from `ICOADS <https://icoads.noaa.gov/r3.html>`_ stored in the ``.imma`` format, please read the `following guide <https://icoads.noaa.gov/e-doc/imma/R3.0-imma1.pdf>`_ to know more details regarding the database and the data format.
+The tool has been created to read meteorological data from ICOADS_ stored in the ``.imma`` format, please read the `following guide`_ to know more details regarding the database and the data format.
 
 Each meteorological report in ICOADS can come from multiple countries, sources and platforms and each report has a source ID (SID) and a deck (DCK) number assigned. “Deck” was originally referred to a punched card deck, but is now used as the primary field to track ICOADS data **collections**. Each deck may contain a single Source ID (SID) or a mixture of SIDs.
 
-The data stored in the ``.imma`` format is stored as a fixed width and/or a field delimited file. The mdf_reader reads the data, organise it into sections and validates them against a declared data model (also referred here as **schema**) which can be source ID and deck dependent.
+The data stored in the ``.imma`` format is stored as a fixed width and/or a field delimited file. The **mdf_reader** reads the data, organise it into sections and validates them against a declared data model (also referred here as **schema**) which can be source ID and deck dependent.
 
 The **core** meteorological variables stored in the ``.imma`` format can be read by using the general ``imma1`` schema included in this tool.
 
 **Supplemental metadata attachments** require a specific **schema** customized to read supplemental metadata from a specific source and deck ("collection"). Several **schemas** are already included in this tool in order to read 18th century ship meteorological metadata.
 
-All schemas are located under the following directory: ``~/mdf_reader/data_models/lib/``
+All schemas are located under the following directory: ``mdf_reader/data_models/library/``
 
-.. note:: For each SID-DCK number the data model or schema use to read supplemental metadata will different. e.g. to read metadata from the `US Maury <https://icoads.noaa.gov/maury.html>`_ Ship data collection SID 69 and DCK 701, we will use the schema ``imma_d701``)
+.. note:: For each SID-DCK number the data model or schema use to read supplemental metadata will different. e.g. to read metadata from the `US Maury`_ Ship data collection SID 69 and DCK 701, we will use the schema ``imma_d701``)
 
 Output:
 -------
 
-The output of the mdf_reader is a python object with three attributes:
+The output of the **mdf_reader** is a python object with three attributes:
 
-• **data**: python `pandas.DataFrame <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html>`_ with data values.
-• **atts**: `python dictionary <https://docs.python.org/3/tutorial/datastructures.html#dictionaries>`_ with attributes of each of the output elements inherited from the input data model **schema**.
+• **data**: python pandas.DataFrame_ with data values.
+• **atts**: `python dictionary`_ with attributes of each of the output elements inherited from the input data model **schema**.
 • **mask**: boolean DF with the results of the validation of each of the data model elements in its columns.
 
 
@@ -67,7 +67,7 @@ The data element extraction and transformation from the initial string to the ou
 
 1. **Elements extraction and missing data tagging**:
 
-   Done using `mdf_reader.import_data.main() <https://mdf-reader.readthedocs.io/en/mdf_reader/autoapi/mdf_reader/reader/import_data/index.html#module-mdf_reader.reader.import_data>`_, where individual data elements are extracted as 'objects' from the full report string and missing data is recognised as ``NA/NaN`` values in the resulting dataframe.
+   Done using ``mdf_reader.import_data.import_data``, where individual data elements are extracted as 'objects' from the full report string and missing data is recognised as ``NA/NaN`` values in the resulting dataframe.
 
    Strings that are recognised as missing from the source are ``pandas`` defaults, plus:
 
@@ -92,7 +92,7 @@ The data element extraction and transformation from the initial string to the ou
       Leading and trailing whitespace stripping unless otherwise declared in ``disable_white_strip`` (disable all, leading or trailing blank stripping).
 
    *datetime* type elements:
-      Safe parsing to datetime objects with `pandas.to_datetime() <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.to_datetime.html>`_, assigning `NaT` where the conversion is not possible.
+      Safe parsing to datetime objects with pandas.to_datetime_, assigning `NaT` where the conversion is not possible.
 
 Validation of elements against the schema or data model
 -------------------------------------------------------
@@ -115,4 +115,18 @@ Overall, the validation process exception handling is:
    *	Rest: ``True``
 
 .. rubric:: Footnotes
-.. [#f1] If ``NaN`` values are present, and column_type is integer, conversion to column_type will not be possible and data type will be as pandas casting rules (`Missing data casting rules and indexing <https://pandas.pydata.org/pandas-docs/stable/user_guide/missing_data.html>`_).
+.. [#f1] If ``NaN`` values are present, and column_type is integer, conversion to column_type will not be possible and data type will be as pandas casting rules (`Missing data casting rules and indexing`_).
+
+.. _pandas.DataFrame: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html
+
+.. _ICOADS: https://icoads.noaa.gov/r3.html
+
+.. _following guide: https://icoads.noaa.gov/e-doc/imma/R3.0-imma1.pdf
+
+.. _US Maury: https://icoads.noaa.gov/maury.html
+
+.. _python dictionary: https://docs.python.org/3/tutorial/datastructures.html#dictionaries
+
+.. _pandas.to_datetime: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.to_datetime.html
+
+.. _Missing data casting rules and indexing: https://pandas.pydata.org/pandas-docs/stable/user_guide/missing_data.html

@@ -237,28 +237,3 @@ call("conda list", shell=True)
 
 # disable warnings
 warnings.filterwarnings("ignore")
-
-notebooks = ()
-print("\nBuilding notebooks:")
-for nb in notebooks:
-    # only render notebooks if necessary
-    f1 = os.path.getmtime(nb + ".ipynb")
-    try:
-        f2 = os.path.getmtime(nb + ".rst")
-
-        if f2 > f1:
-            print(f" --- skipping: {nb}")
-            continue
-    except FileNotFoundError:
-        pass
-
-    call(
-        (
-            "jupyter nbconvert"
-            " --to rst"
-            " --template-file notebooks/tutorial_rst.tpl"
-            " --ExecutePreprocessor.timeout=60"
-            " --execute " + nb
-        ),
-        shell=True,
-    )

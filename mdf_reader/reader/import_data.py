@@ -43,7 +43,7 @@ from .. import properties
 
 
 def import_data(source, encoding=None, chunksize=None, skiprows=None):
-    """
+    """Import data as a pd.TextParser object.
 
     Returns an iterable object with a pandas dataframe from
     an input data source. The pandas dataframe has a report
@@ -55,16 +55,20 @@ def import_data(source, encoding=None, chunksize=None, skiprows=None):
 
     Parameters
     ----------
-    source : str
+    source: str
         Path to data file
 
-    Keyword Arguments
-    -----------------
-    chunksize : int, opt
+    encoding: dict, optional
+        Encoding dictionary passed to function
+        ``pd.read_fwf``.
+        
+    chunksize : int, optional
         Number of lines to chunk the input data into
-    skiprows : int, opt
+        passed to function ``pd.read_fwf``.
+        
+    skiprows : int, optional
         Number of lines to skip from input file
-
+        passed to function ``pd.read_fwf``.
 
     Returns
     -------

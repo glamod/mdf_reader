@@ -237,7 +237,7 @@ def extract_sections(string_df):
 #   MAIN
 #   ---------------------------------------------------------------------------
 def get_sections(string_df, schema, read_sections):
-    """
+    """Get sections from pd.DataFrame.
 
     Returns a pandas dataframe with a report per row
     and the report sections split along the columns.
@@ -246,7 +246,7 @@ def get_sections(string_df, schema, read_sections):
 
     Parameters
     ----------
-    string_df : pandas.DataFrame
+    string_df : pd.DataFrame
         Pandas dataframe with a unique column with
         the reports as a block string
 
@@ -259,7 +259,7 @@ def get_sections(string_df, schema, read_sections):
 
     Returns
     -------
-    pandas.DataFrame
+    pd.DataFrame
         Dataframe with the report sections split
         along the columns.
 
