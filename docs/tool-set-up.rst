@@ -42,13 +42,4 @@ To install the **mdf_reader** in your current conda_ environment, run this comma
 
 In the future, this will be the preferred method to install **mdf_reader**, as it will always install the moste recent stable release.
 
-
-.. _git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
-
-.. _Github repository: https://github.com/glamod/mdf_reader
-
-.. _tarball: https://github.com/glamod/mdf_reader/tarball/master
-
-.. _pip: https://pypi.org/
-
-.. _conda: https://docs.conda.io/en/latest/
+.. include:: hyperlinks.rst

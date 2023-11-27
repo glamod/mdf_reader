@@ -66,35 +66,6 @@ About
 :Authors:
    David Berry, Irene Perez Gonzalez, Beatriz Recinos, Andreas Wernecke and Ludwig Lierhammer
 
-
 |logo_c3s| |logo_NOC| |logo_ICOADS|
 
-.. _python3: https://www.python.org/download/releases/3.0
-
-.. _ICOADS: https://icoads.noaa.gov
-
-.. _IMMA: https://icoads.noaa.gov/e-doc/imma/R3.0-imma1.pdf
-
-.. _ASCII: https://en.wikipedia.org/wiki/ASCII
-
-.. _data model: https://en.wikipedia.org/wiki/Data
-
-.. _pandas.DataFrame: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html
-
-.. _boolean pandas: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.bool.html
-
-.. _dictionary: https://realpython.com/python-dicts
-
-.. _basic numeric data decoding: https://realpython.com/python-encodings-guide/#enter-unicode
-
-.. |logo_c3s| image:: _static/images/logos_c3s/logo_c3s-392x154.png
-    :width: 25%
-    :target: https://climate.copernicus.eu/
-
-.. |logo_NOC| image:: _static/images/logos_c3s/LOGO_2020_-_NOC_1_COLOUR.png
-    :width: 25%
-    :target: https://noc.ac.uk/
-
-.. |logo_ICOADS| image:: _static/images/logos_c3s/icoadsLogo.png
-    :width: 20%
-    :target: https://icoads.noaa.gov/
+.. include:: hyperlinks.rst

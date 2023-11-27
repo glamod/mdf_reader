@@ -11,7 +11,7 @@ How to build a data model
 
 The main steps to create a data model (or schema) for the mdf_reader are:
 
-1. Create a valid directory tree to hold the model **(mymodel)** as shown in the figure below. The correct directory path to store your schema is ``~/mdf_reader/data_models/lib/``.
+1. Create a valid directory tree to hold the model **(mymodel)** as shown in the figure below. The correct directory path to store your schema is ``~/mdf_reader/data_models/library/``.
 
 .. figure:: _static/images/schema.png
     :width: 45%
@@ -35,7 +35,7 @@ To copy a template to edit you can run the following functions::
    mdf_reader.schemas.copy_template(template_name,out_path=file_path)
 
 
-3. Create valid code tables under ``../lib/mymodel/code_tables/table_name[i].json`` if the data model includes code tables.
+3. Create valid code tables under ``../library/mymodel/code_tables/table_name[i].json`` if the data model includes code tables.
 
 The general structure of a schema and the description of each attribute is explain in the table below:
 

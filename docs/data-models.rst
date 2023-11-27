@@ -42,8 +42,8 @@ The mdf_reader supports reading and validation of both internal and external sch
 
 - An **external data model** is a data format that is unknown to the tool. If the data model meets the specifications for which the tool was built, then a model can be built externally and fed into it for both functions data reading and model validation using the argument ``data_model_path``::
 
-   model_path = '~/mdf_reader/data_models/lib/imma1_d701'
-   data_file_path = '~/mdf_reader/tests/data/069-701_1845-04_subset.imma'
+   model_path = 'mdf_reader/data_models/library/imma1_d701'
+   data_file_path = 'mdf_reader/data/069-701_1845-04_subset.imma'
    data = mdf_reader.read(data_file_path, data_model_path= model_path)
 
 .. _code-tables:

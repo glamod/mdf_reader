@@ -22,7 +22,7 @@ Workflow
 Input data: ``.imma`` files and schemas
 ---------------------------------------
 
-The tool has been created to read meteorological data from ICOADS_ stored in the ``.imma`` format, please read the `following guide`_ to know more details regarding the database and the data format.
+The tool has been created to read meteorological data from ICOADS_3_ stored in the ``.imma`` format, please read the `following guide`_ to know more details regarding the database and the data format.
 
 Each meteorological report in ICOADS can come from multiple countries, sources and platforms and each report has a source ID (SID) and a deck (DCK) number assigned. “Deck” was originally referred to a punched card deck, but is now used as the primary field to track ICOADS data **collections**. Each deck may contain a single Source ID (SID) or a mixture of SIDs.
 
@@ -117,16 +117,4 @@ Overall, the validation process exception handling is:
 .. rubric:: Footnotes
 .. [#f1] If ``NaN`` values are present, and column_type is integer, conversion to column_type will not be possible and data type will be as pandas casting rules (`Missing data casting rules and indexing`_).
 
-.. _pandas.DataFrame: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html
-
-.. _ICOADS: https://icoads.noaa.gov/r3.html
-
-.. _following guide: https://icoads.noaa.gov/e-doc/imma/R3.0-imma1.pdf
-
-.. _US Maury: https://icoads.noaa.gov/maury.html
-
-.. _python dictionary: https://docs.python.org/3/tutorial/datastructures.html#dictionaries
-
-.. _pandas.to_datetime: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.to_datetime.html
-
-.. _Missing data casting rules and indexing: https://pandas.pydata.org/pandas-docs/stable/user_guide/missing_data.html
+.. include:: hyperlinks.rst
