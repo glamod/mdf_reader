@@ -94,5 +94,4 @@ ci:
   autoupdate_branch: ''
   autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
   autoupdate_schedule: quarterly
-  skip: [nbstripout]
   submodules: false
