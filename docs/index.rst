@@ -48,6 +48,7 @@ Several data models have been added to the tool including the IMMA schema:
    data-models
    how-to-build-a-data-model
    how_to_read_csv
+   example_notebooks/CLIWOC_datamodel.ipynb
    contributing
    authors
    api
