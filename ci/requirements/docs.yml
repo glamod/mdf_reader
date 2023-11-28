@@ -8,6 +8,7 @@ dependencies:
     #mdf_reader
     - python>=3.10
     - pandas
+    - matplotlib
 
     #documentation
     - ipython
