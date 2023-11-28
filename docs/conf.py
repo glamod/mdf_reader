@@ -15,8 +15,6 @@ import sys
 import warnings
 from subprocess import call
 
-import mdf_reader  # noqa
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -24,6 +22,8 @@ import mdf_reader  # noqa
 
 sys.path.insert(0, os.path.abspath(".."))
 sys.path.insert(0, os.path.abspath("."))
+
+import mdf_reader  # noqa
 
 # -- General configuration ------------------------------------------------
 
