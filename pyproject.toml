@@ -23,13 +23,7 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11"
 ]
-dependencies = [
-  "matplotlib",
-  "pandas>=2.1.0",
-  "dask",
-  "distributed"
-]
-dynamic = ["version"]
+dynamic = ["version", "dependencies"]
 
 [project.scripts]
 mdf_reader = "mdf_reader.cli:main"
@@ -127,6 +121,9 @@ known-third-party = [
 
 [tool.setuptools]
 packages = ["mdf_reader"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = "ci/requirements/requirements.txt"}
 
 [tool.setuptools_scm]
 fallback_version = "999"
