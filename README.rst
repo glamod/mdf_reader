@@ -102,8 +102,8 @@ For more details on how to use the ``mdf_reader`` tool see the following `jupyte
         :target: https://results.pre-commit.ci/latest/github/glamod/mdf_reader/master
         :alt: pre-commit.ci status
 
-.. |fossa| image::
-        :target:
+.. |fossa| image:: https://app.fossa.com/api/projects/git%2Bgithub.com%2Fglamod%2Fmdf_reader.svg?type=shield
+        :target: https://app.fossa.com/projects/git%2Bgithub.com%2Fglamod%2Fmdf_reader?ref=badge_shield
         :alt: FOSSA
 
 .. |status| image:: https://www.repostatus.org/badges/latest/active.svg
