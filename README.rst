@@ -3,15 +3,17 @@ Model Data Format reader: ``mdf_reader`` toolbox
 ================================================
 
 +----------------------------+-----------------------------------------------------+
-| Versions                   | |pypi|                                              |
+| Versions                   | |pypi| |versions|                                   |
 +----------------------------+-----------------------------------------------------+
-| Documentation and Support  | |docs| |versions|                                   |
+| Documentation and Support  | |docs|                                              |
 +----------------------------+-----------------------------------------------------+
-| Open Source                | |license|                                           |
+| Open Source                | |license| |fair| |zenodo|                           |
 +----------------------------+-----------------------------------------------------+
-| Coding Standards           | |black| |pre-commit|                                |
+| Coding Standards           | |black| | |ruff| |pre-commit| |fossa|               |
 +----------------------------+-----------------------------------------------------+
 | Development Status         | |status| |build| |coveralls|                        |
++----------------------------+-----------------------------------------------------+
+| Funding                    | |funding|                                           |
 +----------------------------+-----------------------------------------------------+
 
 The ``mdf_reader`` is a python_ tool designed to read data files compliant with a user specified `data model`_.
@@ -68,38 +70,54 @@ For more details on how to use the ``mdf_reader`` tool see the following `jupyte
         :target: https://pypi.python.org/pypi/mdf_reader
         :alt: Python Package Index Build
 
-.. |docs| image:: https://readthedocs.org/projects/mdf_reader/badge/?version=latest
-        :target: https://mdf-reader.readthedocs.io/en/latest/?version=latest
-        :alt: Documentation Status
-
 .. |versions| image:: https://img.shields.io/pypi/pyversions/mdf_reader.svg
         :target: https://pypi.python.org/pypi/mdf_reader
         :alt: Supported Python Versions
+
+.. |docs| image:: https://readthedocs.org/projects/mdf_reader/badge/?version=latest
+        :target: https://mdf-reader.readthedocs.io/en/latest/?version=latest
+        :alt: Documentation Status
 
 .. |license| image:: https://img.shields.io/github/license/glamod/mdf_reader.svg
         :target: https://github.com/glamod/mdf_reader/blob/master/LICENSE
         :alt: License
 
+.. |fair| image::
+        :target:
+        :alt: FAIR Software Compliance
+
+.. |zenodo| image::
+        :target:
+ 	      :alt: DOI
+
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
         :target: https://github.com/psf/black
         :alt: Python Black
 
+.. |ruff| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+        :target: https://github.com/astral-sh/ruff
+        :alt: Ruff
+
 .. |pre-commit| image:: https://results.pre-commit.ci/badge/github/glamod/mdf_reader/master.svg
-   :target: https://results.pre-commit.ci/latest/github/glamod/mdf_reader/master
-   :alt: pre-commit.ci status
+        :target: https://results.pre-commit.ci/latest/github/glamod/mdf_reader/master
+        :alt: pre-commit.ci status
+
+.. |fossa| image::
+        :target:
+        :alt: FOSSA
 
 .. |status| image:: https://www.repostatus.org/badges/latest/active.svg
         :target: https://www.repostatus.org/#active
         :alt: Project Status: Active – The project has reached a stable, usable state and is being actively developed.
 
-.. |build| image:: https://github.com/glamod/mdf_reader/actions/workflows/ci.yml/badge.svg
-        :target: https://github.com/glamod/mdf_reader/actions/workflows/ci.yml
+.. |build| image:: https://github.com/glamod/mdf_reader/actions/workflows/main.yml/badge.svg
+        :target: https://github.com/glamod/mdf_reader/actions/workflows/main.yml
         :alt: Build Status
 
 .. |coveralls| image:: https://codecov.io/gh/glamod/mdf_reader/branch/master/graph/badge.svg
-	:target: https://codecov.io/gh/glamod/mdf_reader
-	:alt: Coveralls
+	      :target: https://codecov.io/gh/glamod/mdf_reader
+	      :alt: Coveralls
 
-.. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7762679.svg
-        :target: https://doi.org/10.5281/zenodo.7762679
- 	:alt:   DOI
+.. |funding| image:: https://img.shields.io/badge/Powered%20by-Copernicus-blue.svg
+        :target: https://climate.copernicus.eu/
+        :alt: Funding
