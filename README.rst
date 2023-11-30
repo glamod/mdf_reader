@@ -9,7 +9,7 @@ Model Data Format reader: ``mdf_reader`` toolbox
 +----------------------------+-----------------------------------------------------+
 | Open Source                | |license| |fair| |zenodo|                           |
 +----------------------------+-----------------------------------------------------+
-| Coding Standards           | |black| | |ruff| |pre-commit| |fossa|               |
+| Coding Standards           | |black| |ruff| |pre-commit| |fossa|                 |
 +----------------------------+-----------------------------------------------------+
 | Development Status         | |status| |build| |coveralls|                        |
 +----------------------------+-----------------------------------------------------+
