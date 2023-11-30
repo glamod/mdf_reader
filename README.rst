@@ -82,8 +82,8 @@ For more details on how to use the ``mdf_reader`` tool see the following `jupyte
         :target: https://github.com/glamod/mdf_reader/blob/master/LICENSE
         :alt: License
 
-.. |zenodo| image::
-        :target:
+.. |zenodo| image:: https://img.shields.io/badge/zenodo-package_or_version_not_found-red
+        :target: https://zenodo.org/mdf_reader
  	      :alt: DOI
 
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
