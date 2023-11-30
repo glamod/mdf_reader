@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fglamod%2Fmdf_reader.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fglamod%2Fmdf_reader?ref=badge_shield)
+
 ================================================
 Model Data Format reader: ``mdf_reader`` toolbox
 ================================================
@@ -121,3 +123,6 @@ For more details on how to use the ``mdf_reader`` tool see the following `jupyte
 .. |funding| image:: https://img.shields.io/badge/Powered%20by-Copernicus-blue.svg
         :target: https://climate.copernicus.eu/
         :alt: Funding
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fglamod%2Fmdf_reader.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fglamod%2Fmdf_reader?ref=badge_large)
