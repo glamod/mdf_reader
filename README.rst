@@ -110,8 +110,8 @@ For more details on how to use the ``mdf_reader`` tool see the following `jupyte
         :target: https://www.repostatus.org/#active
         :alt: Project Status: Active – The project has reached a stable, usable state and is being actively developed.
 
-.. |build| image:: https://github.com/glamod/mdf_reader/actions/workflows/main.yml/badge.svg
-        :target: https://github.com/glamod/mdf_reader/actions/workflows/main.yml
+.. |build| image:: https://github.com/glamod/mdf_reader/actions/workflows/ci.yml/badge.svg
+        :target: https://github.com/glamod/mdf_reader/actions/workflows/ci.yml
         :alt: Build Status
 
 .. |coveralls| image:: https://codecov.io/gh/glamod/mdf_reader/branch/master/graph/badge.svg
