@@ -1,4 +1,4 @@
-name: CI
+name: mdf_reader Testing Suite
 on:
   push:
     branches:
