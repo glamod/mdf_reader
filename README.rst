@@ -7,7 +7,7 @@ Model Data Format reader: ``mdf_reader`` toolbox
 +----------------------------+-----------------------------------------------------+
 | Documentation and Support  | |docs|                                              |
 +----------------------------+-----------------------------------------------------+
-| Open Source                | |license| |fair| |zenodo|                           |
+| Open Source                | |license| |zenodo|                                  |
 +----------------------------+-----------------------------------------------------+
 | Coding Standards           | |black| |ruff| |pre-commit| |fossa|                 |
 +----------------------------+-----------------------------------------------------+
@@ -81,10 +81,6 @@ For more details on how to use the ``mdf_reader`` tool see the following `jupyte
 .. |license| image:: https://img.shields.io/github/license/glamod/mdf_reader.svg
         :target: https://github.com/glamod/mdf_reader/blob/master/LICENSE
         :alt: License
-
-.. |fair| image::
-        :target:
-        :alt: FAIR Software Compliance
 
 .. |zenodo| image::
         :target:
