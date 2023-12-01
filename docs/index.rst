@@ -58,11 +58,11 @@ Several data models have been added to the tool including the IMMA schema:
 About
 -----
 
-:Version: v2.0 (unpubished)
+:Version: |tag| |release|
 
-:Citation: zenodo link
+:Citation: |zenodo|
 
-:License: actually MIT
+:License: |license|
 
 :Authors:
    David Berry, Irene Perez Gonzalez, Beatriz Recinos, Andreas Wernecke and Ludwig Lierhammer
