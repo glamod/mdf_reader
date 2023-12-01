@@ -70,3 +70,6 @@ About
 |logo_c3s| |logo_NOC| |logo_ICOADS|
 
 .. include:: hyperlinks.rst
+
+.. include:: ../README.rst
+    :start-after: hyperlinks

@@ -29,7 +29,7 @@ Once you have a copy of the source, you caninstall it with pip_:
 
 .. code-block:: console
 
-   pi install -e .
+   pip install -e .
 
 Stable release (not possible yet)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
