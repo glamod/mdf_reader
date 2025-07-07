@@ -1,4 +1,5 @@
 """Console script for mdf_reader."""
+
 import argparse
 import sys
 
