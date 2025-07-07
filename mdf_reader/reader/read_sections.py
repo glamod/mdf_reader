@@ -52,15 +52,17 @@ def extract_fixed_width(section_serie_bf, section_schema):
         )
     )
     section_missing = {
-        i: section_schema["elements"][i].get("missing_value")
-        if section_schema["elements"][i].get("disable_white_strip") is True
-        else [
-            section_schema["elements"][i].get("missing_value"),
-            " "
-            * section_schema["elements"][i].get(
-                "field_length", properties.MAX_FULL_REPORT_WIDTH
-            ),
-        ]
+        i: (
+            section_schema["elements"][i].get("missing_value")
+            if section_schema["elements"][i].get("disable_white_strip") is True
+            else [
+                section_schema["elements"][i].get("missing_value"),
+                " "
+                * section_schema["elements"][i].get(
+                    "field_length", properties.MAX_FULL_REPORT_WIDTH
+                ),
+            ]
+        )
         for i in section_names
     }
     section_elements = pd.read_fwf(

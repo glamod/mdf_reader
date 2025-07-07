@@ -110,9 +110,9 @@ def read_schema(schema_name=None, ext_schema_path=None):
                 "header"
             ].get("delimiter")
             schema["header"].pop("delimiter", None)
-            schema["sections"][properties.dummy_level]["header"][
-                "field_layout"
-            ] = schema["header"].get("field_layout")
+            schema["sections"][properties.dummy_level]["header"]["field_layout"] = (
+                schema["header"].get("field_layout")
+            )
             schema["header"].pop("field_layout", None)
         # 3.3. Make parsing order explicit
         if not schema["header"].get("parsing_order"):  # assume sequential

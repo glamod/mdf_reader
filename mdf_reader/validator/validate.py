@@ -71,9 +71,11 @@ def validate_codes(elements, data, code_tables_path, schema, supp=False):
                             key_elements = [(element[0], x) for x in key_elements]
                         else:
                             key_elements = [
-                                (properties.dummy_level, x)
-                                if not isinstance(x, tuple)
-                                else x
+                                (
+                                    (properties.dummy_level, x)
+                                    if not isinstance(x, tuple)
+                                    else x
+                                )
                                 for x in key_elements
                             ]
                         dtypes = {
